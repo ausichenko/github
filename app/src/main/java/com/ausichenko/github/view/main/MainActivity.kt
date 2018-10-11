@@ -1,7 +1,8 @@
-package com.ausichenko.github
+package com.ausichenko.github.view.main
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import com.ausichenko.github.R
 
 class MainActivity : AppCompatActivity() {
 
