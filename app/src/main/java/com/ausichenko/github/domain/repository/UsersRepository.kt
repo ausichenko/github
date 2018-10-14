@@ -1,8 +1,8 @@
 package com.ausichenko.github.domain.repository
 
 import com.ausichenko.github.data.network.models.GitUser
-import retrofit2.Call
+import io.reactivex.Single
 
 interface UsersRepository {
-    fun getUsers(): Call<List<GitUser>>
+    fun getUsers(): Single<List<GitUser>>
 }
