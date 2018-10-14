@@ -4,6 +4,8 @@ import com.ausichenko.github.BuildConfig
 import com.ausichenko.github.data.network.GithubApi
 import com.ausichenko.github.data.network.NetworkDataSource
 import com.ausichenko.github.data.repository.UsersDataRepository
+import com.ausichenko.github.domain.interactors.UsersInteractor
+import com.ausichenko.github.view.main.users.UsersPresenter
 import com.google.gson.FieldNamingPolicy
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
@@ -17,6 +19,8 @@ import java.util.concurrent.TimeUnit
 val githubModule = module {
     single { makeNetworkDataSource(get()) }
     single { makeUsersRepository(get()) }
+    single { makeUsersInteractor(get()) }
+    single { makeUsersPresenter(get()) }
 }
 
 fun makeNetworkDataSource(githubApi: GithubApi): NetworkDataSource {
@@ -25,6 +29,14 @@ fun makeNetworkDataSource(githubApi: GithubApi): NetworkDataSource {
 
 fun makeUsersRepository(networkDataSource: NetworkDataSource): UsersDataRepository {
     return UsersDataRepository(networkDataSource)
+}
+
+fun makeUsersInteractor(usersRepository: UsersDataRepository): UsersInteractor {
+    return  UsersInteractor(usersRepository)
+}
+
+fun makeUsersPresenter(usersInteractor: UsersInteractor): UsersPresenter {
+    return UsersPresenter(usersInteractor)
 }
 
 val networkModule = module {
