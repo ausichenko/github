@@ -1,4 +1,4 @@
-package com.ausichenko.github.data.remote.models
+package com.ausichenko.github.data.network.models
 
 import com.google.gson.annotations.SerializedName
 
