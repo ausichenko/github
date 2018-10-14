@@ -5,16 +5,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ausichenko.github.R
-import com.ausichenko.github.data.network.models.GitUser
 import com.ausichenko.github.utils.MvpFragment
 import kotlinx.android.synthetic.main.fragment_users.view.*
-import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class UsersFragment : MvpFragment(), UsersView {
+class UsersFragment : MvpFragment() {
 
-    val presenter: UsersPresenter by inject()
+    val usersViewModel: UsersViewModel by viewModel()
 
     private lateinit var fragmentView: View
 
@@ -26,17 +26,14 @@ class UsersFragment : MvpFragment(), UsersView {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        presenter.loadUsers()
-    }
+        usersViewModel.getUsers().observe(this, Observer {
+            val adapter = UsersAdapter(it)
 
-    override fun showUsers(users: List<GitUser>) {
-        val adapter = UsersAdapter(users)
-
-        fragmentView.usersRecyclerView.layoutManager = LinearLayoutManager(context)
-        fragmentView.usersRecyclerView.adapter = adapter
-    }
-
-    override fun showError(error: String) {
-        Toast.makeText(context, error, Toast.LENGTH_LONG).show()
+            fragmentView.usersRecyclerView.layoutManager = LinearLayoutManager(context)
+            fragmentView.usersRecyclerView.adapter = adapter
+        })
+        usersViewModel.errorAction.observe(this, Observer {
+            Toast.makeText(context, it.error, Toast.LENGTH_LONG).show()
+        })
     }
 }

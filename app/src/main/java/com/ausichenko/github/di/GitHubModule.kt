@@ -5,12 +5,13 @@ import com.ausichenko.github.data.network.GithubApi
 import com.ausichenko.github.data.network.NetworkDataSource
 import com.ausichenko.github.data.repository.UsersDataRepository
 import com.ausichenko.github.domain.interactors.UsersInteractor
-import com.ausichenko.github.view.main.users.UsersPresenter
+import com.ausichenko.github.view.main.users.UsersViewModel
 import com.google.gson.FieldNamingPolicy
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
+import org.koin.androidx.viewmodel.ext.koin.viewModel
 import org.koin.dsl.module.module
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
@@ -21,7 +22,7 @@ val githubModule = module {
     single { makeNetworkDataSource(get()) }
     single { makeUsersRepository(get()) }
     single { makeUsersInteractor(get()) }
-    single { makeUsersPresenter(get()) }
+    viewModel { UsersViewModel(get()) }
 }
 
 fun makeNetworkDataSource(githubApi: GithubApi): NetworkDataSource {
@@ -34,10 +35,6 @@ fun makeUsersRepository(networkDataSource: NetworkDataSource): UsersDataReposito
 
 fun makeUsersInteractor(usersRepository: UsersDataRepository): UsersInteractor {
     return  UsersInteractor(usersRepository)
-}
-
-fun makeUsersPresenter(usersInteractor: UsersInteractor): UsersPresenter {
-    return UsersPresenter(usersInteractor)
 }
 
 val networkModule = module {
