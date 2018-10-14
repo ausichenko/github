@@ -13,6 +13,7 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.dsl.module.module
 import retrofit2.Retrofit
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
@@ -75,6 +76,7 @@ fun makeGitHubService(okHttpClient: OkHttpClient, gson: Gson): GithubApi {
     val retrofit = Retrofit.Builder()
             .baseUrl("https://api.github.com")
             .client(okHttpClient)
+            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .addConverterFactory(GsonConverterFactory.create(gson))
             .build()
     return retrofit.create(GithubApi::class.java)
