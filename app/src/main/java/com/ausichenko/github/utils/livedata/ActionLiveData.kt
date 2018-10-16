@@ -1,4 +1,4 @@
-package com.ausichenko.github.utils
+package com.ausichenko.github.utils.livedata
 
 import androidx.annotation.MainThread
 import androidx.lifecycle.LifecycleOwner

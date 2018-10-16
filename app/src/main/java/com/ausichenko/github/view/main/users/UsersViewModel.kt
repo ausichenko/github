@@ -1,23 +1,20 @@
 package com.ausichenko.github.view.main.users
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.ausichenko.github.data.network.models.GitUser
 import com.ausichenko.github.domain.interactors.UsersInteractor
-import com.ausichenko.github.utils.ActionLiveData
+import com.ausichenko.github.utils.livedata.ObserverLiveData
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 
 class UsersViewModel(private val interactor: UsersInteractor) : ViewModel() {
 
     private val disposable = CompositeDisposable()
-    private lateinit var users: MutableLiveData<List<GitUser>>
-    val errorAction = ActionLiveData<ErrorMessage>()
+    private lateinit var users: ObserverLiveData<List<GitUser>, Throwable>
 
-    fun getUsers(): LiveData<List<GitUser>> {
+    fun getUsers(): ObserverLiveData<List<GitUser>, Throwable> {
         if(!::users.isInitialized) {
-            users = MutableLiveData()
+            users = ObserverLiveData()
             loadUsers()
         }
         return users
@@ -25,23 +22,16 @@ class UsersViewModel(private val interactor: UsersInteractor) : ViewModel() {
 
     private fun loadUsers() {
         disposable.add(interactor.getUsers()
+                .doOnSubscribe {
+                    users.load()
+                }
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this::onLoadSuccess, this::onLoadError)
+                .subscribe(users)
         )
-    }
-
-    private fun onLoadSuccess(userList: List<GitUser>) {
-        users.value = userList
-    }
-
-    private fun onLoadError(throwable: Throwable) {
-        errorAction.sendAction(ErrorMessage(throwable.message.toString()))
     }
 
     override fun onCleared() {
         super.onCleared()
         disposable.clear()
     }
-
-    data class ErrorMessage(val error: String)
 }
