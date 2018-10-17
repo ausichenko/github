@@ -12,17 +12,14 @@ class ObserverLiveData<Data, Error>: MutableLiveData<ObserverLiveData.State<Data
         when {
             data != null -> {
                 value?.state = ObserverLiveData.DataState.SUCCESS
-                value?.stateLD?.postValue(ObserverLiveData.DataState.SUCCESS)
                 value?.data = data
             }
             error != null -> {
                 value?.state = ObserverLiveData.DataState.ERROR
-                value?.stateLD?.postValue(ObserverLiveData.DataState.ERROR)
                 value?.error = error
             }
             else -> {
                 value?.state = ObserverLiveData.DataState.EMPTY
-                value?.stateLD?.postValue(ObserverLiveData.DataState.EMPTY)
             }
         }
         notifyObserver()
@@ -30,7 +27,6 @@ class ObserverLiveData<Data, Error>: MutableLiveData<ObserverLiveData.State<Data
 
     fun load() {
         value?.state = ObserverLiveData.DataState.LOADING
-        value?.stateLD?.postValue(ObserverLiveData.DataState.LOADING)
         notifyObserver()
     }
 
@@ -40,11 +36,10 @@ class ObserverLiveData<Data, Error>: MutableLiveData<ObserverLiveData.State<Data
 
     class State<Data, Error> {
         var state = DataState.LOADING
-        var stateLD: MutableLiveData<DataState>? = MutableLiveData()
         var data: Data? = null
-        var dataLD: MutableLiveData<Data>? = MutableLiveData()
+        //var dataLD: MutableLiveData<Data>? = MutableLiveData()
         var error: Error? = null
-        var errorLD: MutableLiveData<Error>? = MutableLiveData()
+        //var errorLD: MutableLiveData<Error>? = MutableLiveData()
     }
 
     enum class DataState {
