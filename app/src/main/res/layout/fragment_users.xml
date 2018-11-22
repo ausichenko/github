@@ -3,27 +3,35 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+
         <variable
             name="viewModel"
             type="com.ausichenko.github.view.main.users.UsersViewModel" />
     </data>
 
-    <androidx.appcompat.widget.ContentFrameLayout
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefreshLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/usersRecyclerView"
+        <androidx.appcompat.widget.ContentFrameLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:visibleOrGone="@{viewModel.isSuccess}" />
+            android:layout_height="match_parent">
 
-        <ProgressBar
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            app:visibleOrGone="@{viewModel.isLoading}"/>
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/usersRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:visibleOrGone="@{viewModel.isSuccess}" />
 
-    </androidx.appcompat.widget.ContentFrameLayout>
+            <ProgressBar
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                app:visibleOrGone="@{viewModel.isLoading}" />
+
+        </androidx.appcompat.widget.ContentFrameLayout>
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 </layout>

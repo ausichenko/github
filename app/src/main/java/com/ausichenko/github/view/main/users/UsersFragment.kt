@@ -8,6 +8,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.ausichenko.github.R
 import com.ausichenko.github.databinding.FragmentUsersBinding
 import com.ausichenko.github.utils.livedata.ObserverLiveData
@@ -23,6 +24,8 @@ class UsersFragment : Fragment() {
         binding = DataBindingUtil.inflate(layoutInflater, R.layout.fragment_users, container, false)
         binding.setLifecycleOwner(this)
 
+        binding.swipeRefreshLayout.setOnRefreshListener { usersViewModel.loadUsers() }
+
         return binding.root
     }
 
@@ -31,6 +34,7 @@ class UsersFragment : Fragment() {
         binding.viewModel = usersViewModel
         usersViewModel.users.observe(this, Observer {
             if (it.state == ObserverLiveData.DataState.SUCCESS) {
+                binding.swipeRefreshLayout.isRefreshing = false
                 val adapter = UsersAdapter(it.data!!)
 
                 binding.usersRecyclerView.layoutManager = LinearLayoutManager(context)

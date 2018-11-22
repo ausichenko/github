@@ -1,7 +1,8 @@
 package com.ausichenko.github.di
 
+import com.ausichenko.github.data.datasource.LocalDataSource
 import com.ausichenko.github.data.network.GithubApi
-import com.ausichenko.github.data.network.NetworkDataSource
+import com.ausichenko.github.data.datasource.RemoteDataSource
 import com.ausichenko.github.data.repository.UsersDataRepository
 import com.ausichenko.github.domain.interactors.UsersInteractor
 import com.ausichenko.github.view.main.users.UsersViewModel
@@ -15,12 +16,12 @@ val githubModule = module {
     viewModel { UsersViewModel(get()) }
 }
 
-fun makeNetworkDataSource(githubApi: GithubApi): NetworkDataSource {
-    return NetworkDataSource(githubApi)
+fun makeNetworkDataSource(githubApi: GithubApi): RemoteDataSource {
+    return RemoteDataSource(githubApi)
 }
 
-fun makeUsersRepository(networkDataSource: NetworkDataSource): UsersDataRepository {
-    return UsersDataRepository(networkDataSource)
+fun makeUsersRepository(remoteDataSource: RemoteDataSource): UsersDataRepository {
+    return UsersDataRepository(LocalDataSource(), remoteDataSource)
 }
 
 fun makeUsersInteractor(usersRepository: UsersDataRepository): UsersInteractor {
