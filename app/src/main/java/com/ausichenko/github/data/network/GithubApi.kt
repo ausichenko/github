@@ -7,5 +7,5 @@ import retrofit2.http.Query
 
 interface GithubApi {
     @GET("users")
-    fun getUsers(@Query("since") userId: Int?): Single<List<GitUser>>
+    fun getUsers(@Query("since") userId: Int? = null): Single<List<GitUser>>
 }

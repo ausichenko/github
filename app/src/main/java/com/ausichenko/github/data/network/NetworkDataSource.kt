@@ -5,6 +5,6 @@ import io.reactivex.Single
 
 class NetworkDataSource(private val githubApi: GithubApi) {
     fun getUsers(): Single<List<GitUser>> {
-        return githubApi.getUsers(null)
+        return githubApi.getUsers()
     }
 }
