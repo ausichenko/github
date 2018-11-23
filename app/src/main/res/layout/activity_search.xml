@@ -10,7 +10,7 @@
             type="com.ausichenko.github.view.search.SearchViewModel" />
     </data>
 
-    <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -45,13 +45,19 @@
                             android:src="@drawable/ic_github_circle" />
 
                         <androidx.appcompat.widget.AppCompatEditText
+                            android:id="@+id/searchBar"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:layout_marginLeft="10dp"
                             android:layout_marginRight="10dp"
                             android:layout_weight="2"
                             android:background="@null"
+                            android:imeOptions="actionSearch"
+                            android:inputType="text"
+                            android:lines="1"
+                            android:text="@={viewModel.searchQuery}"
                             android:textColor="@color/primary_text"
+                            app:onSearch="@{() -> viewModel.call()}"
                             tools:text="Search Query" />
 
                         <View

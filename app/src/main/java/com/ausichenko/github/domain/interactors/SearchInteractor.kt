@@ -5,6 +5,6 @@ import io.reactivex.Single
 
 class SearchInteractor(private val repository: SearchRepository) {
     fun getRepositories(): Single<List<Any>> {
-        TODO("not impl")
+        return Single.just(ArrayList())
     }
 }

@@ -6,6 +6,6 @@ import retrofit2.http.GET
 import retrofit2.http.Query
 
 interface GithubApi {
-    @GET("repositories")
+    @GET("users")
     fun getUsers(@Query("since") userId: Int? = null): Single<List<GitUser>>
 }

@@ -12,11 +12,13 @@ import com.ausichenko.github.R
 import com.ausichenko.github.databinding.FragmentSearchRepositoriesBinding
 import com.ausichenko.github.utils.livedata.ObserverLiveData
 import com.ausichenko.github.view.search.SearchViewModel
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class RepositoriesFragment : Fragment() {
 
-    private val searchViewModel: SearchViewModel by viewModel()
+    private val searchViewModel: SearchViewModel by sharedViewModel()
+    private val repositoriesViewModel: RepositoriesViewModel by viewModel()
 
     private lateinit var binding: FragmentSearchRepositoriesBinding
 
@@ -24,15 +26,17 @@ class RepositoriesFragment : Fragment() {
         binding = DataBindingUtil.inflate(layoutInflater, R.layout.fragment_search_repositories, container, false)
         binding.setLifecycleOwner(this)
 
-        binding.swipeRefreshLayout.setOnRefreshListener { searchViewModel.loadRepositories() }
+        binding.swipeRefreshLayout.setOnRefreshListener { repositoriesViewModel.loadRepositories(searchViewModel.searchQuery) }
 
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.viewModel = searchViewModel
-        searchViewModel.repositories.observe(this, Observer {
+        binding.viewModel = repositoriesViewModel
+
+        prepareSingleEvents()
+        repositoriesViewModel.repositories.observe(this, Observer {
             if (it.state == ObserverLiveData.DataState.SUCCESS) {
                 binding.swipeRefreshLayout.isRefreshing = false
                 val adapter = RepositoriesAdapter(it.data!!)
@@ -41,6 +45,13 @@ class RepositoriesFragment : Fragment() {
                 binding.usersRecyclerView.adapter = adapter
             }
         })
-        searchViewModel.loadRepositories()
+        repositoriesViewModel.loadRepositories(searchViewModel.searchQuery)
+    }
+
+    private fun prepareSingleEvents() {
+        searchViewModel.searchAction.observe(this, Observer {
+            repositoriesViewModel.loadRepositories(searchViewModel.searchQuery)
+            repositoriesViewModel.testSearchQuery.value = searchViewModel.searchQuery.value
+        })
     }
 }
