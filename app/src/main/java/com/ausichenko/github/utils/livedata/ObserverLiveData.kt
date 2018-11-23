@@ -37,9 +37,7 @@ class ObserverLiveData<Data, Error>: MutableLiveData<ObserverLiveData.State<Data
     class State<Data, Error> {
         var state = DataState.LOADING
         var data: Data? = null
-        //var dataLD: MutableLiveData<Data>? = MutableLiveData()
         var error: Error? = null
-        //var errorLD: MutableLiveData<Error>? = MutableLiveData()
     }
 
     enum class DataState {
