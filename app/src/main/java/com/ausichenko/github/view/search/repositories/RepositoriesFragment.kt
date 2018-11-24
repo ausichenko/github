@@ -36,6 +36,16 @@ class RepositoriesFragment : Fragment() {
         binding.viewModel = repositoriesViewModel
 
         prepareSingleEvents()
+        prepareRepositoriesList()
+    }
+
+    private fun prepareSingleEvents() {
+        searchViewModel.searchEvent.observe(this, Observer {
+            repositoriesViewModel.loadRepositories(searchViewModel.searchQuery)
+        })
+    }
+
+    private fun prepareRepositoriesList() {
         repositoriesViewModel.repositories.observe(this, Observer {
             if (it.state == ObserverLiveData.DataState.SUCCESS) {
                 binding.swipeRefreshLayout.isRefreshing = false
@@ -46,12 +56,5 @@ class RepositoriesFragment : Fragment() {
             }
         })
         repositoriesViewModel.loadRepositories(searchViewModel.searchQuery)
-    }
-
-    private fun prepareSingleEvents() {
-        searchViewModel.searchAction.observe(this, Observer {
-            repositoriesViewModel.loadRepositories(searchViewModel.searchQuery)
-            repositoriesViewModel.testSearchQuery.value = searchViewModel.searchQuery.value
-        })
     }
 }

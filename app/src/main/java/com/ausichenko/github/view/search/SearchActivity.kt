@@ -19,7 +19,6 @@ class SearchActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_search)
         binding.viewModel = searchViewModel
-        //binding.searchBar.
 
         changeFragment(RepositoriesFragment())
     }

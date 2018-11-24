@@ -8,9 +8,9 @@ import com.ausichenko.github.utils.livedata.SingleLiveEvent
 @Suppress("unused")
 class SearchViewModel(private val interactor: SearchInteractor) : ViewModel() {
     var searchQuery = MutableLiveData<String>()
-    var searchAction = SingleLiveEvent<Any>()
+    var searchEvent = SingleLiveEvent<Any>()
 
-    fun call() {
-        searchAction.call()
+    fun onSearch() {
+        searchEvent.call()
     }
 }

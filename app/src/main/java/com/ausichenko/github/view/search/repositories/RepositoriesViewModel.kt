@@ -1,7 +1,6 @@
 package com.ausichenko.github.view.search.repositories
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.ausichenko.github.domain.interactors.SearchInteractor
 import com.ausichenko.github.utils.livedata.*
@@ -18,15 +17,13 @@ class RepositoriesViewModel(private val interactor: SearchInteractor) : ViewMode
     val isError: LiveData<Boolean> = repositories.isError()
     val isEmpty: LiveData<Boolean> = repositories.isEmpty()
 
-    var testSearchQuery = MutableLiveData<String>()
-
-    fun loadRepositories(searchQuery: LiveData<String>) {
-        val query = searchQuery.value.toString()
+    fun loadRepositories(searchQueryLiveData: LiveData<String>) {
+        val query = searchQueryLiveData.value.toString()
         loadRepositories(query)
     }
 
-    private fun loadRepositories(query: String) {
-        disposable.add(interactor.getRepositories()
+    private fun loadRepositories(searchQuery: String) {
+        disposable.add(interactor.getRepositories(searchQuery)
                 .doOnSubscribe {
                     repositories.load()
                 }

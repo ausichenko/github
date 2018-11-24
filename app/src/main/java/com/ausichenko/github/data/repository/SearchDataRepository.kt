@@ -8,8 +8,8 @@ import io.reactivex.Single
 class SearchDataRepository(private val localDataSource: LocalDataSource,
                            private val remoteDataSource: RemoteDataSource) : SearchRepository {
 
-    override fun getRepositories(): Single<List<Any>> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    override fun getRepositories(searchQuery: String): Single<List<Any>> {
+        return remoteDataSource.getRepositories(searchQuery)
     }
 
     override fun getCommits(): Single<List<Any>> {
