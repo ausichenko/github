@@ -49,7 +49,7 @@ class RepositoriesFragment : Fragment() {
         repositoriesViewModel.repositories.observe(this, Observer {
             if (it.state == ObserverLiveData.DataState.SUCCESS) {
                 binding.swipeRefreshLayout.isRefreshing = false
-                val adapter = RepositoriesAdapter(it.data!!)
+                val adapter = RepositoriesAdapter(it.data!!.items)
 
                 binding.usersRecyclerView.layoutManager = LinearLayoutManager(context)
                 binding.usersRecyclerView.adapter = adapter
