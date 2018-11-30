@@ -7,8 +7,22 @@ import androidx.recyclerview.widget.RecyclerView
 import com.ausichenko.github.R
 import com.ausichenko.github.data.network.models.GitRepository
 import kotlinx.android.synthetic.main.item_repository.view.*
+import java.util.ArrayList
 
-class RepositoriesAdapter(private val repositories: List<GitRepository>) : RecyclerView.Adapter<RepositoriesAdapter.ViewHolder>() {
+class RepositoriesAdapter(private val clickListener: (GitRepository) -> Unit) : RecyclerView.Adapter<RepositoriesAdapter.ViewHolder>() {
+
+    private val repositories: MutableList<GitRepository> = ArrayList()
+
+    fun setItems(items: List<GitRepository>) {
+        repositories.clear()
+        repositories.addAll(items)
+        notifyDataSetChanged()
+    }
+
+    fun addItems(items: List<GitRepository>) {
+        repositories.addAll(items)
+        notifyDataSetChanged() // todo: replace to range changed or inserted
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_repository, parent, false))
@@ -28,6 +42,10 @@ class RepositoriesAdapter(private val repositories: List<GitRepository>) : Recyc
             itemView.language.text = repository.language
             itemView.description.text = repository.description
             itemView.stars.text = repository.stargazersCount.toString()
+
+            itemView.setOnClickListener {
+                clickListener.invoke(repository)
+            }
         }
     }
 }

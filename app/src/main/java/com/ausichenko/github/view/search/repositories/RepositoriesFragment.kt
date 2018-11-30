@@ -13,6 +13,7 @@ import com.ausichenko.github.databinding.FragmentSearchRepositoriesBinding
 import com.ausichenko.github.utils.DividerItemDecoration
 import com.ausichenko.github.utils.livedata.ObserverLiveData
 import com.ausichenko.github.view.search.SearchViewModel
+import com.google.android.material.snackbar.Snackbar
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -23,13 +24,26 @@ class RepositoriesFragment : Fragment() {
 
     private lateinit var binding: FragmentSearchRepositoriesBinding
 
+    private lateinit var adapter: RepositoriesAdapter
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = DataBindingUtil.inflate(layoutInflater, R.layout.fragment_search_repositories, container, false)
         binding.setLifecycleOwner(this)
 
-        binding.swipeRefreshLayout.setOnRefreshListener { repositoriesViewModel.loadRepositories(searchViewModel.searchQuery) }
+        initRepositoriesList()
 
         return binding.root
+    }
+
+    private fun initRepositoriesList() {
+        adapter = RepositoriesAdapter { repository ->
+            Snackbar.make(binding.root, "Repository ".plus(repository.fullName).plus(" clicked"), Snackbar.LENGTH_LONG).show()
+        }
+        binding.repositoriesRecyclerView.layoutManager = LinearLayoutManager(context)
+        binding.repositoriesRecyclerView.addItemDecoration(DividerItemDecoration(context!!, R.drawable.divider))
+        binding.repositoriesRecyclerView.adapter = adapter
+
+        binding.swipeRefreshLayout.setOnRefreshListener { repositoriesViewModel.loadRepositories(searchViewModel.searchQuery) }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -50,11 +64,7 @@ class RepositoriesFragment : Fragment() {
         repositoriesViewModel.repositories.observe(this, Observer {
             if (it.state == ObserverLiveData.DataState.SUCCESS) {
                 binding.swipeRefreshLayout.isRefreshing = false
-                val adapter = RepositoriesAdapter(it.data!!.items)
-
-                binding.repositoriesRecyclerView.layoutManager = LinearLayoutManager(context)
-                binding.repositoriesRecyclerView.addItemDecoration(DividerItemDecoration(context!!, R.drawable.divider))
-                binding.repositoriesRecyclerView.adapter = adapter
+                adapter.setItems(it.data!!.items)
             }
         })
         repositoriesViewModel.loadRepositories(searchViewModel.searchQuery)
