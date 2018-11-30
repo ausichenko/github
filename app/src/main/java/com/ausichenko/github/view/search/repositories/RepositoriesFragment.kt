@@ -10,6 +10,7 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ausichenko.github.R
 import com.ausichenko.github.databinding.FragmentSearchRepositoriesBinding
+import com.ausichenko.github.utils.DividerItemDecoration
 import com.ausichenko.github.utils.livedata.ObserverLiveData
 import com.ausichenko.github.view.search.SearchViewModel
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
@@ -51,8 +52,9 @@ class RepositoriesFragment : Fragment() {
                 binding.swipeRefreshLayout.isRefreshing = false
                 val adapter = RepositoriesAdapter(it.data!!.items)
 
-                binding.usersRecyclerView.layoutManager = LinearLayoutManager(context)
-                binding.usersRecyclerView.adapter = adapter
+                binding.repositoriesRecyclerView.layoutManager = LinearLayoutManager(context)
+                binding.repositoriesRecyclerView.addItemDecoration(DividerItemDecoration(context!!, R.drawable.divider))
+                binding.repositoriesRecyclerView.adapter = adapter
             }
         })
         repositoriesViewModel.loadRepositories(searchViewModel.searchQuery)
