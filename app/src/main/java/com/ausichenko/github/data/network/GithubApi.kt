@@ -1,5 +1,6 @@
 package com.ausichenko.github.data.network
 
+import com.ausichenko.github.data.network.models.GitCommit
 import com.ausichenko.github.data.network.models.GitRepository
 import com.ausichenko.github.data.network.models.GitResponse
 import com.ausichenko.github.data.network.models.GitUser
@@ -12,6 +13,9 @@ interface GithubApi {
     // Search
     @GET("search/repositories")
     fun getRepositories(@Query("q") searchQuery: String): Single<GitResponse<GitRepository>>
+
+    @GET("search/commits")
+    fun getCommits(@Query("q") searchQuery: String): Single<GitResponse<GitCommit>>
 
     // Users
     @GET("users")
