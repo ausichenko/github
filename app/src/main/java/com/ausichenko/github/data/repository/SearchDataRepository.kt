@@ -2,6 +2,7 @@ package com.ausichenko.github.data.repository
 
 import com.ausichenko.github.data.datasource.LocalDataSource
 import com.ausichenko.github.data.datasource.RemoteDataSource
+import com.ausichenko.github.data.network.models.GitCommit
 import com.ausichenko.github.data.network.models.GitRepository
 import com.ausichenko.github.data.network.models.GitResponse
 import com.ausichenko.github.domain.repository.SearchRepository
@@ -14,8 +15,8 @@ class SearchDataRepository(private val localDataSource: LocalDataSource,
         return remoteDataSource.getRepositories(searchQuery)
     }
 
-    override fun getCommits(): Single<List<Any>> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    override fun getCommits(searchQuery: String): Single<GitResponse<GitCommit>> {
+        return remoteDataSource.getCommits(searchQuery)
     }
 
     override fun getCode(): Single<List<Any>> {
