@@ -13,7 +13,7 @@ data class GitRepository(
         var private: Boolean,
         @SerializedName("html_url")
         var htmlUrl: String,
-        var description: String,
+        var description: String?,
         var fork: String,
         var url: String,
         @SerializedName("created_at")
@@ -28,7 +28,7 @@ data class GitRepository(
         var stargazersCount: Int,
         @SerializedName("watchers_count")
         var watchersCount: Int,
-        var language: String,
+        var language: String?,
         @SerializedName("forks_count")
         var forksCount: Int,
         @SerializedName("open_issues_count")

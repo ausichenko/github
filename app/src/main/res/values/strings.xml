@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">GitHub</string>
 
+    <string name="search_github">Search GitHub</string>
+
     <string name="error_while_loading">Error while loading :(</string>
     <string name="list_is_empty">List is empty :(</string>
 </resources>

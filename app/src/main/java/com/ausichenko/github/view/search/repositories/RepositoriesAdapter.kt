@@ -39,9 +39,24 @@ class RepositoriesAdapter(private val clickListener: (GitRepository) -> Unit) : 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         fun bind(repository: GitRepository) {
             itemView.fullName.text = repository.fullName
-            itemView.language.text = repository.language
-            itemView.description.text = repository.description
-            itemView.stars.text = repository.stargazersCount.toString()
+            if (!repository.language.isNullOrEmpty()) {
+                itemView.language.visibility = View.VISIBLE
+                itemView.language.text = repository.language
+            } else {
+                itemView.language.visibility = View.GONE
+            }
+            if (!repository.description.isNullOrEmpty()) {
+                itemView.description.visibility = View.VISIBLE
+                itemView.description.text = repository.description
+            } else {
+                itemView.description.visibility = View.GONE
+            }
+            if (repository.stargazersCount > 0) {
+                itemView.starsLayout.visibility = View.VISIBLE
+                itemView.stars.text = repository.stargazersCount.toString()
+            } else {
+                itemView.starsLayout.visibility = View.GONE
+            }
 
             itemView.setOnClickListener {
                 clickListener.invoke(repository)

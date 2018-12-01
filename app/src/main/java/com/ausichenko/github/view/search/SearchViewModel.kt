@@ -10,6 +10,10 @@ class SearchViewModel(private val interactor: SearchInteractor) : ViewModel() {
     var searchQuery = MutableLiveData<String>()
     var searchEvent = SingleLiveEvent<Any>()
 
+    init {
+        searchQuery.value = ""
+    }
+
     fun onSearch() {
         searchEvent.call()
     }
