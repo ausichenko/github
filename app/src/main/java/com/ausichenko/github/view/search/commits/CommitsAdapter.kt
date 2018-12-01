@@ -7,10 +7,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.ausichenko.github.R
 import com.ausichenko.github.data.network.models.GitCommit
 import kotlinx.android.synthetic.main.item_commit.view.*
-import java.text.SimpleDateFormat
 import java.util.*
 
-class CommitsAdapter(private val clickListener: (GitCommit) -> Unit) : RecyclerView.Adapter<CommitsAdapter.ViewHolder>() {
+class CommitsAdapter(private val clickListener: (GitCommit) -> Unit) :
+    RecyclerView.Adapter<CommitsAdapter.ViewHolder>() {
 
     private val commits: MutableList<GitCommit> = ArrayList()
 
@@ -26,7 +26,13 @@ class CommitsAdapter(private val clickListener: (GitCommit) -> Unit) : RecyclerV
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_commit, parent, false))
+        return ViewHolder(
+            LayoutInflater.from(parent.context).inflate(
+                R.layout.item_commit,
+                parent,
+                false
+            )
+        )
     }
 
     override fun getItemCount(): Int {
@@ -41,24 +47,23 @@ class CommitsAdapter(private val clickListener: (GitCommit) -> Unit) : RecyclerV
         fun bind(commit: GitCommit) {
             itemView.name.text = commit.commit.message
 
-            val author = commit.author.login
-            val commiter = commit.commiter.login
+            val author = commit.author
+            val committer = commit.committer
 
-            var info = author
-            if (commiter.equals(author)) {
-                info = info.plus(" authored and ").plus(commiter)
+            if (!author.login.equals(committer.login)) {
+                itemView.info.text = itemView.context.getString(
+                    R.string.commit_info_authored_committed,
+                    author.login,
+                    committer.login,
+                    commit.repository.fullName
+                )
+            } else {
+                itemView.info.text = itemView.context.getString(
+                    R.string.commit_info_committed,
+                    author.login,
+                    commit.repository.fullName
+                )
             }
-            var format = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ")
-            val newDate = format.parse(commit.commit.commiter.date)
-
-            format = SimpleDateFormat("MMM dd")
-            val date = format.format(newDate)
-
-            info = info.plus(" committed to ").plus(commit.repository.fullName).plus(" on ").plus(date)
-
-            // todo: to res
-
-            itemView.info.text = info
 
             itemView.setOnClickListener {
                 clickListener.invoke(commit)

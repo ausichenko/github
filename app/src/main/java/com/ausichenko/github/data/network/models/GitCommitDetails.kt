@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName
 data class GitCommitDetails(
     var url: String,
     var author: GitCommitAuthor,
-    var commiter: GitCommitAuthor,
+    var committer: GitCommitAuthor,
     var message: String,
     var tree: GitTree,
     @SerializedName("comment_count")

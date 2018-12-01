@@ -2,6 +2,7 @@ package com.ausichenko.github.di
 
 import com.ausichenko.github.BuildConfig
 import com.ausichenko.github.data.network.GithubApi
+import com.ausichenko.github.data.network.interceptor.HeaderInterceptor
 import com.google.gson.FieldNamingPolicy
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
@@ -22,10 +23,10 @@ val networkModule = module {
 
 fun makeGson(): Gson {
     return GsonBuilder()
-            .setLenient()
-            .setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
-            .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
-            .create()
+        .setLenient()
+        .setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+        .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
+        .create()
 }
 
 fun makeLoggingInterceptor(): HttpLoggingInterceptor {
@@ -39,18 +40,19 @@ fun makeLoggingInterceptor(): HttpLoggingInterceptor {
 
 fun makeOkHttpClient(httpLoggingInterceptor: HttpLoggingInterceptor): OkHttpClient {
     return OkHttpClient.Builder()
-            .addInterceptor(httpLoggingInterceptor)
-            .connectTimeout(120, TimeUnit.SECONDS)
-            .readTimeout(120, TimeUnit.SECONDS)
-            .build()
+        .addInterceptor(httpLoggingInterceptor)
+        .addInterceptor(HeaderInterceptor())
+        .connectTimeout(120, TimeUnit.SECONDS)
+        .readTimeout(120, TimeUnit.SECONDS)
+        .build()
 }
 
 fun makeGitHubService(okHttpClient: OkHttpClient, gson: Gson): GithubApi {
     val retrofit = Retrofit.Builder()
-            .baseUrl("https://api.github.com")
-            .client(okHttpClient)
-            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-            .addConverterFactory(GsonConverterFactory.create(gson))
-            .build()
+        .baseUrl("https://api.github.com")
+        .client(okHttpClient)
+        .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+        .addConverterFactory(GsonConverterFactory.create(gson))
+        .build()
     return retrofit.create(GithubApi::class.java)
 }

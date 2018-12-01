@@ -11,7 +11,7 @@ data class GitCommit(
     var commentsUrl: String,
     var commit: GitCommitDetails,
     var author: GitAuthor,
-    var commiter: GitAuthor,
+    var committer: GitAuthor,
     var parents: List<GitParent>,
     var repository: GitRepository,
     var score: Double

@@ -12,9 +12,9 @@
         android:id="@+id/name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="@color/primary_text"
-        android:lines="1"
         android:ellipsize="end"
+        android:maxLines="2"
+        android:textColor="@color/primary_text"
         android:textSize="16sp"
         tools:text="some commit name" />
 
@@ -25,6 +25,6 @@
         android:layout_below="@id/name"
         android:textColor="@color/primary_text"
         android:textSize="14sp"
-        tools:text="ausichenko commited to ausichenko/github on Dec 1 - a1b2c3d" />
+        tools:text="ausichenko commited to ausichenko/github" />
 
 </RelativeLayout>

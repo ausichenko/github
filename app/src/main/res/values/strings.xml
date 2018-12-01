@@ -9,6 +9,9 @@
     <string name="wikis">Wikis</string>
     <string name="users">Users</string>
 
+    <string name="commit_info_authored_committed">%s authored and %s committed to %s</string>
+    <string name="commit_info_committed">%s committed to %s</string>
+
     <string name="error_while_loading">Error while loading :(</string>
     <string name="list_is_empty">List is empty :(</string>
 </resources>
