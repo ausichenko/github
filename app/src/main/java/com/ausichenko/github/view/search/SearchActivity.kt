@@ -15,12 +15,12 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 class SearchActivity : AppCompatActivity() {
 
     companion object {
-        private const val repositoriesId: Long = 1
-        private const val commitsId: Long = 2
-        private const val issuesId: Long = 3
-        private const val topicsId: Long = 4
-        private const val wikisId: Long = 5
-        private const val usersId: Long = 6
+        private const val REPOSITORIES_ID: Long = 1
+        private const val COMMITS_ID: Long = 2
+        private const val ISSUES_ID: Long = 3
+        private const val TOPICS_ID: Long = 4
+        private const val WIKIS_ID: Long = 5
+        private const val USERS_ID: Long = 6
     }
 
     private val searchViewModel: SearchViewModel by viewModel()
@@ -38,12 +38,12 @@ class SearchActivity : AppCompatActivity() {
 
     private fun initSpinner() {
         val items: MutableList<SearchTypeAdapter.SearchItem> = ArrayList()
-        items.add(SearchTypeAdapter.SearchItem(repositoriesId, getString(R.string.repositories)))
-        items.add(SearchTypeAdapter.SearchItem(commitsId, getString(R.string.commits)))
-        items.add(SearchTypeAdapter.SearchItem(issuesId, getString(R.string.issues)))
-        items.add(SearchTypeAdapter.SearchItem(topicsId, getString(R.string.topics)))
-        items.add(SearchTypeAdapter.SearchItem(wikisId, getString(R.string.wikis)))
-        items.add(SearchTypeAdapter.SearchItem(usersId, getString(R.string.users)))
+        items.add(SearchTypeAdapter.SearchItem(REPOSITORIES_ID, getString(R.string.repositories)))
+        items.add(SearchTypeAdapter.SearchItem(COMMITS_ID, getString(R.string.commits)))
+        items.add(SearchTypeAdapter.SearchItem(ISSUES_ID, getString(R.string.issues)))
+        items.add(SearchTypeAdapter.SearchItem(TOPICS_ID, getString(R.string.topics)))
+        items.add(SearchTypeAdapter.SearchItem(WIKIS_ID, getString(R.string.wikis)))
+        items.add(SearchTypeAdapter.SearchItem(USERS_ID, getString(R.string.users)))
 
         val adapter = SearchTypeAdapter(applicationContext, items)
         binding.spinner.adapter = adapter
@@ -56,12 +56,12 @@ class SearchActivity : AppCompatActivity() {
                 id: Long
             ) {
                 when (id) {
-                    repositoriesId -> changeFragment(RepositoriesFragment())
-                    commitsId -> changeFragment(CommitsFragment())
-                    issuesId -> changeFragment(Fragment())
-                    topicsId -> changeFragment(Fragment())
-                    wikisId -> changeFragment(Fragment())
-                    usersId -> changeFragment(Fragment())
+                    REPOSITORIES_ID -> changeFragment(RepositoriesFragment())
+                    COMMITS_ID -> changeFragment(CommitsFragment())
+                    ISSUES_ID -> changeFragment(Fragment())
+                    TOPICS_ID -> changeFragment(Fragment())
+                    WIKIS_ID -> changeFragment(Fragment())
+                    USERS_ID -> changeFragment(Fragment())
                 }
             }
 

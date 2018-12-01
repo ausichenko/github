@@ -26,8 +26,17 @@ class CommitsFragment : Fragment() {
 
     private lateinit var adapter: CommitsAdapter
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        binding = DataBindingUtil.inflate(layoutInflater, R.layout.fragment_search_commits, container, false)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        binding = DataBindingUtil.inflate(
+            layoutInflater,
+            R.layout.fragment_search_commits,
+            container,
+            false
+        )
         binding.setLifecycleOwner(this)
 
         initRepositoriesList()
@@ -37,13 +46,26 @@ class CommitsFragment : Fragment() {
 
     private fun initRepositoriesList() {
         adapter = CommitsAdapter { commit ->
-            Snackbar.make(binding.root, "Commit ".plus(commit.commit.message).plus(" clicked"), Snackbar.LENGTH_LONG).show()
+            Snackbar.make(
+                binding.root,
+                "Commit ".plus(commit.commit.message).plus(" clicked"),
+                Snackbar.LENGTH_LONG
+            ).show()
         }
         binding.commitsRecyclerView.layoutManager = LinearLayoutManager(context)
-        binding.commitsRecyclerView.addItemDecoration(DividerItemDecoration(context!!, R.drawable.divider))
+        binding.commitsRecyclerView.addItemDecoration(
+            DividerItemDecoration(
+                context!!,
+                R.drawable.divider
+            )
+        )
         binding.commitsRecyclerView.adapter = adapter
 
-        binding.swipeRefreshLayout.setOnRefreshListener { commitsViewModel.loadCommits(searchViewModel.searchQuery) }
+        binding.swipeRefreshLayout.setOnRefreshListener {
+            commitsViewModel.loadCommits(
+                searchViewModel.searchQuery
+            )
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

@@ -26,8 +26,17 @@ class RepositoriesFragment : Fragment() {
 
     private lateinit var adapter: RepositoriesAdapter
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        binding = DataBindingUtil.inflate(layoutInflater, R.layout.fragment_search_repositories, container, false)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        binding = DataBindingUtil.inflate(
+            layoutInflater,
+            R.layout.fragment_search_repositories,
+            container,
+            false
+        )
         binding.setLifecycleOwner(this)
 
         initRepositoriesList()
@@ -37,13 +46,26 @@ class RepositoriesFragment : Fragment() {
 
     private fun initRepositoriesList() {
         adapter = RepositoriesAdapter { repository ->
-            Snackbar.make(binding.root, "Repository ".plus(repository.fullName).plus(" clicked"), Snackbar.LENGTH_LONG).show()
+            Snackbar.make(
+                binding.root,
+                "Repository ".plus(repository.fullName).plus(" clicked"),
+                Snackbar.LENGTH_LONG
+            ).show()
         }
         binding.repositoriesRecyclerView.layoutManager = LinearLayoutManager(context)
-        binding.repositoriesRecyclerView.addItemDecoration(DividerItemDecoration(context!!, R.drawable.divider))
+        binding.repositoriesRecyclerView.addItemDecoration(
+            DividerItemDecoration(
+                context!!,
+                R.drawable.divider
+            )
+        )
         binding.repositoriesRecyclerView.adapter = adapter
 
-        binding.swipeRefreshLayout.setOnRefreshListener { repositoriesViewModel.loadRepositories(searchViewModel.searchQuery) }
+        binding.swipeRefreshLayout.setOnRefreshListener {
+            repositoriesViewModel.loadRepositories(
+                searchViewModel.searchQuery
+            )
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

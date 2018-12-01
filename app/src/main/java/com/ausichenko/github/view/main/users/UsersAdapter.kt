@@ -8,10 +8,17 @@ import com.ausichenko.github.R
 import com.ausichenko.github.data.network.models.GitUser
 import kotlinx.android.synthetic.main.item_user.view.*
 
-class UsersAdapter(private val users: List<GitUser>) : RecyclerView.Adapter<UsersAdapter.ViewHolder>() {
+class UsersAdapter(private val users: List<GitUser>) :
+    RecyclerView.Adapter<UsersAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_user, parent, false))
+        return ViewHolder(
+            LayoutInflater.from(parent.context).inflate(
+                R.layout.item_user,
+                parent,
+                false
+            )
+        )
     }
 
     override fun getItemCount(): Int {

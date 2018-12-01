@@ -9,7 +9,8 @@ import com.ausichenko.github.data.network.models.GitRepository
 import kotlinx.android.synthetic.main.item_repository.view.*
 import java.util.ArrayList
 
-class RepositoriesAdapter(private val clickListener: (GitRepository) -> Unit) : RecyclerView.Adapter<RepositoriesAdapter.ViewHolder>() {
+class RepositoriesAdapter(private val clickListener: (GitRepository) -> Unit) :
+    RecyclerView.Adapter<RepositoriesAdapter.ViewHolder>() {
 
     private val repositories: MutableList<GitRepository> = ArrayList()
 
@@ -25,7 +26,13 @@ class RepositoriesAdapter(private val clickListener: (GitRepository) -> Unit) : 
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_repository, parent, false))
+        return ViewHolder(
+            LayoutInflater.from(parent.context).inflate(
+                R.layout.item_repository,
+                parent,
+                false
+            )
+        )
     }
 
     override fun getItemCount(): Int {

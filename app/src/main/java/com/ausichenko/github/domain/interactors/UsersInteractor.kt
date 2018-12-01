@@ -8,6 +8,6 @@ import io.reactivex.schedulers.Schedulers
 class UsersInteractor(private val repository: UsersRepository) {
     fun getUsers(): Single<List<GitUser>> {
         return repository.getUsers()
-                .subscribeOn(Schedulers.io())
+            .subscribeOn(Schedulers.io())
     }
 }

@@ -6,8 +6,10 @@ import com.ausichenko.github.data.network.models.GitUser
 import com.ausichenko.github.domain.repository.UsersRepository
 import io.reactivex.Single
 
-class UsersDataRepository(private val localDataSource: LocalDataSource,
-                          private val remoteDataSource: RemoteDataSource) : UsersRepository {
+class UsersDataRepository(
+    private val localDataSource: LocalDataSource,
+    private val remoteDataSource: RemoteDataSource
+) : UsersRepository {
 
     override fun getUsers(): Single<List<GitUser>> {
         return localDataSource.isEmpty().flatMap { empty ->
@@ -15,9 +17,9 @@ class UsersDataRepository(private val localDataSource: LocalDataSource,
                 return@flatMap localDataSource.getUsers()
             } else {
                 return@flatMap remoteDataSource.getUsers()
-                        .doOnSuccess { users ->
-                            localDataSource.saveAll(users)
-                        }
+                    .doOnSuccess { users ->
+                        localDataSource.saveAll(users)
+                    }
             }
         }
     }

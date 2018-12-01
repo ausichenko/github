@@ -20,11 +20,11 @@ class UsersViewModel(private val interactor: UsersInteractor) : ViewModel() {
 
     fun loadUsers() {
         disposable.add(interactor.getUsers()
-                .doOnSubscribe {
-                    users.load()
-                }
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(users)
+            .doOnSubscribe {
+                users.load()
+            }
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(users)
         )
     }
 

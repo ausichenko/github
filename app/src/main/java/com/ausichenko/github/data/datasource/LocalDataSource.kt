@@ -3,7 +3,7 @@ package com.ausichenko.github.data.datasource
 import com.ausichenko.github.data.network.models.GitUser
 import io.reactivex.Single
 
-class LocalDataSource: DataSource {
+class LocalDataSource : DataSource {
 
     private val users: LinkedHashMap<Long, GitUser> = LinkedHashMap()
 

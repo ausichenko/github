@@ -3,7 +3,9 @@ package com.ausichenko.github.utils.livedata
 import androidx.lifecycle.MutableLiveData
 import io.reactivex.functions.BiConsumer
 
-class ObserverLiveData<Data, Error> : MutableLiveData<ObserverLiveData.State<Data, Error>>(), BiConsumer<Data, Error> {
+class ObserverLiveData<Data, Error> : MutableLiveData<ObserverLiveData.State<Data, Error>>(),
+    BiConsumer<Data, Error> {
+
     init {
         value = ObserverLiveData.State()
     }

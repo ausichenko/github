@@ -26,11 +26,11 @@ class RepositoriesViewModel(private val interactor: SearchInteractor) : ViewMode
 
     private fun loadRepositories(searchQuery: String) {
         disposable.add(interactor.getRepositories(searchQuery)
-                .doOnSubscribe {
-                    repositories.load()
-                }
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(repositories)
+            .doOnSubscribe {
+                repositories.load()
+            }
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(repositories)
         )
     }
 

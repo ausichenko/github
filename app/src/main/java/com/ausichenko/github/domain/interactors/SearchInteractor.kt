@@ -11,7 +11,7 @@ class SearchInteractor(private val repository: SearchRepository) {
 
     fun getRepositories(searchQuery: String): Single<GitResponse<GitRepository>> {
         return repository.getRepositories(searchQuery)
-                .subscribeOn(Schedulers.io())
+            .subscribeOn(Schedulers.io())
     }
 
     fun getCommits(searchQuery: String): Single<GitResponse<GitCommit>> {

@@ -20,7 +20,11 @@ class UsersFragment : Fragment() {
 
     private lateinit var binding: FragmentUsersBinding
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         binding = DataBindingUtil.inflate(layoutInflater, R.layout.fragment_users, container, false)
         binding.setLifecycleOwner(this)
 

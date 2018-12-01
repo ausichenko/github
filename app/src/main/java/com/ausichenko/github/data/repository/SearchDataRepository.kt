@@ -8,8 +8,10 @@ import com.ausichenko.github.data.network.models.GitResponse
 import com.ausichenko.github.domain.repository.SearchRepository
 import io.reactivex.Single
 
-class SearchDataRepository(private val localDataSource: LocalDataSource,
-                           private val remoteDataSource: RemoteDataSource) : SearchRepository {
+class SearchDataRepository(
+    private val localDataSource: LocalDataSource,
+    private val remoteDataSource: RemoteDataSource
+) : SearchRepository {
 
     override fun getRepositories(searchQuery: String): Single<GitResponse<GitRepository>> {
         return remoteDataSource.getRepositories(searchQuery)

@@ -26,11 +26,11 @@ class CommitsViewModel(private val interactor: SearchInteractor) : ViewModel() {
 
     private fun loadCommits(searchQuery: String) {
         disposable.add(interactor.getCommits(searchQuery)
-                .doOnSubscribe {
-                    commits.load()
-                }
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(commits)
+            .doOnSubscribe {
+                commits.load()
+            }
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(commits)
         )
     }
 
