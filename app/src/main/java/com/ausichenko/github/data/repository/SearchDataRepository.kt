@@ -3,6 +3,7 @@ package com.ausichenko.github.data.repository
 import com.ausichenko.github.data.datasource.LocalDataSource
 import com.ausichenko.github.data.datasource.RemoteDataSource
 import com.ausichenko.github.data.network.models.GitCommit
+import com.ausichenko.github.data.network.models.GitIssue
 import com.ausichenko.github.data.network.models.GitRepository
 import com.ausichenko.github.data.network.models.GitResponse
 import com.ausichenko.github.domain.repository.SearchRepository
@@ -25,8 +26,8 @@ class SearchDataRepository(
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun getIssues(): Single<List<Any>> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    override fun getIssues(searchQuery: String): Single<GitResponse<GitIssue>> {
+        return remoteDataSource.getIssues(searchQuery)
     }
 
     override fun getUsers(): Single<List<Any>> {

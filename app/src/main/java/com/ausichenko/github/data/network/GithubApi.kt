@@ -1,9 +1,6 @@
 package com.ausichenko.github.data.network
 
-import com.ausichenko.github.data.network.models.GitCommit
-import com.ausichenko.github.data.network.models.GitRepository
-import com.ausichenko.github.data.network.models.GitResponse
-import com.ausichenko.github.data.network.models.GitUser
+import com.ausichenko.github.data.network.models.*
 import io.reactivex.Single
 import retrofit2.http.GET
 import retrofit2.http.Query
@@ -16,6 +13,9 @@ interface GithubApi {
 
     @GET("search/commits")
     fun getCommits(@Query("q") searchQuery: String): Single<GitResponse<GitCommit>>
+
+    @GET("search/issues")
+    fun getIssues(@Query("q") searchQuery: String): Single<GitResponse<GitIssue>>
 
     // Users
     @GET("users")

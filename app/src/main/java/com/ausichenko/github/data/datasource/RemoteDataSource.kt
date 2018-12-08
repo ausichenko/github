@@ -1,10 +1,7 @@
 package com.ausichenko.github.data.datasource
 
 import com.ausichenko.github.data.network.GithubApi
-import com.ausichenko.github.data.network.models.GitCommit
-import com.ausichenko.github.data.network.models.GitRepository
-import com.ausichenko.github.data.network.models.GitResponse
-import com.ausichenko.github.data.network.models.GitUser
+import com.ausichenko.github.data.network.models.*
 import io.reactivex.Single
 
 class RemoteDataSource(private val githubApi: GithubApi) : DataSource {
@@ -16,6 +13,10 @@ class RemoteDataSource(private val githubApi: GithubApi) : DataSource {
 
     fun getCommits(searchQuery: String): Single<GitResponse<GitCommit>> {
         return githubApi.getCommits(searchQuery)
+    }
+
+    fun getIssues(searchQuery: String): Single<GitResponse<GitIssue>> {
+        return githubApi.getIssues(searchQuery)
     }
 
     // Users

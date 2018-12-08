@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import com.ausichenko.github.R
 import com.ausichenko.github.databinding.ActivitySearchBinding
 import com.ausichenko.github.view.search.commits.CommitsFragment
+import com.ausichenko.github.view.search.issues.IssuesFragment
 import com.ausichenko.github.view.search.repositories.RepositoriesFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -58,7 +59,7 @@ class SearchActivity : AppCompatActivity() {
                 when (id) {
                     REPOSITORIES_ID -> changeFragment(RepositoriesFragment())
                     COMMITS_ID -> changeFragment(CommitsFragment())
-                    ISSUES_ID -> changeFragment(Fragment())
+                    ISSUES_ID -> changeFragment(IssuesFragment())
                     TOPICS_ID -> changeFragment(Fragment())
                     WIKIS_ID -> changeFragment(Fragment())
                     USERS_ID -> changeFragment(Fragment())
