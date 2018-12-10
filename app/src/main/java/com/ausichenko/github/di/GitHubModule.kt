@@ -14,6 +14,7 @@ import com.ausichenko.github.view.search.SearchViewModel
 import com.ausichenko.github.view.search.commits.CommitsViewModel
 import com.ausichenko.github.view.search.issues.IssuesViewModel
 import com.ausichenko.github.view.search.repositories.RepositoriesViewModel
+import com.ausichenko.github.view.search.topics.TopicsViewModel
 import org.koin.androidx.viewmodel.ext.koin.viewModel
 import org.koin.dsl.module.module
 
@@ -26,6 +27,7 @@ val githubModule = module {
     viewModel { RepositoriesViewModel(get()) }
     viewModel { CommitsViewModel(get()) }
     viewModel { IssuesViewModel(get()) }
+    viewModel { TopicsViewModel(get()) }
 
     single { makeUsersRepository(get()) }
     single { makeUsersInteractor(get()) }

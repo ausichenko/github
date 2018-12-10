@@ -2,7 +2,6 @@ package com.ausichenko.github.di
 
 import com.ausichenko.github.BuildConfig
 import com.ausichenko.github.data.network.GithubApi
-import com.ausichenko.github.data.network.interceptor.HeaderInterceptor
 import com.google.gson.FieldNamingPolicy
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
@@ -41,7 +40,6 @@ fun makeLoggingInterceptor(): HttpLoggingInterceptor {
 fun makeOkHttpClient(httpLoggingInterceptor: HttpLoggingInterceptor): OkHttpClient {
     return OkHttpClient.Builder()
         .addInterceptor(httpLoggingInterceptor)
-        .addInterceptor(HeaderInterceptor())
         .connectTimeout(120, TimeUnit.SECONDS)
         .readTimeout(120, TimeUnit.SECONDS)
         .build()

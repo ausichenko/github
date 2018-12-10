@@ -27,11 +27,11 @@ class SearchDataRepository(
         return remoteDataSource.getIssues(searchQuery)
     }
 
-    override fun getUsers(): Single<List<Any>> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    override fun getTopics(searchQuery: String): Single<Response<Topic>> {
+        return remoteDataSource.getTopics(searchQuery)
     }
 
-    override fun getTopics(): Single<List<Any>> {
+    override fun getUsers(): Single<List<Any>> {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 

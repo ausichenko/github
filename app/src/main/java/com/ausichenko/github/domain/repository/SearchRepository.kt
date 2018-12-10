@@ -8,7 +8,7 @@ interface SearchRepository {
     fun getCommits(searchQuery: String): Single<Response<Commit>>
     fun getCode(): Single<List<Any>> // todo: You must authenticate to search for code across all public repositories.
     fun getIssues(searchQuery: String): Single<Response<Issue>>
+    fun getTopics(searchQuery: String): Single<Response<Topic>>
     fun getUsers(): Single<List<Any>>
-    fun getTopics(): Single<List<Any>>
     fun getLabels(): Single<List<Any>>
 }
