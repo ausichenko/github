@@ -6,7 +6,7 @@
 
         <variable
             name="viewModel"
-            type="com.ausichenko.github.view.main.users.UsersViewModel" />
+            type="com.ausichenko.github.view.search.users.UsersViewModel" />
     </data>
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout

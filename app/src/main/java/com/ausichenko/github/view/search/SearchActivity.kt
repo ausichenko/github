@@ -12,6 +12,7 @@ import com.ausichenko.github.view.search.commits.CommitsFragment
 import com.ausichenko.github.view.search.issues.IssuesFragment
 import com.ausichenko.github.view.search.repositories.RepositoriesFragment
 import com.ausichenko.github.view.search.topics.TopicsFragment
+import com.ausichenko.github.view.search.users.UsersFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SearchActivity : AppCompatActivity() {
@@ -44,7 +45,7 @@ class SearchActivity : AppCompatActivity() {
         items.add(SearchTypeAdapter.SearchItem(COMMITS_ID, getString(R.string.commits)))
         items.add(SearchTypeAdapter.SearchItem(ISSUES_ID, getString(R.string.issues)))
         items.add(SearchTypeAdapter.SearchItem(TOPICS_ID, getString(R.string.topics)))
-        items.add(SearchTypeAdapter.SearchItem(WIKIS_ID, getString(R.string.wikis)))
+        //items.add(SearchTypeAdapter.SearchItem(WIKIS_ID, getString(R.string.wikis)))
         items.add(SearchTypeAdapter.SearchItem(USERS_ID, getString(R.string.users)))
 
         val adapter = SearchTypeAdapter(applicationContext, items)
@@ -62,8 +63,8 @@ class SearchActivity : AppCompatActivity() {
                     COMMITS_ID -> changeFragment(CommitsFragment())
                     ISSUES_ID -> changeFragment(IssuesFragment())
                     TOPICS_ID -> changeFragment(TopicsFragment())
-                    WIKIS_ID -> changeFragment(Fragment())
-                    USERS_ID -> changeFragment(Fragment())
+                    //WIKIS_ID -> changeFragment(Fragment())
+                    USERS_ID -> changeFragment(UsersFragment())
                 }
             }
 

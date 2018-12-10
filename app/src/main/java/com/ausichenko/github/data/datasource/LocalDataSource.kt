@@ -19,7 +19,7 @@ class LocalDataSource : DataSource {
         users.forEach { user -> this.users[user.id] = user }
     }
 
-    override fun getUsers(): Single<List<User>> {
+    fun getUsers(): Single<List<User>> {
         return Single.just(users.values.toList())
     }
 }

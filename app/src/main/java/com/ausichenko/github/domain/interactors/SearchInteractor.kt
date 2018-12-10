@@ -26,4 +26,9 @@ class SearchInteractor(private val repository: SearchRepository) {
         return repository.getTopics(searchQuery)
             .subscribeOn(Schedulers.io())
     }
+
+    fun getUsers(searchQuery: String): Single<Response<User>> {
+        return repository.getUsers(searchQuery)
+            .subscribeOn(Schedulers.io())
+    }
 }

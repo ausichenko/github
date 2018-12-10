@@ -23,8 +23,7 @@ class RemoteDataSource(private val githubApi: GithubApi) : DataSource {
         return githubApi.getTopics(searchQuery)
     }
 
-    // Users
-    override fun getUsers(): Single<List<User>> {
-        return githubApi.getUsers()
+    fun getUsers(searchQuery: String): Single<Response<User>> {
+        return githubApi.getUsers(searchQuery)
     }
 }

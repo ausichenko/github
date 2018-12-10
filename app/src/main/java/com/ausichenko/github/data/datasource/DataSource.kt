@@ -1,11 +1,6 @@
 package com.ausichenko.github.data.datasource
 
-import com.ausichenko.github.data.network.models.User
-import io.reactivex.Single
-
-interface DataSource {
-    fun getUsers(): Single<List<User>>
-}
+interface DataSource
 
 // todo: think about split data layer to: data, cache and remote
 // todo: where this DataSource class is base interface for RemoteDateSource and CacheDataSource

@@ -23,7 +23,6 @@ interface GithubApi {
     @GET("search/topics")
     fun getTopics(@Query("q") searchQuery: String): Single<Response<Topic>>
 
-    // Users
-    @GET("users")
-    fun getUsers(@Query("since") userId: Int? = null): Single<List<User>>
+    @GET("search/users")
+    fun getUsers(@Query("q") searchQuery: String): Single<Response<User>>
 }
