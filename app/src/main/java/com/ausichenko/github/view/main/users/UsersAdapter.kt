@@ -5,10 +5,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.ausichenko.github.R
-import com.ausichenko.github.data.network.models.GitUser
+import com.ausichenko.github.data.network.models.User
 import kotlinx.android.synthetic.main.item_user.view.*
 
-class UsersAdapter(private val users: List<GitUser>) :
+class UsersAdapter(private val users: List<User>) :
     RecyclerView.Adapter<UsersAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -30,7 +30,7 @@ class UsersAdapter(private val users: List<GitUser>) :
     }
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        fun bind(user: GitUser) {
+        fun bind(user: User) {
             itemView.username.text = user.login
         }
     }

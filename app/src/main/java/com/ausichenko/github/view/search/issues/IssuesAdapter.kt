@@ -5,22 +5,22 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.ausichenko.github.R
-import com.ausichenko.github.data.network.models.GitIssue
+import com.ausichenko.github.data.network.models.Issue
 import kotlinx.android.synthetic.main.item_issue.view.*
 import java.util.*
 
-class IssuesAdapter(private val clickListener: (GitIssue) -> Unit) :
+class IssuesAdapter(private val clickListener: (Issue) -> Unit) :
     RecyclerView.Adapter<IssuesAdapter.ViewHolder>() {
 
-    private val issues: MutableList<GitIssue> = ArrayList()
+    private val issues: MutableList<Issue> = ArrayList()
 
-    fun setItems(items: List<GitIssue>) {
+    fun setItems(items: List<Issue>) {
         issues.clear()
         issues.addAll(items)
         notifyDataSetChanged()
     }
 
-    fun addItems(items: List<GitIssue>) {
+    fun addItems(items: List<Issue>) {
         issues.addAll(items)
         notifyDataSetChanged() // todo: replace to range changed or inserted
     }
@@ -44,7 +44,7 @@ class IssuesAdapter(private val clickListener: (GitIssue) -> Unit) :
     }
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        fun bind(issue: GitIssue) {
+        fun bind(issue: Issue) {
             itemView.title.text = issue.title
             itemView.body.text = issue.body
             itemView.number.text = itemView.context.getString(R.string.number, issue.number)

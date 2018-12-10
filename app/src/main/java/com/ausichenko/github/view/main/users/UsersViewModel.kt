@@ -2,7 +2,7 @@ package com.ausichenko.github.view.main.users
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
-import com.ausichenko.github.data.network.models.GitUser
+import com.ausichenko.github.data.network.models.User
 import com.ausichenko.github.domain.interactors.UsersInteractor
 import com.ausichenko.github.utils.livedata.*
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -12,7 +12,7 @@ class UsersViewModel(private val interactor: UsersInteractor) : ViewModel() {
 
     private val disposable = CompositeDisposable()
 
-    var users: ObserverLiveData<List<GitUser>, Throwable> = ObserverLiveData()
+    var users: ObserverLiveData<List<User>, Throwable> = ObserverLiveData()
     val isSuccess: LiveData<Boolean> = users.isSuccess()
     val isLoading: LiveData<Boolean> = users.isLoading()
     val isError: LiveData<Boolean> = users.isError()

@@ -9,15 +9,15 @@ interface GithubApi {
 
     // Search
     @GET("search/repositories")
-    fun getRepositories(@Query("q") searchQuery: String): Single<GitResponse<GitRepository>>
+    fun getRepositories(@Query("q") searchQuery: String): Single<Response<Repository>>
 
     @GET("search/commits")
-    fun getCommits(@Query("q") searchQuery: String): Single<GitResponse<GitCommit>>
+    fun getCommits(@Query("q") searchQuery: String): Single<Response<Commit>>
 
     @GET("search/issues")
-    fun getIssues(@Query("q") searchQuery: String): Single<GitResponse<GitIssue>>
+    fun getIssues(@Query("q") searchQuery: String): Single<Response<Issue>>
 
     // Users
     @GET("users")
-    fun getUsers(@Query("since") userId: Int? = null): Single<List<GitUser>>
+    fun getUsers(@Query("since") userId: Int? = null): Single<List<User>>
 }

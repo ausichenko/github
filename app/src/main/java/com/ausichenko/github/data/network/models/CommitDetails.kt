@@ -1,6 +1,6 @@
 package com.ausichenko.github.data.network.models
 
-data class GitTree(
+data class CommitDetails(
     var url: String,
-    var sha: String
+    var message: String
 )

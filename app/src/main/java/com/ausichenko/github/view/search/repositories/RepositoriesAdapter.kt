@@ -5,22 +5,22 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.ausichenko.github.R
-import com.ausichenko.github.data.network.models.GitRepository
+import com.ausichenko.github.data.network.models.Repository
 import kotlinx.android.synthetic.main.item_repository.view.*
-import java.util.ArrayList
+import java.util.*
 
-class RepositoriesAdapter(private val clickListener: (GitRepository) -> Unit) :
+class RepositoriesAdapter(private val clickListener: (Repository) -> Unit) :
     RecyclerView.Adapter<RepositoriesAdapter.ViewHolder>() {
 
-    private val repositories: MutableList<GitRepository> = ArrayList()
+    private val repositories: MutableList<Repository> = ArrayList()
 
-    fun setItems(items: List<GitRepository>) {
+    fun setItems(items: List<Repository>) {
         repositories.clear()
         repositories.addAll(items)
         notifyDataSetChanged()
     }
 
-    fun addItems(items: List<GitRepository>) {
+    fun addItems(items: List<Repository>) {
         repositories.addAll(items)
         notifyDataSetChanged() // todo: replace to range changed or inserted
     }
@@ -44,7 +44,7 @@ class RepositoriesAdapter(private val clickListener: (GitRepository) -> Unit) :
     }
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        fun bind(repository: GitRepository) {
+        fun bind(repository: Repository) {
             itemView.fullName.text = repository.fullName
             if (!repository.language.isNullOrEmpty()) {
                 itemView.language.visibility = View.VISIBLE

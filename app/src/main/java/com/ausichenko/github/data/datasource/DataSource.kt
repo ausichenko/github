@@ -1,10 +1,10 @@
 package com.ausichenko.github.data.datasource
 
-import com.ausichenko.github.data.network.models.GitUser
+import com.ausichenko.github.data.network.models.User
 import io.reactivex.Single
 
 interface DataSource {
-    fun getUsers(): Single<List<GitUser>>
+    fun getUsers(): Single<List<User>>
 }
 
 // todo: think about split data layer to: data, cache and remote

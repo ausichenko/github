@@ -2,8 +2,8 @@ package com.ausichenko.github.view.search.commits
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
-import com.ausichenko.github.data.network.models.GitCommit
-import com.ausichenko.github.data.network.models.GitResponse
+import com.ausichenko.github.data.network.models.Commit
+import com.ausichenko.github.data.network.models.Response
 import com.ausichenko.github.domain.interactors.SearchInteractor
 import com.ausichenko.github.utils.livedata.*
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -13,7 +13,7 @@ class CommitsViewModel(private val interactor: SearchInteractor) : ViewModel() {
 
     private val disposable = CompositeDisposable()
 
-    var commits: ObserverLiveData<GitResponse<GitCommit>, Throwable> = ObserverLiveData()
+    var commits: ObserverLiveData<Response<Commit>, Throwable> = ObserverLiveData()
     val isSuccess: LiveData<Boolean> = commits.isSuccess()
     val isLoading: LiveData<Boolean> = commits.isLoading()
     val isError: LiveData<Boolean> = commits.isError()

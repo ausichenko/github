@@ -5,22 +5,22 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.ausichenko.github.R
-import com.ausichenko.github.data.network.models.GitCommit
+import com.ausichenko.github.data.network.models.Commit
 import kotlinx.android.synthetic.main.item_commit.view.*
 import java.util.*
 
-class CommitsAdapter(private val clickListener: (GitCommit) -> Unit) :
+class CommitsAdapter(private val clickListener: (Commit) -> Unit) :
     RecyclerView.Adapter<CommitsAdapter.ViewHolder>() {
 
-    private val commits: MutableList<GitCommit> = ArrayList()
+    private val commits: MutableList<Commit> = ArrayList()
 
-    fun setItems(items: List<GitCommit>) {
+    fun setItems(items: List<Commit>) {
         commits.clear()
         commits.addAll(items)
         notifyDataSetChanged()
     }
 
-    fun addItems(items: List<GitCommit>) {
+    fun addItems(items: List<Commit>) {
         commits.addAll(items)
         notifyDataSetChanged() // todo: replace to range changed or inserted
     }
@@ -44,7 +44,7 @@ class CommitsAdapter(private val clickListener: (GitCommit) -> Unit) :
     }
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        fun bind(commit: GitCommit) {
+        fun bind(commit: Commit) {
             itemView.name.text = commit.commit.message
 
             val author = commit.author
