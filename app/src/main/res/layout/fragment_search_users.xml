@@ -30,12 +30,17 @@
                 android:layout_gravity="center"
                 app:visibleOrGone="@{viewModel.isLoading}" />
 
-            <TextView
+            <FrameLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="@string/error_while_loading"
-                app:visibleOrGone="@{viewModel.isError}" />
+                app:visibleOrGone="@{viewModel.isError}">
+
+                <include
+                    android:id="@+id/errorLayout"
+                    layout="@layout/layout_error" />
+
+            </FrameLayout>
 
             <TextView
                 android:layout_width="wrap_content"
