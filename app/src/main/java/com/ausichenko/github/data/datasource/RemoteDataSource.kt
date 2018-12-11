@@ -2,7 +2,7 @@ package com.ausichenko.github.data.datasource
 
 import com.ausichenko.github.data.network.GithubApi
 import com.ausichenko.github.data.network.models.*
-import com.ausichenko.github.utils.checkResult
+import com.ausichenko.github.utils.ext.checkResult
 import io.reactivex.Single
 
 class RemoteDataSource(private val githubApi: GithubApi) : DataSource {

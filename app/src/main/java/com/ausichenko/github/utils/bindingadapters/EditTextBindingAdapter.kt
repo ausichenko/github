@@ -3,7 +3,7 @@ package com.ausichenko.github.utils.bindingadapters
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import androidx.databinding.BindingAdapter
-import com.ausichenko.github.utils.dismissKeyboard
+import com.ausichenko.github.utils.ext.dismissKeyboard
 
 @BindingAdapter("onSearch")
 fun EditText.setOnSearchListener(func: () -> Unit) {
