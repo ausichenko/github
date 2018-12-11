@@ -3,7 +3,7 @@ package com.ausichenko.github.view.search.issues
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import com.ausichenko.github.data.network.models.Issue
-import com.ausichenko.github.data.network.models.Response
+import com.ausichenko.github.data.network.models.GitResponse
 import com.ausichenko.github.domain.interactors.SearchInteractor
 import com.ausichenko.github.utils.livedata.*
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -13,7 +13,7 @@ class IssuesViewModel(private val interactor: SearchInteractor) : ViewModel() {
 
     private val disposable = CompositeDisposable()
 
-    var issues: ObserverLiveData<Response<Issue>, Throwable> = ObserverLiveData()
+    var issues: ObserverLiveData<GitResponse<Issue>, Throwable> = ObserverLiveData()
     val isSuccess: LiveData<Boolean> = issues.isSuccess()
     val isLoading: LiveData<Boolean> = issues.isLoading()
     val isError: LiveData<Boolean> = issues.isError()

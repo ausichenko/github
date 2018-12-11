@@ -2,7 +2,7 @@ package com.ausichenko.github.view.search.topics
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
-import com.ausichenko.github.data.network.models.Response
+import com.ausichenko.github.data.network.models.GitResponse
 import com.ausichenko.github.data.network.models.Topic
 import com.ausichenko.github.domain.interactors.SearchInteractor
 import com.ausichenko.github.utils.livedata.*
@@ -13,7 +13,7 @@ class TopicsViewModel(private val interactor: SearchInteractor) : ViewModel() {
 
     private val disposable = CompositeDisposable()
 
-    var topics: ObserverLiveData<Response<Topic>, Throwable> = ObserverLiveData()
+    var topics: ObserverLiveData<GitResponse<Topic>, Throwable> = ObserverLiveData()
     val isSuccess: LiveData<Boolean> = topics.isSuccess()
     val isLoading: LiveData<Boolean> = topics.isLoading()
     val isError: LiveData<Boolean> = topics.isError()

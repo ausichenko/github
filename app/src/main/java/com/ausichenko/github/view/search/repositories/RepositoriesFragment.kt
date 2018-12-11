@@ -9,6 +9,8 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ausichenko.github.R
+import com.ausichenko.github.data.exeptions.FieldException
+import com.ausichenko.github.data.exeptions.GitHubException
 import com.ausichenko.github.databinding.FragmentSearchRepositoriesBinding
 import com.ausichenko.github.utils.DividerItemDecoration
 import com.ausichenko.github.utils.livedata.ObserverLiveData
@@ -87,6 +89,13 @@ class RepositoriesFragment : Fragment() {
             if (it.state == ObserverLiveData.DataState.SUCCESS) {
                 binding.swipeRefreshLayout.isRefreshing = false
                 adapter.setItems(it.data!!.items)
+            } else if (it.state == ObserverLiveData.DataState.ERROR) {
+                when (it.error) {
+                    is GitHubException -> {
+                        binding.errorImage.setImageResource((it.error as FieldException).errorImage)
+                        binding.errorMessage.setText((it.error as FieldException).errorMessage)
+                    }
+                }
             }
         })
         repositoriesViewModel.loadRepositories(searchViewModel.searchQuery)

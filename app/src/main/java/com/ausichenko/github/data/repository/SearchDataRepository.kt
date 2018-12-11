@@ -11,11 +11,11 @@ class SearchDataRepository(
     private val remoteDataSource: RemoteDataSource
 ) : SearchRepository {
 
-    override fun getRepositories(searchQuery: String): Single<Response<Repository>> {
+    override fun getRepositories(searchQuery: String): Single<GitResponse<Repository>> {
         return remoteDataSource.getRepositories(searchQuery)
     }
 
-    override fun getCommits(searchQuery: String): Single<Response<Commit>> {
+    override fun getCommits(searchQuery: String): Single<GitResponse<Commit>> {
         return remoteDataSource.getCommits(searchQuery)
     }
 
@@ -23,15 +23,15 @@ class SearchDataRepository(
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun getIssues(searchQuery: String): Single<Response<Issue>> {
+    override fun getIssues(searchQuery: String): Single<GitResponse<Issue>> {
         return remoteDataSource.getIssues(searchQuery)
     }
 
-    override fun getTopics(searchQuery: String): Single<Response<Topic>> {
+    override fun getTopics(searchQuery: String): Single<GitResponse<Topic>> {
         return remoteDataSource.getTopics(searchQuery)
     }
 
-    override fun getUsers(searchQuery: String): Single<Response<User>> {
+    override fun getUsers(searchQuery: String): Single<GitResponse<User>> {
         return remoteDataSource.getUsers(searchQuery)
     }
 

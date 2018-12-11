@@ -7,27 +7,27 @@ import io.reactivex.schedulers.Schedulers
 
 class SearchInteractor(private val repository: SearchRepository) {
 
-    fun getRepositories(searchQuery: String): Single<Response<Repository>> {
+    fun getRepositories(searchQuery: String): Single<GitResponse<Repository>> {
         return repository.getRepositories(searchQuery)
             .subscribeOn(Schedulers.io())
     }
 
-    fun getCommits(searchQuery: String): Single<Response<Commit>> {
+    fun getCommits(searchQuery: String): Single<GitResponse<Commit>> {
         return repository.getCommits(searchQuery)
             .subscribeOn(Schedulers.io())
     }
 
-    fun getIssues(searchQuery: String): Single<Response<Issue>> {
+    fun getIssues(searchQuery: String): Single<GitResponse<Issue>> {
         return repository.getIssues(searchQuery)
             .subscribeOn(Schedulers.io())
     }
 
-    fun getTopics(searchQuery: String): Single<Response<Topic>> {
+    fun getTopics(searchQuery: String): Single<GitResponse<Topic>> {
         return repository.getTopics(searchQuery)
             .subscribeOn(Schedulers.io())
     }
 
-    fun getUsers(searchQuery: String): Single<Response<User>> {
+    fun getUsers(searchQuery: String): Single<GitResponse<User>> {
         return repository.getUsers(searchQuery)
             .subscribeOn(Schedulers.io())
     }
