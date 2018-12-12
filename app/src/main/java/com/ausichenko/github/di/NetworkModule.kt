@@ -1,12 +1,15 @@
 package com.ausichenko.github.di
 
+import android.content.Context
 import com.ausichenko.github.BuildConfig
 import com.ausichenko.github.data.network.GithubApi
+import com.ausichenko.github.data.network.interceptors.NetworkInterceptor
 import com.google.gson.FieldNamingPolicy
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
+import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module.module
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
@@ -16,7 +19,8 @@ import java.util.concurrent.TimeUnit
 val networkModule = module {
     single { makeGson() }
     single { makeLoggingInterceptor() }
-    single { makeOkHttpClient(get()) }
+    single { makeNetworkInterceptor(androidContext()) }
+    single { makeOkHttpClient(get(), get()) }
     single { makeGitHubService(get(), get()) }
 }
 
@@ -37,9 +41,17 @@ fun makeLoggingInterceptor(): HttpLoggingInterceptor {
     return logging
 }
 
-fun makeOkHttpClient(httpLoggingInterceptor: HttpLoggingInterceptor): OkHttpClient {
+fun makeNetworkInterceptor(context: Context): NetworkInterceptor {
+    return NetworkInterceptor(context)
+}
+
+fun makeOkHttpClient(
+    httpLoggingInterceptor: HttpLoggingInterceptor,
+    networkInterceptor: NetworkInterceptor
+): OkHttpClient {
     return OkHttpClient.Builder()
         .addInterceptor(httpLoggingInterceptor)
+        .addInterceptor(networkInterceptor)
         .connectTimeout(120, TimeUnit.SECONDS)
         .readTimeout(120, TimeUnit.SECONDS)
         .build()

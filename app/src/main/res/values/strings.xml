@@ -17,5 +17,6 @@
     <string name="error_while_loading">Error while loading :(</string>
     <string name="list_is_empty">List is empty :(</string>
 
+    <string name="no_network_error">No internet connection</string>
     <string name="empty_search_error">Start typing to search</string>
 </resources>
