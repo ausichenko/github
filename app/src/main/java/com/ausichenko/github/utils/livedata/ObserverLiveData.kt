@@ -1,33 +1,34 @@
 package com.ausichenko.github.utils.livedata
 
 import androidx.lifecycle.MutableLiveData
-import io.reactivex.Observable
 import io.reactivex.Observer
 import io.reactivex.disposables.Disposable
-import io.reactivex.functions.BiConsumer
-import io.reactivex.functions.Consumer
 
-class ObserverLiveData<Data, Error> : MutableLiveData<ObserverLiveData.State<Data, Error>>(),
-    BiConsumer<Data, Error> {
+class ObserverLiveData<Data> : MutableLiveData<ObserverLiveData.State<Data>>(), Observer<Data> {
 
     init {
         value = ObserverLiveData.State()
     }
 
-    override fun accept(data: Data, error: Error) {
-        when {
-            data != null -> {
-                value?.state = ObserverLiveData.DataState.SUCCESS
-                value?.data = data
-            }
-            error != null -> {
-                value?.state = ObserverLiveData.DataState.ERROR
-                value?.error = error
-            }
-            else -> {
-                value?.state = ObserverLiveData.DataState.EMPTY
-            }
-        }
+    private lateinit var disposable: Disposable
+
+    override fun onComplete() {
+        disposable.dispose()
+    }
+
+    override fun onSubscribe(d: Disposable) {
+        disposable = d
+    }
+
+    override fun onNext(data: Data) {
+        value?.state = ObserverLiveData.DataState.SUCCESS
+        value?.data = data
+        notifyObserver()
+    }
+
+    override fun onError(throwable: Throwable) {
+        value?.state = ObserverLiveData.DataState.ERROR
+        value?.error = throwable
         notifyObserver()
     }
 
@@ -40,10 +41,10 @@ class ObserverLiveData<Data, Error> : MutableLiveData<ObserverLiveData.State<Dat
         postValue(value)
     }
 
-    class State<Data, Error> {
+    class State<Data> {
         var state = DataState.LOADING
         var data: Data? = null
-        var error: Error? = null
+        var error: Throwable? = null
     }
 
     enum class DataState {

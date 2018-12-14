@@ -13,7 +13,7 @@ class TopicsViewModel(private val interactor: SearchInteractor) : ViewModel() {
 
     private val disposable = CompositeDisposable()
 
-    var topics: ObserverLiveData<GitResponse<Topic>, Throwable> = ObserverLiveData()
+    var topics: SingleLiveData<GitResponse<Topic>, Throwable> = SingleLiveData()
     val isSuccess: LiveData<Boolean> = topics.isSuccess()
     val isLoading: LiveData<Boolean> = topics.isLoading()
     val isError: LiveData<Boolean> = topics.isError()

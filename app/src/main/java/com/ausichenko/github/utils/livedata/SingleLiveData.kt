@@ -1,11 +1,7 @@
 package com.ausichenko.github.utils.livedata
 
 import androidx.lifecycle.MutableLiveData
-import io.reactivex.Observable
-import io.reactivex.Observer
-import io.reactivex.disposables.Disposable
 import io.reactivex.functions.BiConsumer
-import io.reactivex.functions.Consumer
 
 class SingleLiveData<Data, Error> : MutableLiveData<SingleLiveData.State<Data, Error>>(),
     BiConsumer<Data, Error> {

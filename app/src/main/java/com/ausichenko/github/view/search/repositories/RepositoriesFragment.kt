@@ -87,7 +87,7 @@ class RepositoriesFragment : Fragment() {
         repositoriesViewModel.repositories.observe(this, Observer {
             if (it.state == ObserverLiveData.DataState.SUCCESS) {
                 binding.swipeRefreshLayout.isRefreshing = false
-                adapter.setItems(it.data!!.items)
+                adapter.setItems(it.data!!)
             } else if (it.state == ObserverLiveData.DataState.ERROR) {
                 if (it.error is GitHubException) {
                     binding.errorLayout.error = it.error as GitHubException

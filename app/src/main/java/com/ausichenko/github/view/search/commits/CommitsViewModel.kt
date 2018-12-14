@@ -13,7 +13,7 @@ class CommitsViewModel(private val interactor: SearchInteractor) : ViewModel() {
 
     private val disposable = CompositeDisposable()
 
-    var commits: ObserverLiveData<GitResponse<Commit>, Throwable> = ObserverLiveData()
+    var commits: SingleLiveData<GitResponse<Commit>, Throwable> = SingleLiveData()
     val isSuccess: LiveData<Boolean> = commits.isSuccess()
     val isLoading: LiveData<Boolean> = commits.isLoading()
     val isError: LiveData<Boolean> = commits.isError()

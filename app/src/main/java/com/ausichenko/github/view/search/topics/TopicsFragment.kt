@@ -12,7 +12,7 @@ import com.ausichenko.github.R
 import com.ausichenko.github.data.exceptions.GitHubException
 import com.ausichenko.github.databinding.FragmentSearchTopicsBinding
 import com.ausichenko.github.utils.DividerItemDecoration
-import com.ausichenko.github.utils.livedata.ObserverLiveData
+import com.ausichenko.github.utils.livedata.SingleLiveData
 import com.ausichenko.github.view.search.SearchViewModel
 import com.google.android.material.snackbar.Snackbar
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
@@ -85,10 +85,10 @@ class TopicsFragment : Fragment() {
 
     private fun prepareRepositoriesList() {
         repositoriesViewModel.topics.observe(this, Observer {
-            if (it.state == ObserverLiveData.DataState.SUCCESS) {
+            if (it.state == SingleLiveData.DataState.SUCCESS) {
                 binding.swipeRefreshLayout.isRefreshing = false
                 adapter.setItems(it.data!!.items)
-            } else if (it.state == ObserverLiveData.DataState.ERROR) {
+            } else if (it.state == SingleLiveData.DataState.ERROR) {
                 if (it.error is GitHubException) {
                     binding.errorLayout.error = it.error as GitHubException
                 }

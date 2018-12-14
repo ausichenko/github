@@ -4,25 +4,25 @@ import androidx.arch.core.util.Function
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
 
-fun <Data, Error> ObserverLiveData<Data, Error>.isSuccess(): LiveData<Boolean> {
+fun <Data> ObserverLiveData<Data>.isSuccess(): LiveData<Boolean> {
     return Transformations.map(this, Function {
         return@Function value?.state == ObserverLiveData.DataState.SUCCESS
     })
 }
 
-fun <Data, Error> ObserverLiveData<Data, Error>.isLoading(): LiveData<Boolean> {
+fun <Data> ObserverLiveData<Data>.isLoading(): LiveData<Boolean> {
     return Transformations.map(this, Function {
         return@Function value?.state == ObserverLiveData.DataState.LOADING
     })
 }
 
-fun <Data, Error> ObserverLiveData<Data, Error>.isError(): LiveData<Boolean> {
+fun <Data> ObserverLiveData<Data>.isError(): LiveData<Boolean> {
     return Transformations.map(this, Function {
         return@Function value?.state == ObserverLiveData.DataState.ERROR
     })
 }
 
-fun <Data, Error> ObserverLiveData<Data, Error>.isEmpty(): LiveData<Boolean> {
+fun <Data> ObserverLiveData<Data>.isEmpty(): LiveData<Boolean> {
     return Transformations.map(this, Function {
         return@Function value?.state == ObserverLiveData.DataState.EMPTY
     })
