@@ -2,17 +2,40 @@ package com.ausichenko.github.data.repository
 
 import com.ausichenko.github.data.datasource.LocalDataSource
 import com.ausichenko.github.data.datasource.RemoteDataSource
+import com.ausichenko.github.data.models.Repository
 import com.ausichenko.github.data.network.models.*
 import com.ausichenko.github.domain.repository.SearchRepository
+import io.reactivex.Flowable
+import io.reactivex.Observable
 import io.reactivex.Single
+import io.reactivex.schedulers.Schedulers
 
 class SearchDataRepository(
     private val localDataSource: LocalDataSource,
     private val remoteDataSource: RemoteDataSource
 ) : SearchRepository {
 
-    override fun getRepositories(searchQuery: String): Single<GitResponse<Repository>> {
-        return remoteDataSource.getRepositories(searchQuery)
+    override fun getRepositories(searchQuery: String): Observable<List<Repository>> {
+
+        val local = localDataSource.getRepositories(searchQuery)
+            .subscribeOn(Schedulers.computation())
+
+        val remote = remoteDataSource.getRepositories(searchQuery)
+            .map { response ->
+
+                Observable.create<Any> { subscriber ->
+                    response.items.forEach { repository ->
+                        repository.searchQuery = searchQuery
+                    }
+                    localDataSource.saveRepositories(response.items)
+                    subscriber.onComplete()
+                }.subscribeOn(Schedulers.computation()).subscribe()
+
+                response.items
+            }
+            .subscribeOn(Schedulers.io())
+
+        return Observable.concat(local, remote)
     }
 
     override fun getCommits(searchQuery: String): Single<GitResponse<Commit>> {

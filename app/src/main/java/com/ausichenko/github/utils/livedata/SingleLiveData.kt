@@ -7,32 +7,32 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.functions.BiConsumer
 import io.reactivex.functions.Consumer
 
-class ObserverLiveData<Data, Error> : MutableLiveData<ObserverLiveData.State<Data, Error>>(),
+class SingleLiveData<Data, Error> : MutableLiveData<SingleLiveData.State<Data, Error>>(),
     BiConsumer<Data, Error> {
 
     init {
-        value = ObserverLiveData.State()
+        value = SingleLiveData.State()
     }
 
     override fun accept(data: Data, error: Error) {
         when {
             data != null -> {
-                value?.state = ObserverLiveData.DataState.SUCCESS
+                value?.state = SingleLiveData.DataState.SUCCESS
                 value?.data = data
             }
             error != null -> {
-                value?.state = ObserverLiveData.DataState.ERROR
+                value?.state = SingleLiveData.DataState.ERROR
                 value?.error = error
             }
             else -> {
-                value?.state = ObserverLiveData.DataState.EMPTY
+                value?.state = SingleLiveData.DataState.EMPTY
             }
         }
         notifyObserver()
     }
 
     fun load() {
-        value?.state = ObserverLiveData.DataState.LOADING
+        value?.state = SingleLiveData.DataState.LOADING
         notifyObserver()
     }
 

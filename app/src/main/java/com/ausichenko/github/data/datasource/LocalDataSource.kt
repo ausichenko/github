@@ -1,25 +1,16 @@
 package com.ausichenko.github.data.datasource
 
-import com.ausichenko.github.data.network.models.User
-import io.reactivex.Single
+import com.ausichenko.github.data.database.dao.RepositoryDao
+import com.ausichenko.github.data.models.Repository
+import io.reactivex.Observable
 
-class LocalDataSource : DataSource {
+class LocalDataSource(private val repositoryDao: RepositoryDao) : DataSource {
 
-    private val users: LinkedHashMap<Long, User> = LinkedHashMap()
-
-    fun isEmpty(): Single<Boolean> {
-        return Single.just(users.isEmpty())
+    fun saveRepositories(repositories: List<Repository>) {
+        repositoryDao.insertAll(repositories)
     }
 
-    fun clear() {
-        users.clear()
-    }
-
-    fun saveAll(users: List<User>) {
-        users.forEach { user -> this.users[user.id] = user }
-    }
-
-    fun getUsers(): Single<List<User>> {
-        return Single.just(users.values.toList())
+    fun getRepositories(searchQuery: String): Observable<List<Repository>> {
+        return repositoryDao.getBySearchQuery(searchQuery)
     }
 }

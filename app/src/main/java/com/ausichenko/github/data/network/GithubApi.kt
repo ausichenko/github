@@ -1,6 +1,8 @@
 package com.ausichenko.github.data.network
 
+import com.ausichenko.github.data.models.Repository
 import com.ausichenko.github.data.network.models.*
+import io.reactivex.Observable
 import io.reactivex.Single
 import retrofit2.Response
 import retrofit2.http.GET
@@ -11,7 +13,7 @@ interface GithubApi {
 
     // Search
     @GET("search/repositories")
-    fun getRepositories(@Query("q") searchQuery: String): Single<Response<GitResponse<Repository>>>
+    fun getRepositories(@Query("q") searchQuery: String): Observable<Response<GitResponse<Repository>>>
 
     @Headers("Accept: application/vnd.github.cloak-preview")
     @GET("search/commits")

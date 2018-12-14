@@ -3,7 +3,7 @@ package com.ausichenko.github.view.search.repositories
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import com.ausichenko.github.data.network.models.GitResponse
-import com.ausichenko.github.data.network.models.Repository
+import com.ausichenko.github.data.models.Repository
 import com.ausichenko.github.domain.interactors.SearchInteractor
 import com.ausichenko.github.utils.livedata.*
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -13,7 +13,7 @@ class RepositoriesViewModel(private val interactor: SearchInteractor) : ViewMode
 
     private val disposable = CompositeDisposable()
 
-    var repositories: ObserverLiveData<GitResponse<Repository>, Throwable> = ObserverLiveData()
+    var repositories: ObserverLiveData<List<Repository>, Throwable> = ObserverLiveData()
     val isSuccess: LiveData<Boolean> = repositories.isSuccess()
     val isLoading: LiveData<Boolean> = repositories.isLoading()
     val isError: LiveData<Boolean> = repositories.isError()

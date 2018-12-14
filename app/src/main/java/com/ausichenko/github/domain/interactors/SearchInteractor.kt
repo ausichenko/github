@@ -1,15 +1,17 @@
 package com.ausichenko.github.domain.interactors
 
+import com.ausichenko.github.data.models.Repository
 import com.ausichenko.github.data.network.models.*
 import com.ausichenko.github.domain.repository.SearchRepository
+import io.reactivex.Flowable
+import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
 
 class SearchInteractor(private val repository: SearchRepository) {
 
-    fun getRepositories(searchQuery: String): Single<GitResponse<Repository>> {
+    fun getRepositories(searchQuery: String): Observable<List<Repository>> {
         return repository.getRepositories(searchQuery)
-            .subscribeOn(Schedulers.io())
     }
 
     fun getCommits(searchQuery: String): Single<GitResponse<Commit>> {
