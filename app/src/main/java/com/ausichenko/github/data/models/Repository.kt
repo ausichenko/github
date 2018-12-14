@@ -6,7 +6,7 @@ import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 
 @Entity
-data class Repository(
+data class Repository( // todo: split models database/network and use mapper
     @PrimaryKey
     var id: Long,
     var name: String,

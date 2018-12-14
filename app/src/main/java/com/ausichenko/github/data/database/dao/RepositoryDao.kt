@@ -1,10 +1,8 @@
 package com.ausichenko.github.data.database.dao
 
-import androidx.room.Dao
-import androidx.room.Delete
-import androidx.room.Insert
-import androidx.room.Query
+import androidx.room.*
 import com.ausichenko.github.data.models.Repository
+import io.reactivex.Maybe
 import io.reactivex.Observable
 
 @Dao
@@ -14,9 +12,9 @@ interface RepositoryDao {
     fun getAll(): Observable<List<Repository>>
 
     @Query("SELECT * FROM repository WHERE search_query LIKE (:searchQuery)")
-    fun getBySearchQuery(searchQuery: String): Observable<List<Repository>>
+    fun getBySearchQuery(searchQuery: String): Maybe<List<Repository>>
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertAll(repositories: List<Repository>)
 
     @Delete

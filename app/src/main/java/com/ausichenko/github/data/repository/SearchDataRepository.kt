@@ -5,8 +5,7 @@ import com.ausichenko.github.data.datasource.RemoteDataSource
 import com.ausichenko.github.data.models.Repository
 import com.ausichenko.github.data.network.models.*
 import com.ausichenko.github.domain.repository.SearchRepository
-import io.reactivex.Observable
-import io.reactivex.Single
+import io.reactivex.*
 import io.reactivex.schedulers.Schedulers
 
 class SearchDataRepository(
@@ -17,25 +16,29 @@ class SearchDataRepository(
     override fun getRepositories(searchQuery: String): Observable<List<Repository>> {
 
         val local = localDataSource.getRepositories(searchQuery)
-            .filter { list -> list.isNotEmpty() }
+            .filter { list ->
+                list.isNotEmpty()
+            }
             .subscribeOn(Schedulers.computation())
 
         val remote = remoteDataSource.getRepositories(searchQuery)
             .map { it.items }
-                /*
-            .doOnNext { items ->
-                Observable.create<Any> { subscriber ->
-                    items.forEach { repository ->
-                        repository.searchQuery = searchQuery
-                    }
-                    //localDataSource.saveRepositories(items)
-                    subscriber.onComplete()
-                }.subscribeOn(Schedulers.computation()).subscribe()
+            .doAfterSuccess { items ->
+                saveRepositories(items, searchQuery)
             }
-            */
             .subscribeOn(Schedulers.io())
 
-        return remote//Observable.concat(local, remote)
+        return Maybe.concat(local, remote.toMaybe()).toObservable()
+    }
+
+    private fun saveRepositories(repositories: List<Repository>, searchQuery: String) {
+        repositories.forEach {
+            it.searchQuery = searchQuery
+        }
+        Completable.fromCallable { localDataSource.saveRepositories(repositories) }
+            .subscribeOn(Schedulers.computation())
+            .observeOn(Schedulers.computation())
+            .subscribe()
     }
 
     override fun getCommits(searchQuery: String): Single<GitResponse<Commit>> {

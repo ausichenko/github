@@ -4,13 +4,12 @@ import com.ausichenko.github.data.models.Repository
 import com.ausichenko.github.data.network.GithubApi
 import com.ausichenko.github.data.network.models.*
 import com.ausichenko.github.utils.ext.checkResult
-import io.reactivex.Observable
 import io.reactivex.Single
 
 class RemoteDataSource(private val githubApi: GithubApi) : DataSource {
 
     // Search
-    fun getRepositories(searchQuery: String): Observable<GitResponse<Repository>> {
+    fun getRepositories(searchQuery: String): Single<GitResponse<Repository>> {
         return githubApi.getRepositories(searchQuery)
             .map {
                 it.checkResult()
