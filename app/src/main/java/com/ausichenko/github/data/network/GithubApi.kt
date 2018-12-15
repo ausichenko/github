@@ -11,7 +11,7 @@ import retrofit2.http.Query
 interface GithubApi {
 
     // Search
-    @GET("search/repositories")
+    @GET("search/repositories?sort=stars&order=desc")
     fun getRepositories(@Query("q") searchQuery: String): Single<Response<GitResponse<Repository>>>
 
     @Headers("Accept: application/vnd.github.cloak-preview")
