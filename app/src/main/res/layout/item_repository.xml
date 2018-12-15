@@ -14,6 +14,8 @@
         android:layout_height="wrap_content"
         android:layout_toStartOf="@id/starsLayout"
         android:layout_toLeftOf="@id/starsLayout"
+        android:ellipsize="end"
+        android:lines="1"
         android:textColor="@color/primary_text"
         android:textSize="16sp"
         tools:text="ausichenko/github" />
