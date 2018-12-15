@@ -14,7 +14,7 @@
         android:layout_height="wrap_content"
         android:ellipsize="end"
         android:maxLines="2"
-        android:textColor="@color/primary_text"
+        android:textColor="@color/accent"
         android:textSize="16sp"
         tools:text="some commit name" />
 

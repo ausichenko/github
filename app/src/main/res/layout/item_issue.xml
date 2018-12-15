@@ -14,7 +14,7 @@
         android:layout_height="wrap_content"
         android:layout_toStartOf="@id/number"
         android:layout_toLeftOf="@id/number"
-        android:textColor="@color/primary_text"
+        android:textColor="@color/accent"
         android:textSize="16sp"
         tools:text="ausichenko/github issue" />
 

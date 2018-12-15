@@ -16,7 +16,7 @@
         android:layout_toLeftOf="@id/starsLayout"
         android:ellipsize="end"
         android:lines="1"
-        android:textColor="@color/primary_text"
+        android:textColor="@color/accent"
         android:textSize="16sp"
         tools:text="ausichenko/github" />
 
