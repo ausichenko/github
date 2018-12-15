@@ -50,17 +50,25 @@ class CommitsAdapter(private val clickListener: (Commit) -> Unit) :
             val author = commit.author
             val committer = commit.committer
 
-            if (!author.login.equals(committer.login)) {
-                itemView.info.text = itemView.context.getString(
-                    R.string.commit_info_authored_committed,
-                    author.login,
-                    committer.login,
-                    commit.repository.fullName
-                )
+            if (author != null) {
+                if (committer != null && !author.login.equals(committer.login)) {
+                    itemView.info.text = itemView.context.getString(
+                        R.string.commit_info_authored_committed,
+                        author.login,
+                        committer.login,
+                        commit.repository.fullName
+                    )
+                } else {
+                    itemView.info.text = itemView.context.getString(
+                        R.string.commit_info_committed,
+                        author.login,
+                        commit.repository.fullName
+                    )
+                }
             } else {
                 itemView.info.text = itemView.context.getString(
                     R.string.commit_info_committed,
-                    author.login,
+                    "anonim",
                     commit.repository.fullName
                 )
             }
