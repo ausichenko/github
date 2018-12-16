@@ -1,6 +1,5 @@
 package com.ausichenko.github.data.exceptions
 
-import com.ausichenko.github.R
+import java.io.IOException
 
-class NoNetworkException :
-    GitHubException(R.drawable.ic_no_network, R.string.no_network_error)
+class NoNetworkException : IOException()

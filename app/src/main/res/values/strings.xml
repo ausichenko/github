@@ -6,7 +6,6 @@
     <string name="commits">Commits</string>
     <string name="issues">Issues</string>
     <string name="topics">Topics</string>
-    <string name="wikis">Wikis</string>
     <string name="users">Users</string>
 
     <string name="commit_info_authored_committed">%s authored and %s committed to %s</string>
@@ -16,6 +15,9 @@
 
     <string name="error_while_loading">Error while loading :(</string>
     <string name="list_is_empty">List is empty :(</string>
+
+    <string name="offline_message">You have lost connection to the internet.\nThis app is offline.</string>
+    <string name="turn_on_wifi">Turn on wifi</string>
 
     <string name="no_network_error">No internet connection</string>
     <string name="empty_search_error">Start typing to search</string>

@@ -1,6 +1,8 @@
 package com.ausichenko.github.view.search
 
+import android.content.Intent
 import android.os.Bundle
+import android.provider.Settings
 import android.view.View
 import android.widget.AdapterView
 import androidx.appcompat.app.AppCompatActivity
@@ -22,8 +24,7 @@ class SearchActivity : AppCompatActivity() {
         private const val COMMITS_ID: Long = 2
         private const val ISSUES_ID: Long = 3
         private const val TOPICS_ID: Long = 4
-        private const val WIKIS_ID: Long = 5
-        private const val USERS_ID: Long = 6
+        private const val USERS_ID: Long = 5
     }
 
     private val searchViewModel: SearchViewModel by viewModel()
@@ -33,9 +34,11 @@ class SearchActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_search)
+        binding.setLifecycleOwner(this)
         binding.viewModel = searchViewModel
 
         initSpinner()
+        initNetworkBanner()
         changeFragment(RepositoriesFragment())
     }
 
@@ -45,7 +48,6 @@ class SearchActivity : AppCompatActivity() {
         items.add(SearchTypeAdapter.SearchItem(COMMITS_ID, getString(R.string.commits)))
         items.add(SearchTypeAdapter.SearchItem(ISSUES_ID, getString(R.string.issues)))
         items.add(SearchTypeAdapter.SearchItem(TOPICS_ID, getString(R.string.topics)))
-        //items.add(SearchTypeAdapter.SearchItem(WIKIS_ID, getString(R.string.wikis)))
         items.add(SearchTypeAdapter.SearchItem(USERS_ID, getString(R.string.users)))
 
         val adapter = SearchTypeAdapter(applicationContext, items)
@@ -63,13 +65,19 @@ class SearchActivity : AppCompatActivity() {
                     COMMITS_ID -> changeFragment(CommitsFragment())
                     ISSUES_ID -> changeFragment(IssuesFragment())
                     TOPICS_ID -> changeFragment(TopicsFragment())
-                    //WIKIS_ID -> changeFragment(Fragment())
                     USERS_ID -> changeFragment(UsersFragment())
                 }
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
+    }
+
+    private fun initNetworkBanner() {
+        binding.turnOnWifi.setOnClickListener {
+            startActivity(Intent(Settings.ACTION_WIFI_SETTINGS))
+        }
+        searchViewModel.initNetworkObserver(applicationContext)
     }
 
     private fun changeFragment(fragment: Fragment) {
