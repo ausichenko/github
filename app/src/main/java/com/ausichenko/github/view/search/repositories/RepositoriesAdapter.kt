@@ -58,9 +58,9 @@ class RepositoriesAdapter(private val clickListener: (Repository) -> Unit) :
             } else {
                 itemView.description.visibility = View.GONE
             }
-            if (repository.stargazersCount > 0) {
+            if (repository.stars > 0) {
                 itemView.starsLayout.visibility = View.VISIBLE
-                itemView.stars.text = repository.stargazersCount.toString()
+                itemView.stars.text = repository.stars.toString()
             } else {
                 itemView.starsLayout.visibility = View.GONE
             }

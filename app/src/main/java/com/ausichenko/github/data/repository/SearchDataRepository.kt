@@ -1,10 +1,13 @@
 package com.ausichenko.github.data.repository
 
+import com.ausichenko.github.data.database.models.RepositoryDB
 import com.ausichenko.github.data.datasource.LocalDataSource
 import com.ausichenko.github.data.datasource.RemoteDataSource
 import com.ausichenko.github.data.models.Repository
 import com.ausichenko.github.data.network.models.*
 import com.ausichenko.github.domain.repository.SearchRepository
+import com.ausichenko.github.utils.mapper.toRepository
+import com.ausichenko.github.utils.mapper.toRepositoryDB
 import io.reactivex.*
 import io.reactivex.schedulers.Schedulers
 
@@ -16,9 +19,10 @@ class SearchDataRepository(
     override fun getRepositories(searchQuery: String): Observable<List<Repository>> {
 
         val local = localDataSource.getRepositories(searchQuery)
-            .filter { list ->
-                list.isNotEmpty()
-            }
+            .flattenAsObservable { it }
+            .map { it.toRepository() }
+            .toList()
+            .filter { it.isNotEmpty() }
             .subscribeOn(Schedulers.computation())
 
         val remote = remoteDataSource.getRepositories(searchQuery)
@@ -26,16 +30,20 @@ class SearchDataRepository(
             .doAfterSuccess { items ->
                 saveRepositories(items, searchQuery)
             }
+            .flattenAsObservable { it }
+            .map { it.toRepository() }
+            .toList()
             .subscribeOn(Schedulers.io())
 
         return Maybe.concat(local, remote.toMaybe()).toObservable()
     }
 
-    private fun saveRepositories(repositories: List<Repository>, searchQuery: String) {
-        repositories.forEach {
-            it.searchQuery = searchQuery
+    private fun saveRepositories(networkRepositories: List<RepositoryNetwork>, searchQuery: String) {
+        val databaseRepositories = ArrayList<RepositoryDB>()
+        networkRepositories.forEach {
+            databaseRepositories.add(it.toRepositoryDB(searchQuery))
         }
-        Completable.fromCallable { localDataSource.saveRepositories(repositories) }
+        Completable.fromCallable { localDataSource.saveRepositories(databaseRepositories) }
             .subscribeOn(Schedulers.computation())
             .observeOn(Schedulers.computation())
             .subscribe()

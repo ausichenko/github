@@ -1,18 +1,18 @@
 package com.ausichenko.github.data.database.dao
 
 import androidx.room.*
-import com.ausichenko.github.data.models.Repository
+import com.ausichenko.github.data.database.models.RepositoryDB
 import io.reactivex.Maybe
 
 @Dao
 interface RepositoryDao {
 
-    @Query("select * from repository where search_query like (:searchQuery) order by stargazers_count desc limit 30")
-    fun getBySearchQuery(searchQuery: String): Maybe<List<Repository>>
+    @Query("select * from repositories where search_query like (:searchQuery) order by stars desc limit 30")
+    fun getBySearchQuery(searchQuery: String): Maybe<List<RepositoryDB>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertAll(repositories: List<Repository>)
+    fun insertAll(repositories: List<RepositoryDB>)
 
     @Delete
-    fun delete(repository: Repository)
+    fun delete(repository: RepositoryDB)
 }
