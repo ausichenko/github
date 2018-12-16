@@ -7,7 +7,7 @@ import io.reactivex.Maybe
 @Dao
 interface RepositoryDao {
 
-    @Query("select * from repositories where search_query like (:searchQuery) order by stars desc limit 30")
+    @Query("select * from repositories where search_query like (:searchQuery) limit 30")
     fun getBySearchQuery(searchQuery: String): Maybe<List<RepositoryDB>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
