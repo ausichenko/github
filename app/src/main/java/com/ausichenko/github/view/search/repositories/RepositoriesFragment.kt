@@ -62,11 +62,13 @@ class RepositoriesFragment : Fragment() {
         )
         binding.repositoriesRecyclerView.adapter = adapter
 
+        /*
         binding.swipeRefreshLayout.setOnRefreshListener {
             repositoriesViewModel.loadRepositories(
                 searchViewModel.searchQuery
             )
         }
+        */
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -86,7 +88,6 @@ class RepositoriesFragment : Fragment() {
     private fun prepareRepositoriesList() {
         repositoriesViewModel.repositories.observe(this, Observer {
             if (it.state == ObserverLiveData.DataState.SUCCESS) {
-                binding.swipeRefreshLayout.isRefreshing = false
                 adapter.setItems(it.data!!)
             } else if (it.state == ObserverLiveData.DataState.ERROR) {
                 if (it.error is GitHubException) {

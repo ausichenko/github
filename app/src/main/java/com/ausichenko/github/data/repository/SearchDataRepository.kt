@@ -8,7 +8,10 @@ import com.ausichenko.github.data.network.models.*
 import com.ausichenko.github.domain.repository.SearchRepository
 import com.ausichenko.github.utils.mapper.toRepository
 import com.ausichenko.github.utils.mapper.toRepositoryDB
-import io.reactivex.*
+import io.reactivex.Completable
+import io.reactivex.Maybe
+import io.reactivex.Observable
+import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
 
 class SearchDataRepository(
@@ -38,7 +41,10 @@ class SearchDataRepository(
         return Maybe.concat(local, remote.toMaybe()).toObservable()
     }
 
-    private fun saveRepositories(networkRepositories: List<RepositoryNetwork>, searchQuery: String) {
+    private fun saveRepositories(
+        networkRepositories: List<RepositoryNetwork>,
+        searchQuery: String
+    ) {
         val databaseRepositories = ArrayList<RepositoryDB>()
         networkRepositories.forEach {
             databaseRepositories.add(it.toRepositoryDB(searchQuery))
