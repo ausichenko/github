@@ -10,8 +10,10 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ausichenko.github.R
 import com.ausichenko.github.data.exceptions.FullscreenException
-import com.ausichenko.github.databinding.FragmentSearchIssuesBinding
+import com.ausichenko.github.data.models.Issue
+import com.ausichenko.github.databinding.FragmentSearchListBinding
 import com.ausichenko.github.utils.DividerItemDecoration
+import com.ausichenko.github.utils.bindingadapters.setVisibleOrGone
 import com.ausichenko.github.utils.livedata.ObserverLiveData
 import com.ausichenko.github.view.search.SearchViewModel
 import com.google.android.material.snackbar.Snackbar
@@ -23,7 +25,7 @@ class IssuesFragment : Fragment() {
     private val searchViewModel: SearchViewModel by sharedViewModel()
     private val issuesViewModel: IssuesViewModel by viewModel()
 
-    private lateinit var binding: FragmentSearchIssuesBinding
+    private lateinit var binding: FragmentSearchListBinding
 
     private lateinit var adapter: IssuesAdapter
 
@@ -34,18 +36,17 @@ class IssuesFragment : Fragment() {
     ): View? {
         binding = DataBindingUtil.inflate(
             layoutInflater,
-            R.layout.fragment_search_issues,
+            R.layout.fragment_search_list,
             container,
             false
         )
-        binding.setLifecycleOwner(this)
 
-        initRepositoriesList()
+        initIssuesList()
 
         return binding.root
     }
 
-    private fun initRepositoriesList() {
+    private fun initIssuesList() {
         adapter = IssuesAdapter { issue ->
             Snackbar.make(
                 binding.root,
@@ -53,22 +54,21 @@ class IssuesFragment : Fragment() {
                 Snackbar.LENGTH_LONG
             ).show()
         }
-        binding.issuesRecyclerView.layoutManager = LinearLayoutManager(context)
-        binding.issuesRecyclerView.addItemDecoration(
+        binding.recyclerView.layoutManager = LinearLayoutManager(context)
+        binding.recyclerView.addItemDecoration(
             DividerItemDecoration(
                 context!!,
                 R.drawable.divider
             )
         )
-        binding.issuesRecyclerView.adapter = adapter
+        binding.recyclerView.adapter = adapter
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.viewModel = issuesViewModel
 
         prepareSingleEvents()
-        prepareRepositoriesList()
+        prepareIssuesList()
     }
 
     private fun prepareSingleEvents() {
@@ -77,20 +77,38 @@ class IssuesFragment : Fragment() {
         })
     }
 
-    private fun prepareRepositoriesList() {
+    private fun prepareIssuesList() {
         issuesViewModel.issues.observe(this, Observer {
-            if (it.state == ObserverLiveData.DataState.SUCCESS) {
-                adapter.setItems(it.data!!)
-            } else if (it.state == ObserverLiveData.DataState.ERROR) {
-                if (it.error is FullscreenException) {
-                    val errorImage = (it.error as FullscreenException).errorImage
-                    val errorMessage = (it.error as FullscreenException).errorMessage
-
-                    binding.errorLayout.errorImage.setImageResource(errorImage)
-                    binding.errorLayout.errorMessage.setText(errorMessage)
-                }
+            when (it.state) {
+                ObserverLiveData.DataState.SUCCESS -> handleSuccessState(it.data!!)
+                ObserverLiveData.DataState.LOADING -> handleLoadingState()
+                ObserverLiveData.DataState.ERROR -> handleErrorState(it.error!!)
             }
         })
         issuesViewModel.loadIssues(searchViewModel.searchQuery)
+    }
+
+    private fun handleSuccessState(items: List<Issue>) {
+        binding.recyclerView.setVisibleOrGone(true)
+        binding.loadingLayout.root.setVisibleOrGone(false)
+        binding.errorLayout.root.setVisibleOrGone(false)
+
+        adapter.setItems(items)
+    }
+
+    private fun handleLoadingState() {
+        binding.loadingLayout.root.setVisibleOrGone(true)
+    }
+
+    private fun handleErrorState(error: Throwable) {
+        if (error is FullscreenException) {
+            binding.recyclerView.setVisibleOrGone(false)
+            binding.loadingLayout.root.setVisibleOrGone(false)
+            binding.errorLayout.root.setVisibleOrGone(true)
+
+            binding.errorLayout.errorImage.setImageResource(error.errorImage)
+            binding.errorLayout.errorMessage.setText(error.errorMessage)
+        }
+        // other errors may show only toast/snackbar with message
     }
 }

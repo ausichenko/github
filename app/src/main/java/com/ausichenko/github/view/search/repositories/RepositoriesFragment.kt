@@ -85,7 +85,6 @@ class RepositoriesFragment : Fragment() {
                 ObserverLiveData.DataState.ERROR -> handleErrorState(it.error!!)
             }
         })
-
         repositoriesViewModel.loadRepositories(searchViewModel.searchQuery)
     }
 
