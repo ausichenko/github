@@ -9,10 +9,12 @@ import com.ausichenko.github.domain.repository.SearchRepository
 import com.ausichenko.github.utils.mapper.toRepository
 import com.ausichenko.github.utils.mapper.toRepositoryDB
 import io.reactivex.Completable
-import io.reactivex.Maybe
+import io.reactivex.Notification
 import io.reactivex.Observable
 import io.reactivex.Single
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import java.util.concurrent.TimeUnit
 
 class SearchDataRepository(
     private val localDataSource: LocalDataSource,
@@ -21,14 +23,33 @@ class SearchDataRepository(
 
     override fun getRepositories(searchQuery: String): Observable<List<Repository>> {
 
-        val local = localDataSource.getRepositories(searchQuery)
+        return Observable.concatArrayEager(
+            getRepositoriesFromDb(searchQuery),
+            getRepositoriesFromApi(searchQuery)
+                .materialize()
+                .observeOn(AndroidSchedulers.mainThread())
+                .map {
+                    handleErrors(it)
+                    it
+                }
+                .filter { !it.isOnError }
+                .dematerialize<List<Repository>>()
+                .debounce(400, TimeUnit.MILLISECONDS)
+        )
+    }
+
+    private fun getRepositoriesFromDb(searchQuery: String): Observable<List<Repository>> {
+        return localDataSource.getRepositories(searchQuery)
             .flattenAsObservable { it }
             .map { it.toRepository() }
             .toList()
             .filter { it.isNotEmpty() }
+            .toObservable()
             .subscribeOn(Schedulers.computation())
+    }
 
-        val remote = remoteDataSource.getRepositories(searchQuery)
+    private fun getRepositoriesFromApi(searchQuery: String): Observable<List<Repository>> {
+        return remoteDataSource.getRepositories(searchQuery)
             .map { it.items }
             .doAfterSuccess { items ->
                 saveRepositories(items, searchQuery)
@@ -36,9 +57,8 @@ class SearchDataRepository(
             .flattenAsObservable { it }
             .map { it.toRepository() }
             .toList()
+            .toObservable()
             .subscribeOn(Schedulers.io())
-
-        return Maybe.concat(local, remote.toMaybe()).toObservable()
     }
 
     private fun saveRepositories(
@@ -53,6 +73,10 @@ class SearchDataRepository(
             .subscribeOn(Schedulers.computation())
             .observeOn(Schedulers.computation())
             .subscribe()
+    }
+
+    private fun handleErrors(notification: Notification<List<Repository>>) {
+        //if (notification.isOnError)
     }
 
     override fun getCommits(searchQuery: String): Single<GitResponse<Commit>> {
