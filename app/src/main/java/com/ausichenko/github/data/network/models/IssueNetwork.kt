@@ -1,6 +1,6 @@
 package com.ausichenko.github.data.network.models
 
-data class Issue(
+data class IssueNetwork(
     var id: Long,
     var number: Int,
     var title: String,

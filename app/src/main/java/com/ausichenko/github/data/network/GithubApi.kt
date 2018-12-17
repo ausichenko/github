@@ -15,15 +15,15 @@ interface GithubApi {
 
     @Headers("Accept: application/vnd.github.cloak-preview")
     @GET("search/commits")
-    fun getCommits(@Query("q") searchQuery: String): Single<Response<GitResponse<Commit>>>
+    fun getCommits(@Query("q") searchQuery: String): Single<Response<GitResponse<CommitNetwork>>>
 
     @GET("search/issues")
-    fun getIssues(@Query("q") searchQuery: String): Single<Response<GitResponse<Issue>>>
+    fun getIssues(@Query("q") searchQuery: String): Single<Response<GitResponse<IssueNetwork>>>
 
     @Headers("Accept: application/vnd.github.mercy-preview+json")
     @GET("search/topics")
-    fun getTopics(@Query("q") searchQuery: String): Single<Response<GitResponse<Topic>>>
+    fun getTopics(@Query("q") searchQuery: String): Single<Response<GitResponse<TopicNetwork>>>
 
     @GET("search/users")
-    fun getUsers(@Query("q") searchQuery: String): Single<Response<GitResponse<User>>>
+    fun getUsers(@Query("q") searchQuery: String): Single<Response<GitResponse<UserNetwork>>>
 }

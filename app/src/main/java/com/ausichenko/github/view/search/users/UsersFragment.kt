@@ -49,7 +49,7 @@ class UsersFragment : Fragment() {
         adapter = UsersAdapter { user ->
             Snackbar.make(
                 binding.root,
-                "User ".plus(user.login).plus(" clicked"),
+                "UserNetwork ".plus(user.login).plus(" clicked"),
                 Snackbar.LENGTH_LONG
             ).show()
         }

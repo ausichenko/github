@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.ausichenko.github.R
-import com.ausichenko.github.data.network.models.User
+import com.ausichenko.github.data.models.User
 import com.ausichenko.github.utils.RoundedCornersTransformation
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_user.view.*

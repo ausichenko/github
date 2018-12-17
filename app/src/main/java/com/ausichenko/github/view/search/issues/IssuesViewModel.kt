@@ -2,7 +2,7 @@ package com.ausichenko.github.view.search.issues
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
-import com.ausichenko.github.data.network.models.Issue
+import com.ausichenko.github.data.models.Issue
 import com.ausichenko.github.domain.interactors.SearchInteractor
 import com.ausichenko.github.utils.livedata.ObserverLiveData
 import com.ausichenko.github.utils.livedata.isError

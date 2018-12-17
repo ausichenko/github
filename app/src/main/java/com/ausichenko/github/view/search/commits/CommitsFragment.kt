@@ -49,7 +49,7 @@ class CommitsFragment : Fragment() {
         adapter = CommitsAdapter { commit ->
             Snackbar.make(
                 binding.root,
-                "Commit ".plus(commit.commit.message).plus(" clicked"),
+                "Commit ".plus(commit.commitMessage).plus(" clicked"),
                 Snackbar.LENGTH_LONG
             ).show()
         }

@@ -5,7 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.ausichenko.github.R
-import com.ausichenko.github.data.network.models.Issue
+import com.ausichenko.github.data.models.Issue
 import kotlinx.android.synthetic.main.item_issue.view.*
 import java.util.*
 

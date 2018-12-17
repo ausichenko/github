@@ -2,7 +2,7 @@ package com.ausichenko.github.view.search.commits
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
-import com.ausichenko.github.data.network.models.Commit
+import com.ausichenko.github.data.models.Commit
 import com.ausichenko.github.domain.interactors.SearchInteractor
 import com.ausichenko.github.utils.livedata.ObserverLiveData
 import com.ausichenko.github.utils.livedata.isError

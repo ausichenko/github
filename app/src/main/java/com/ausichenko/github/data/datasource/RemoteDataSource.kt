@@ -13,22 +13,22 @@ class RemoteDataSource(private val githubApi: GithubApi) : DataSource {
             .checkResult()
     }
 
-    fun getCommits(searchQuery: String): Single<GitResponse<Commit>> {
+    fun getCommits(searchQuery: String): Single<GitResponse<CommitNetwork>> {
         return githubApi.getCommits(searchQuery)
             .checkResult()
     }
 
-    fun getIssues(searchQuery: String): Single<GitResponse<Issue>> {
+    fun getIssues(searchQuery: String): Single<GitResponse<IssueNetwork>> {
         return githubApi.getIssues(searchQuery)
             .checkResult()
     }
 
-    fun getTopics(searchQuery: String): Single<GitResponse<Topic>> {
+    fun getTopics(searchQuery: String): Single<GitResponse<TopicNetwork>> {
         return githubApi.getTopics(searchQuery)
             .checkResult()
     }
 
-    fun getUsers(searchQuery: String): Single<GitResponse<User>> {
+    fun getUsers(searchQuery: String): Single<GitResponse<UserNetwork>> {
         return githubApi.getUsers(searchQuery)
             .checkResult()
     }

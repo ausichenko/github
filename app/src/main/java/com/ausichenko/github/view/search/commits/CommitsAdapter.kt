@@ -5,7 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.ausichenko.github.R
-import com.ausichenko.github.data.network.models.Commit
+import com.ausichenko.github.data.models.Commit
 import kotlinx.android.synthetic.main.item_commit.view.*
 import java.util.*
 
@@ -45,31 +45,28 @@ class CommitsAdapter(private val clickListener: (Commit) -> Unit) :
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         fun bind(commit: Commit) {
-            itemView.name.text = commit.commit.message
+            itemView.name.text = commit.commitMessage
 
-            val author = commit.author
-            val committer = commit.committer
-
-            if (author != null) {
-                if (committer != null && !author.login.equals(committer.login)) {
+            if (commit.authorLogin != null) {
+                if (commit.committerLogin != null && !commit.authorLogin.equals(commit.committerLogin)) {
                     itemView.info.text = itemView.context.getString(
                         R.string.commit_info_authored_committed,
-                        author.login,
-                        committer.login,
-                        commit.repository.fullName
+                        commit.authorLogin,
+                        commit.committerLogin,
+                        commit.repositoryName
                     )
                 } else {
                     itemView.info.text = itemView.context.getString(
                         R.string.commit_info_committed,
-                        author.login,
-                        commit.repository.fullName
+                        commit.authorLogin,
+                        commit.repositoryName
                     )
                 }
             } else {
                 itemView.info.text = itemView.context.getString(
                     R.string.commit_info_committed,
-                    "anonim",
-                    commit.repository.fullName
+                    itemView.context.getString(R.string.git_anon),
+                    commit.repositoryName
                 )
             }
 

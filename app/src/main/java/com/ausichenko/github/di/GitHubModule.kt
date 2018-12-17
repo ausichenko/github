@@ -1,6 +1,5 @@
 package com.ausichenko.github.di
 
-import com.ausichenko.github.data.database.dao.RepositoryDao
 import com.ausichenko.github.data.datasource.LocalDataSource
 import com.ausichenko.github.data.datasource.RemoteDataSource
 import com.ausichenko.github.data.network.GithubApi
@@ -17,7 +16,7 @@ import org.koin.androidx.viewmodel.ext.koin.viewModel
 import org.koin.dsl.module.module
 
 val githubModule = module {
-    single { makeLocalDataSource(get()) }
+    single { makeLocalDataSource() }
     single { makeRemoteDataSource(get()) }
 
     single { makeSearchRepository(get(), get()) }
@@ -30,15 +29,18 @@ val githubModule = module {
     viewModel { UsersViewModel(get()) }
 }
 
-fun makeLocalDataSource(repositoryDao: RepositoryDao): LocalDataSource {
-    return LocalDataSource(repositoryDao)
+fun makeLocalDataSource(): LocalDataSource {
+    return LocalDataSource()
 }
 
 fun makeRemoteDataSource(githubApi: GithubApi): RemoteDataSource {
     return RemoteDataSource(githubApi)
 }
 
-fun makeSearchRepository(localDataSource: LocalDataSource, remoteDataSource: RemoteDataSource): SearchRepository {
+fun makeSearchRepository(
+    localDataSource: LocalDataSource,
+    remoteDataSource: RemoteDataSource
+): SearchRepository {
     return SearchDataRepository(localDataSource, remoteDataSource)
 }
 

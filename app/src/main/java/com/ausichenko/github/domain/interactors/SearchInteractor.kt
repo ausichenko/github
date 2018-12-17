@@ -2,10 +2,10 @@ package com.ausichenko.github.domain.interactors
 
 import com.ausichenko.github.data.exceptions.StartSearchException
 import com.ausichenko.github.data.models.Repository
-import com.ausichenko.github.data.network.models.Commit
-import com.ausichenko.github.data.network.models.Issue
-import com.ausichenko.github.data.network.models.Topic
-import com.ausichenko.github.data.network.models.User
+import com.ausichenko.github.data.models.User
+import com.ausichenko.github.data.models.Commit
+import com.ausichenko.github.data.models.Issue
+import com.ausichenko.github.data.models.Topic
 import com.ausichenko.github.domain.repository.SearchRepository
 import io.reactivex.Observable
 
