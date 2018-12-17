@@ -9,10 +9,8 @@ import com.ausichenko.github.domain.repository.SearchRepository
 import com.ausichenko.github.utils.mapper.toRepository
 import com.ausichenko.github.utils.mapper.toRepositoryDB
 import io.reactivex.Completable
-import io.reactivex.Notification
 import io.reactivex.Observable
 import io.reactivex.Single
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import java.util.concurrent.TimeUnit
 
@@ -27,11 +25,6 @@ class SearchDataRepository(
             getRepositoriesFromDb(searchQuery),
             getRepositoriesFromApi(searchQuery)
                 .materialize()
-                .observeOn(AndroidSchedulers.mainThread())
-                .map {
-                    handleErrors(it)
-                    it
-                }
                 .filter { !it.isOnError }
                 .dematerialize<List<Repository>>()
                 .debounce(400, TimeUnit.MILLISECONDS)
@@ -73,10 +66,6 @@ class SearchDataRepository(
             .subscribeOn(Schedulers.computation())
             .observeOn(Schedulers.computation())
             .subscribe()
-    }
-
-    private fun handleErrors(notification: Notification<List<Repository>>) {
-        //if (notification.isOnError)
     }
 
     override fun getCommits(searchQuery: String): Single<GitResponse<Commit>> {

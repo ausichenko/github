@@ -10,10 +10,6 @@ class RemoteDataSource(private val githubApi: GithubApi) : DataSource {
     // Search
     fun getRepositories(searchQuery: String): Single<GitResponse<RepositoryNetwork>> {
         return githubApi.getRepositories(searchQuery)
-            .map {
-                //it.checkResult()
-                return@map it.body()
-            }
     }
 
     fun getCommits(searchQuery: String): Single<GitResponse<Commit>> {
