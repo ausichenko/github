@@ -9,7 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ausichenko.github.R
-import com.ausichenko.github.data.exceptions.GitHubException
+import com.ausichenko.github.data.exceptions.FullscreenException
 import com.ausichenko.github.databinding.FragmentSearchRepositoriesBinding
 import com.ausichenko.github.utils.DividerItemDecoration
 import com.ausichenko.github.utils.livedata.ObserverLiveData
@@ -90,8 +90,8 @@ class RepositoriesFragment : Fragment() {
             if (it.state == ObserverLiveData.DataState.SUCCESS) {
                 adapter.setItems(it.data!!)
             } else if (it.state == ObserverLiveData.DataState.ERROR) {
-                if (it.error is GitHubException) {
-                    binding.errorLayout.error = it.error as GitHubException
+                if (it.error is FullscreenException) {
+                    binding.errorLayout.error = it.error as FullscreenException
                 }
             }
         })

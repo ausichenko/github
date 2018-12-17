@@ -5,11 +5,11 @@
 
     <data>
 
-        <import type="com.ausichenko.github.data.exceptions.GitHubException" />
+        <import type="com.ausichenko.github.data.exceptions.FullscreenException" />
 
         <variable
             name="error"
-            type="GitHubException" />
+            type="FullscreenException" />
     </data>
 
     <LinearLayout

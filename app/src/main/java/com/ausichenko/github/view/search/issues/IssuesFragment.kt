@@ -9,7 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ausichenko.github.R
-import com.ausichenko.github.data.exceptions.GitHubException
+import com.ausichenko.github.data.exceptions.FullscreenException
 import com.ausichenko.github.databinding.FragmentSearchIssuesBinding
 import com.ausichenko.github.utils.DividerItemDecoration
 import com.ausichenko.github.utils.livedata.SingleLiveData
@@ -89,8 +89,8 @@ class IssuesFragment : Fragment() {
                 binding.swipeRefreshLayout.isRefreshing = false
                 adapter.setItems(it.data!!.items)
             } else if (it.state == SingleLiveData.DataState.ERROR) {
-                if (it.error is GitHubException) {
-                    binding.errorLayout.error = it.error as GitHubException
+                if (it.error is FullscreenException) {
+                    binding.errorLayout.error = it.error as FullscreenException
                 }
             }
         })

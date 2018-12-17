@@ -1,6 +1,6 @@
 package com.ausichenko.github.domain.interactors
 
-import com.ausichenko.github.data.exceptions.EmptySearchException
+import com.ausichenko.github.data.exceptions.StartSearchException
 import com.ausichenko.github.data.models.Repository
 import com.ausichenko.github.data.network.models.*
 import com.ausichenko.github.domain.repository.SearchRepository
@@ -13,7 +13,7 @@ class SearchInteractor(private val repository: SearchRepository) {
     fun getRepositories(searchQuery: String): Observable<List<Repository>> {
         return if (searchQuery.isEmpty()) {
             Observable.create<List<Repository>> {
-                throw EmptySearchException()
+                throw StartSearchException()
             }
         } else {
             repository.getRepositories(searchQuery)

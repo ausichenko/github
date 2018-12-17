@@ -11,7 +11,7 @@ interface GithubApi {
 
     // Search
     @GET("search/repositories")
-    fun getRepositories(@Query("q") searchQuery: String): Single<GitResponse<RepositoryNetwork>>
+    fun getRepositories(@Query("q") searchQuery: String): Single<Response<GitResponse<RepositoryNetwork>>>
 
     @Headers("Accept: application/vnd.github.cloak-preview")
     @GET("search/commits")

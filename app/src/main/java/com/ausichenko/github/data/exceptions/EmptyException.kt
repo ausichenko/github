@@ -3,4 +3,4 @@ package com.ausichenko.github.data.exceptions
 import com.ausichenko.github.R
 
 class EmptyException :
-    GitHubException(R.drawable.ic_search, R.string.app_name)
+    FullscreenException(R.drawable.ic_empty_search, R.string.nothing_found)
