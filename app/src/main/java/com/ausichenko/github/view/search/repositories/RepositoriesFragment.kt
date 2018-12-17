@@ -12,6 +12,7 @@ import com.ausichenko.github.R
 import com.ausichenko.github.data.exceptions.FullscreenException
 import com.ausichenko.github.databinding.FragmentSearchRepositoriesBinding
 import com.ausichenko.github.utils.DividerItemDecoration
+import com.ausichenko.github.utils.bindingadapters.setVisibleOrGone
 import com.ausichenko.github.utils.livedata.ObserverLiveData
 import com.ausichenko.github.view.search.SearchViewModel
 import com.google.android.material.snackbar.Snackbar
@@ -38,7 +39,6 @@ class RepositoriesFragment : Fragment() {
             container,
             false
         )
-        binding.setLifecycleOwner(this)
 
         initRepositoriesList()
 
@@ -61,19 +61,10 @@ class RepositoriesFragment : Fragment() {
             )
         )
         binding.repositoriesRecyclerView.adapter = adapter
-
-        /*
-        binding.swipeRefreshLayout.setOnRefreshListener {
-            repositoriesViewModel.loadRepositories(
-                searchViewModel.searchQuery
-            )
-        }
-        */
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.viewModel = repositoriesViewModel
 
         prepareSingleEvents()
         prepareRepositoriesList()
@@ -91,10 +82,22 @@ class RepositoriesFragment : Fragment() {
                 adapter.setItems(it.data!!)
             } else if (it.state == ObserverLiveData.DataState.ERROR) {
                 if (it.error is FullscreenException) {
-                    binding.errorLayout.error = it.error as FullscreenException
+                    val errorImage = (it.error as FullscreenException).errorImage
+                    val errorMessage = (it.error as FullscreenException).errorMessage
+
+                    binding.errorLayout.errorImage.setImageResource(errorImage)
+                    binding.errorLayout.errorMessage.setText(errorMessage)
                 }
             }
         })
+        repositoriesViewModel.isLoading.observe(this, Observer {
+            binding.loadingLayout.root.setVisibleOrGone(it)
+        })
+        repositoriesViewModel.isError.observe(this, Observer {
+            binding.errorLayout.root.setVisibleOrGone(it)
+            binding.repositoriesRecyclerView.setVisibleOrGone(!it)
+        })
+
         repositoriesViewModel.loadRepositories(searchViewModel.searchQuery)
     }
 }

@@ -83,7 +83,11 @@ class TopicsFragment : Fragment() {
                 adapter.setItems(it.data!!)
             } else if (it.state == ObserverLiveData.DataState.ERROR) {
                 if (it.error is FullscreenException) {
-                    binding.errorLayout.error = it.error as FullscreenException
+                    val errorImage = (it.error as FullscreenException).errorImage
+                    val errorMessage = (it.error as FullscreenException).errorMessage
+
+                    binding.errorLayout.errorImage.setImageResource(errorImage)
+                    binding.errorLayout.errorMessage.setText(errorMessage)
                 }
             }
         })

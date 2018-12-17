@@ -1,16 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
-
-    <data>
-
-        <import type="com.ausichenko.github.data.exceptions.FullscreenException" />
-
-        <variable
-            name="error"
-            type="FullscreenException" />
-    </data>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -24,7 +14,6 @@
             android:layout_width="150dp"
             android:layout_height="150dp"
             android:layout_marginBottom="20dp"
-            app:drawableRes="@{error.errorImage}"
             tools:src="@drawable/ic_error" />
 
         <TextView
@@ -34,7 +23,6 @@
             android:textColor="@color/secondary_text"
             android:textSize="20sp"
             android:textStyle="bold"
-            app:stringRes="@{error.errorMessage}"
             tools:text="Some error message" />
 
     </LinearLayout>

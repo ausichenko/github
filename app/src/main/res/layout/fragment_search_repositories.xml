@@ -1,46 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
-
-    <data>
-
-        <import type="com.ausichenko.github.data.exceptions.FullscreenException" />
-
-        <variable
-            name="viewModel"
-            type="com.ausichenko.github.view.search.repositories.RepositoriesViewModel" />
-    </data>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
 
     <androidx.appcompat.widget.ContentFrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <ProgressBar
-            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="top"
-            android:layout_marginTop="-8dp"
-            android:indeterminate="true"
-            app:visibleOrGone="@{viewModel.isLoading}" />
+        <include
+            android:id="@+id/loadingLayout"
+            layout="@layout/layout_loading" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/repositoriesRecyclerView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:visibleOrGone="@{!viewModel.isError}" />
+            android:layout_height="match_parent" />
 
-        <FrameLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            app:visibleOrGone="@{viewModel.isError}">
-
-            <include
-                android:id="@+id/errorLayout"
-                layout="@layout/layout_error" />
-
-        </FrameLayout>
+        <include
+            android:id="@+id/errorLayout"
+            layout="@layout/layout_error" />
 
     </androidx.appcompat.widget.ContentFrameLayout>
 
