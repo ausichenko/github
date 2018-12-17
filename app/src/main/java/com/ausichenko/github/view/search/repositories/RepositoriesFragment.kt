@@ -10,7 +10,8 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ausichenko.github.R
 import com.ausichenko.github.data.exceptions.FullscreenException
-import com.ausichenko.github.databinding.FragmentSearchRepositoriesBinding
+import com.ausichenko.github.data.models.Repository
+import com.ausichenko.github.databinding.FragmentSearchListBinding
 import com.ausichenko.github.utils.DividerItemDecoration
 import com.ausichenko.github.utils.bindingadapters.setVisibleOrGone
 import com.ausichenko.github.utils.livedata.ObserverLiveData
@@ -24,7 +25,7 @@ class RepositoriesFragment : Fragment() {
     private val searchViewModel: SearchViewModel by sharedViewModel()
     private val repositoriesViewModel: RepositoriesViewModel by viewModel()
 
-    private lateinit var binding: FragmentSearchRepositoriesBinding
+    private lateinit var binding: FragmentSearchListBinding
 
     private lateinit var adapter: RepositoriesAdapter
 
@@ -35,7 +36,7 @@ class RepositoriesFragment : Fragment() {
     ): View? {
         binding = DataBindingUtil.inflate(
             layoutInflater,
-            R.layout.fragment_search_repositories,
+            R.layout.fragment_search_list,
             container,
             false
         )
@@ -53,14 +54,14 @@ class RepositoriesFragment : Fragment() {
                 Snackbar.LENGTH_LONG
             ).show()
         }
-        binding.repositoriesRecyclerView.layoutManager = LinearLayoutManager(context)
-        binding.repositoriesRecyclerView.addItemDecoration(
+        binding.recyclerView.layoutManager = LinearLayoutManager(context)
+        binding.recyclerView.addItemDecoration(
             DividerItemDecoration(
                 context!!,
                 R.drawable.divider
             )
         )
-        binding.repositoriesRecyclerView.adapter = adapter
+        binding.recyclerView.adapter = adapter
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -78,26 +79,37 @@ class RepositoriesFragment : Fragment() {
 
     private fun prepareRepositoriesList() {
         repositoriesViewModel.repositories.observe(this, Observer {
-            if (it.state == ObserverLiveData.DataState.SUCCESS) {
-                adapter.setItems(it.data!!)
-            } else if (it.state == ObserverLiveData.DataState.ERROR) {
-                if (it.error is FullscreenException) {
-                    val errorImage = (it.error as FullscreenException).errorImage
-                    val errorMessage = (it.error as FullscreenException).errorMessage
-
-                    binding.errorLayout.errorImage.setImageResource(errorImage)
-                    binding.errorLayout.errorMessage.setText(errorMessage)
-                }
+            when (it.state) {
+                ObserverLiveData.DataState.SUCCESS -> handleSuccessState(it.data!!)
+                ObserverLiveData.DataState.LOADING -> handleLoadingState()
+                ObserverLiveData.DataState.ERROR -> handleErrorState(it.error!!)
             }
-        })
-        repositoriesViewModel.isLoading.observe(this, Observer {
-            binding.loadingLayout.root.setVisibleOrGone(it)
-        })
-        repositoriesViewModel.isError.observe(this, Observer {
-            binding.errorLayout.root.setVisibleOrGone(it)
-            binding.repositoriesRecyclerView.setVisibleOrGone(!it)
         })
 
         repositoriesViewModel.loadRepositories(searchViewModel.searchQuery)
+    }
+
+    private fun handleSuccessState(items: List<Repository>) {
+        binding.recyclerView.setVisibleOrGone(true)
+        binding.loadingLayout.root.setVisibleOrGone(false)
+        binding.errorLayout.root.setVisibleOrGone(false)
+
+        adapter.setItems(items)
+    }
+
+    private fun handleLoadingState() {
+        binding.loadingLayout.root.setVisibleOrGone(true)
+    }
+
+    private fun handleErrorState(error: Throwable) {
+        if (error is FullscreenException) {
+            binding.recyclerView.setVisibleOrGone(false)
+            binding.loadingLayout.root.setVisibleOrGone(false)
+            binding.errorLayout.root.setVisibleOrGone(true)
+
+            binding.errorLayout.errorImage.setImageResource(error.errorImage)
+            binding.errorLayout.errorMessage.setText(error.errorMessage)
+        }
+        // other errors may show only toast/snackbar with message
     }
 }

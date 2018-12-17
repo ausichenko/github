@@ -50,7 +50,6 @@ class ObserverLiveData<Data> : MutableLiveData<ObserverLiveData.State<Data>>(), 
     enum class DataState {
         SUCCESS,
         LOADING,
-        ERROR,
-        EMPTY
+        ERROR
     }
 }

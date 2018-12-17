@@ -10,8 +10,6 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 class RepositoriesViewModel(private val interactor: SearchInteractor) : ViewModel() {
 
     var repositories: ObserverLiveData<List<Repository>> = ObserverLiveData()
-    val isLoading: LiveData<Boolean> = repositories.isLoading()
-    val isError: LiveData<Boolean> = repositories.isError()
 
     fun loadRepositories(searchQueryLiveData: LiveData<String>) {
         val query = searchQueryLiveData.value.toString()
