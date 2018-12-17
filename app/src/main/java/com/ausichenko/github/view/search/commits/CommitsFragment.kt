@@ -10,6 +10,7 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ausichenko.github.R
 import com.ausichenko.github.data.exceptions.FullscreenException
+import com.ausichenko.github.data.exceptions.MessageException
 import com.ausichenko.github.data.models.Commit
 import com.ausichenko.github.databinding.FragmentSearchListBinding
 import com.ausichenko.github.utils.DividerItemDecoration
@@ -101,14 +102,20 @@ class CommitsFragment : Fragment() {
     }
 
     private fun handleErrorState(error: Throwable) {
-        if (error is FullscreenException) {
-            binding.recyclerView.setVisibleOrGone(false)
-            binding.loadingLayout.root.setVisibleOrGone(false)
-            binding.errorLayout.root.setVisibleOrGone(true)
+        when (error) {
+            is MessageException -> {
+                binding.loadingLayout.root.setVisibleOrGone(false)
 
-            binding.errorLayout.errorImage.setImageResource(error.errorImage)
-            binding.errorLayout.errorMessage.setText(error.errorMessage)
+                Snackbar.make(binding.root, error.errorMessage, Snackbar.LENGTH_LONG).show()
+            }
+            is FullscreenException -> {
+                binding.recyclerView.setVisibleOrGone(false)
+                binding.loadingLayout.root.setVisibleOrGone(false)
+                binding.errorLayout.root.setVisibleOrGone(true)
+
+                binding.errorLayout.errorImage.setImageResource(error.errorImage)
+                binding.errorLayout.errorMessage.setText(error.errorMessage)
+            }
         }
-        // other errors may show only toast/snackbar with message
     }
 }

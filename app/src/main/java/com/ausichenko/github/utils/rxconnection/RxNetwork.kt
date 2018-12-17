@@ -11,7 +11,7 @@ object RxNetwork {
     fun getConnectivityStatus(context: Context): Boolean {
         val cm = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val activeNetwork = cm.activeNetworkInfo
-        return null != activeNetwork && activeNetwork.isConnected
+        return activeNetwork != null && activeNetwork.isConnected
     }
 
     fun stream(context: Context): Observable<Boolean> {

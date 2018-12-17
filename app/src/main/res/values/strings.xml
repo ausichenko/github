@@ -19,8 +19,8 @@
     <string name="offline_message">You have lost connection to the internet.\nThis app is offline.</string>
     <string name="turn_on_wifi">Turn on wifi</string>
 
-    <string name="no_network_error">No internet connection</string>
+    <string name="no_internet_connection">No internet connection</string>
     <string name="empty_search_error">Start typing to search</string>
     <string name="nothing_found">Nothing found</string>
-    <string name="git_anon">anonim</string>
+    <string name="git_anon">mr.anon</string>
 </resources>
