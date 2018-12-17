@@ -9,48 +9,37 @@
             type="com.ausichenko.github.view.search.users.UsersViewModel" />
     </data>
 
-    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:id="@+id/swipeRefreshLayout"
+    <androidx.appcompat.widget.ContentFrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <androidx.appcompat.widget.ContentFrameLayout
+        <ProgressBar
+            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content"
+            android:layout_gravity="top"
+            android:layout_marginTop="-8dp"
+            android:indeterminate="true"
+            app:visibleOrGone="@{viewModel.isLoading}" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/usersRecyclerView"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:visibleOrGone="@{viewModel.isSuccess}" />
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/usersRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:visibleOrGone="@{!viewModel.isError}" />
 
-            <ProgressBar
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                app:visibleOrGone="@{viewModel.isLoading}" />
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            app:visibleOrGone="@{viewModel.isError}">
 
-            <FrameLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                app:visibleOrGone="@{viewModel.isError}">
+            <include
+                android:id="@+id/errorLayout"
+                layout="@layout/layout_error" />
 
-                <include
-                    android:id="@+id/errorLayout"
-                    layout="@layout/layout_error" />
+        </FrameLayout>
 
-            </FrameLayout>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="@string/list_is_empty"
-                app:visibleOrGone="@{viewModel.isEmpty}" />
-
-        </androidx.appcompat.widget.ContentFrameLayout>
-
-    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+    </androidx.appcompat.widget.ContentFrameLayout>
 
 </layout>

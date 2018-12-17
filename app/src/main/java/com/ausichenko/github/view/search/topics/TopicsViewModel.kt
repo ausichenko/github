@@ -2,22 +2,18 @@ package com.ausichenko.github.view.search.topics
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
-import com.ausichenko.github.data.network.models.GitResponse
 import com.ausichenko.github.data.network.models.Topic
 import com.ausichenko.github.domain.interactors.SearchInteractor
-import com.ausichenko.github.utils.livedata.*
+import com.ausichenko.github.utils.livedata.ObserverLiveData
+import com.ausichenko.github.utils.livedata.isError
+import com.ausichenko.github.utils.livedata.isLoading
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
 
 class TopicsViewModel(private val interactor: SearchInteractor) : ViewModel() {
 
-    private val disposable = CompositeDisposable()
-
-    var topics: SingleLiveData<GitResponse<Topic>, Throwable> = SingleLiveData()
-    val isSuccess: LiveData<Boolean> = topics.isSuccess()
+    var topics: ObserverLiveData<List<Topic>> = ObserverLiveData()
     val isLoading: LiveData<Boolean> = topics.isLoading()
     val isError: LiveData<Boolean> = topics.isError()
-    val isEmpty: LiveData<Boolean> = topics.isEmpty()
 
     fun loadTopics(searchQueryLiveData: LiveData<String>) {
         val query = searchQueryLiveData.value.toString()
@@ -25,17 +21,11 @@ class TopicsViewModel(private val interactor: SearchInteractor) : ViewModel() {
     }
 
     private fun loadTopics(searchQuery: String) {
-        disposable.add(interactor.getTopics(searchQuery)
+        interactor.getTopics(searchQuery)
             .doOnSubscribe {
                 topics.load()
             }
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(topics)
-        )
-    }
-
-    override fun onCleared() {
-        super.onCleared()
-        disposable.clear()
     }
 }

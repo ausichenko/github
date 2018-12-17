@@ -12,7 +12,7 @@ import com.ausichenko.github.R
 import com.ausichenko.github.data.exceptions.FullscreenException
 import com.ausichenko.github.databinding.FragmentSearchCommitsBinding
 import com.ausichenko.github.utils.DividerItemDecoration
-import com.ausichenko.github.utils.livedata.SingleLiveData
+import com.ausichenko.github.utils.livedata.ObserverLiveData
 import com.ausichenko.github.view.search.SearchViewModel
 import com.google.android.material.snackbar.Snackbar
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
@@ -61,12 +61,6 @@ class CommitsFragment : Fragment() {
             )
         )
         binding.commitsRecyclerView.adapter = adapter
-
-        binding.swipeRefreshLayout.setOnRefreshListener {
-            commitsViewModel.loadCommits(
-                searchViewModel.searchQuery
-            )
-        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -85,10 +79,9 @@ class CommitsFragment : Fragment() {
 
     private fun prepareRepositoriesList() {
         commitsViewModel.commits.observe(this, Observer {
-            if (it.state == SingleLiveData.DataState.SUCCESS) {
-                binding.swipeRefreshLayout.isRefreshing = false
-                adapter.setItems(it.data!!.items)
-            } else if (it.state == SingleLiveData.DataState.ERROR) {
+            if (it.state == ObserverLiveData.DataState.SUCCESS) {
+                adapter.setItems(it.data!!)
+            } else if (it.state == ObserverLiveData.DataState.ERROR) {
                 if (it.error is FullscreenException) {
                     binding.errorLayout.error = it.error as FullscreenException
                 }

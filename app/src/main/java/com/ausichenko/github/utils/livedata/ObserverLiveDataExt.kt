@@ -22,9 +22,3 @@ fun <Data> ObserverLiveData<Data>.isError(): LiveData<Boolean> {
         return@Function value?.state == ObserverLiveData.DataState.ERROR && value?.error is FullscreenException
     })
 }
-
-fun <Data> ObserverLiveData<Data>.isEmpty(): LiveData<Boolean> {
-    return Transformations.map(this, Function {
-        return@Function value?.state == ObserverLiveData.DataState.EMPTY
-    })
-}

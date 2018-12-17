@@ -2,11 +2,12 @@ package com.ausichenko.github.domain.interactors
 
 import com.ausichenko.github.data.exceptions.StartSearchException
 import com.ausichenko.github.data.models.Repository
-import com.ausichenko.github.data.network.models.*
+import com.ausichenko.github.data.network.models.Commit
+import com.ausichenko.github.data.network.models.Issue
+import com.ausichenko.github.data.network.models.Topic
+import com.ausichenko.github.data.network.models.User
 import com.ausichenko.github.domain.repository.SearchRepository
 import io.reactivex.Observable
-import io.reactivex.Single
-import io.reactivex.schedulers.Schedulers
 
 class SearchInteractor(private val repository: SearchRepository) {
 
@@ -20,23 +21,43 @@ class SearchInteractor(private val repository: SearchRepository) {
         }
     }
 
-    fun getCommits(searchQuery: String): Single<GitResponse<Commit>> {
-        return repository.getCommits(searchQuery)
-            .subscribeOn(Schedulers.io())
+    fun getCommits(searchQuery: String): Observable<List<Commit>> {
+        return if (searchQuery.isEmpty()) {
+            Observable.create<List<Commit>> {
+                throw StartSearchException()
+            }
+        } else {
+            repository.getCommits(searchQuery)
+        }
     }
 
-    fun getIssues(searchQuery: String): Single<GitResponse<Issue>> {
-        return repository.getIssues(searchQuery)
-            .subscribeOn(Schedulers.io())
+    fun getIssues(searchQuery: String): Observable<List<Issue>> {
+        return if (searchQuery.isEmpty()) {
+            Observable.create<List<Issue>> {
+                throw StartSearchException()
+            }
+        } else {
+            repository.getIssues(searchQuery)
+        }
     }
 
-    fun getTopics(searchQuery: String): Single<GitResponse<Topic>> {
-        return repository.getTopics(searchQuery)
-            .subscribeOn(Schedulers.io())
+    fun getTopics(searchQuery: String): Observable<List<Topic>> {
+        return if (searchQuery.isEmpty()) {
+            Observable.create<List<Topic>> {
+                throw StartSearchException()
+            }
+        } else {
+            repository.getTopics(searchQuery)
+        }
     }
 
-    fun getUsers(searchQuery: String): Single<GitResponse<User>> {
-        return repository.getUsers(searchQuery)
-            .subscribeOn(Schedulers.io())
+    fun getUsers(searchQuery: String): Observable<List<User>> {
+        return if (searchQuery.isEmpty()) {
+            Observable.create<List<User>> {
+                throw StartSearchException()
+            }
+        } else {
+            repository.getUsers(searchQuery)
+        }
     }
 }

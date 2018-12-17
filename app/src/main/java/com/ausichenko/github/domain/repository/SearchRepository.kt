@@ -1,16 +1,16 @@
 package com.ausichenko.github.domain.repository
 
 import com.ausichenko.github.data.models.Repository
-import com.ausichenko.github.data.network.models.*
+import com.ausichenko.github.data.network.models.Commit
+import com.ausichenko.github.data.network.models.Issue
+import com.ausichenko.github.data.network.models.Topic
+import com.ausichenko.github.data.network.models.User
 import io.reactivex.Observable
-import io.reactivex.Single
 
 interface SearchRepository {
     fun getRepositories(searchQuery: String): Observable<List<Repository>>
-    fun getCommits(searchQuery: String): Single<GitResponse<Commit>>
-    fun getCode(): Single<List<Any>> // todo: You must authenticate to search for code across all public repositories.
-    fun getIssues(searchQuery: String): Single<GitResponse<Issue>>
-    fun getTopics(searchQuery: String): Single<GitResponse<Topic>>
-    fun getUsers(searchQuery: String): Single<GitResponse<User>>
-    fun getLabels(): Single<List<Any>>
+    fun getCommits(searchQuery: String): Observable<List<Commit>>
+    fun getIssues(searchQuery: String): Observable<List<Issue>>
+    fun getTopics(searchQuery: String): Observable<List<Topic>>
+    fun getUsers(searchQuery: String): Observable<List<User>>
 }
