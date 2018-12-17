@@ -4,7 +4,6 @@ import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.ausichenko.github.domain.interactors.SearchInteractor
-import com.ausichenko.github.utils.ext.logd
 import com.ausichenko.github.utils.livedata.SingleLiveEvent
 import com.ausichenko.github.utils.rxconnection.RxNetwork
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -34,7 +33,6 @@ class SearchViewModel(private val interactor: SearchInteractor) : ViewModel() {
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe {
                 isOnline.postValue(it)
-                logd("RxNetwork: state = $it")
             })
     }
 

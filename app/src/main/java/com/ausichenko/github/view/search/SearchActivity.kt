@@ -8,8 +8,10 @@ import android.widget.AdapterView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import com.ausichenko.github.R
 import com.ausichenko.github.databinding.ActivitySearchBinding
+import com.ausichenko.github.utils.bindingadapters.setVisibleOrGone
 import com.ausichenko.github.view.search.commits.CommitsFragment
 import com.ausichenko.github.view.search.issues.IssuesFragment
 import com.ausichenko.github.view.search.repositories.RepositoriesFragment
@@ -78,6 +80,12 @@ class SearchActivity : AppCompatActivity() {
             startActivity(Intent(Settings.ACTION_WIFI_SETTINGS))
         }
         searchViewModel.initNetworkObserver(applicationContext)
+        searchViewModel.isOnline.observe(this, Observer { isOnline ->
+            binding.networkBanner.setVisibleOrGone(!isOnline)
+            if (isOnline) {
+                searchViewModel.onSearch()
+            }
+        })
     }
 
     private fun changeFragment(fragment: Fragment) {
