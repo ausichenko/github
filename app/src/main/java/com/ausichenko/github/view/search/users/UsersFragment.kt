@@ -10,8 +10,10 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ausichenko.github.R
 import com.ausichenko.github.data.exceptions.FullscreenException
-import com.ausichenko.github.databinding.FragmentSearchUsersBinding
+import com.ausichenko.github.data.models.User
+import com.ausichenko.github.databinding.FragmentSearchListBinding
 import com.ausichenko.github.utils.DividerItemDecoration
+import com.ausichenko.github.utils.bindingadapters.setVisibleOrGone
 import com.ausichenko.github.utils.livedata.ObserverLiveData
 import com.ausichenko.github.view.search.SearchViewModel
 import com.google.android.material.snackbar.Snackbar
@@ -21,9 +23,9 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 class UsersFragment : Fragment() {
 
     private val searchViewModel: SearchViewModel by sharedViewModel()
-    private val repositoriesViewModel: UsersViewModel by viewModel()
+    private val usersViewModel: UsersViewModel by viewModel()
 
-    private lateinit var binding: FragmentSearchUsersBinding
+    private lateinit var binding: FragmentSearchListBinding
 
     private lateinit var adapter: UsersAdapter
 
@@ -34,63 +36,79 @@ class UsersFragment : Fragment() {
     ): View? {
         binding = DataBindingUtil.inflate(
             layoutInflater,
-            R.layout.fragment_search_users,
+            R.layout.fragment_search_list,
             container,
             false
         )
-        binding.setLifecycleOwner(this)
 
-        initRepositoriesList()
+        initUsersList()
 
         return binding.root
     }
 
-    private fun initRepositoriesList() {
+    private fun initUsersList() {
         adapter = UsersAdapter { user ->
             Snackbar.make(
                 binding.root,
-                "UserNetwork ".plus(user.login).plus(" clicked"),
+                "User ".plus(user.login).plus(" clicked"),
                 Snackbar.LENGTH_LONG
             ).show()
         }
-        binding.usersRecyclerView.layoutManager = LinearLayoutManager(context)
-        binding.usersRecyclerView.addItemDecoration(
+        binding.recyclerView.layoutManager = LinearLayoutManager(context)
+        binding.recyclerView.addItemDecoration(
             DividerItemDecoration(
                 context!!,
                 R.drawable.divider
             )
         )
-        binding.usersRecyclerView.adapter = adapter
+        binding.recyclerView.adapter = adapter
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.viewModel = repositoriesViewModel
 
         prepareSingleEvents()
-        prepareRepositoriesList()
+        prepareUsersList()
     }
 
     private fun prepareSingleEvents() {
         searchViewModel.searchEvent.observe(this, Observer {
-            repositoriesViewModel.loadUsers(searchViewModel.searchQuery)
+            usersViewModel.loadUsers(searchViewModel.searchQuery)
         })
     }
 
-    private fun prepareRepositoriesList() {
-        repositoriesViewModel.users.observe(this, Observer {
-            if (it.state == ObserverLiveData.DataState.SUCCESS) {
-                adapter.setItems(it.data!!)
-            } else if (it.state == ObserverLiveData.DataState.ERROR) {
-                if (it.error is FullscreenException) {
-                    val errorImage = (it.error as FullscreenException).errorImage
-                    val errorMessage = (it.error as FullscreenException).errorMessage
-
-                    binding.errorLayout.errorImage.setImageResource(errorImage)
-                    binding.errorLayout.errorMessage.setText(errorMessage)
-                }
+    private fun prepareUsersList() {
+        usersViewModel.users.observe(this, Observer {
+            when (it.state) {
+                ObserverLiveData.DataState.SUCCESS -> handleSuccessState(it.data!!)
+                ObserverLiveData.DataState.LOADING -> handleLoadingState()
+                ObserverLiveData.DataState.ERROR -> handleErrorState(it.error!!)
             }
         })
-        repositoriesViewModel.loadUsers(searchViewModel.searchQuery)
+        usersViewModel.loadUsers(searchViewModel.searchQuery)
+    }
+
+    private fun handleSuccessState(items: List<User>) {
+        binding.recyclerView.setVisibleOrGone(true)
+        binding.loadingLayout.root.setVisibleOrGone(false)
+        binding.errorLayout.root.setVisibleOrGone(false)
+
+        adapter.setItems(items)
+    }
+
+    private fun handleLoadingState() {
+        binding.loadingLayout.root.setVisibleOrGone(true)
+    }
+
+    private fun handleErrorState(error: Throwable) {
+        if (error is FullscreenException) {
+            binding.recyclerView.setVisibleOrGone(false)
+            binding.loadingLayout.root.setVisibleOrGone(false)
+            binding.errorLayout.root.setVisibleOrGone(true)
+
+            binding.errorLayout.errorImage.setImageResource(error.errorImage)
+            binding.errorLayout.errorMessage.setText(error.errorMessage)
+        }
+        // other errors may show only toast/snackbar with message
     }
 }

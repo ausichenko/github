@@ -10,8 +10,10 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ausichenko.github.R
 import com.ausichenko.github.data.exceptions.FullscreenException
-import com.ausichenko.github.databinding.FragmentSearchTopicsBinding
+import com.ausichenko.github.data.models.Topic
+import com.ausichenko.github.databinding.FragmentSearchListBinding
 import com.ausichenko.github.utils.DividerItemDecoration
+import com.ausichenko.github.utils.bindingadapters.setVisibleOrGone
 import com.ausichenko.github.utils.livedata.ObserverLiveData
 import com.ausichenko.github.view.search.SearchViewModel
 import com.google.android.material.snackbar.Snackbar
@@ -21,9 +23,9 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 class TopicsFragment : Fragment() {
 
     private val searchViewModel: SearchViewModel by sharedViewModel()
-    private val repositoriesViewModel: TopicsViewModel by viewModel()
+    private val topicsViewModel: TopicsViewModel by viewModel()
 
-    private lateinit var binding: FragmentSearchTopicsBinding
+    private lateinit var binding: FragmentSearchListBinding
 
     private lateinit var adapter: TopicsAdapter
 
@@ -34,18 +36,17 @@ class TopicsFragment : Fragment() {
     ): View? {
         binding = DataBindingUtil.inflate(
             layoutInflater,
-            R.layout.fragment_search_topics,
+            R.layout.fragment_search_list,
             container,
             false
         )
-        binding.setLifecycleOwner(this)
 
-        initRepositoriesList()
+        initTopicsList()
 
         return binding.root
     }
 
-    private fun initRepositoriesList() {
+    private fun initTopicsList() {
         adapter = TopicsAdapter { topic ->
             Snackbar.make(
                 binding.root,
@@ -53,44 +54,61 @@ class TopicsFragment : Fragment() {
                 Snackbar.LENGTH_LONG
             ).show()
         }
-        binding.topicRecyclerView.layoutManager = LinearLayoutManager(context)
-        binding.topicRecyclerView.addItemDecoration(
+        binding.recyclerView.layoutManager = LinearLayoutManager(context)
+        binding.recyclerView.addItemDecoration(
             DividerItemDecoration(
                 context!!,
                 R.drawable.divider
             )
         )
-        binding.topicRecyclerView.adapter = adapter
+        binding.recyclerView.adapter = adapter
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.viewModel = repositoriesViewModel
 
         prepareSingleEvents()
-        prepareRepositoriesList()
+        prepareTopicsList()
     }
 
     private fun prepareSingleEvents() {
         searchViewModel.searchEvent.observe(this, Observer {
-            repositoriesViewModel.loadTopics(searchViewModel.searchQuery)
+            topicsViewModel.loadTopics(searchViewModel.searchQuery)
         })
     }
 
-    private fun prepareRepositoriesList() {
-        repositoriesViewModel.topics.observe(this, Observer {
-            if (it.state == ObserverLiveData.DataState.SUCCESS) {
-                adapter.setItems(it.data!!)
-            } else if (it.state == ObserverLiveData.DataState.ERROR) {
-                if (it.error is FullscreenException) {
-                    val errorImage = (it.error as FullscreenException).errorImage
-                    val errorMessage = (it.error as FullscreenException).errorMessage
-
-                    binding.errorLayout.errorImage.setImageResource(errorImage)
-                    binding.errorLayout.errorMessage.setText(errorMessage)
-                }
+    private fun prepareTopicsList() {
+        topicsViewModel.topics.observe(this, Observer {
+            when (it.state) {
+                ObserverLiveData.DataState.SUCCESS -> handleSuccessState(it.data!!)
+                ObserverLiveData.DataState.LOADING -> handleLoadingState()
+                ObserverLiveData.DataState.ERROR -> handleErrorState(it.error!!)
             }
         })
-        repositoriesViewModel.loadTopics(searchViewModel.searchQuery)
+        topicsViewModel.loadTopics(searchViewModel.searchQuery)
+    }
+
+    private fun handleSuccessState(items: List<Topic>) {
+        binding.recyclerView.setVisibleOrGone(true)
+        binding.loadingLayout.root.setVisibleOrGone(false)
+        binding.errorLayout.root.setVisibleOrGone(false)
+
+        adapter.setItems(items)
+    }
+
+    private fun handleLoadingState() {
+        binding.loadingLayout.root.setVisibleOrGone(true)
+    }
+
+    private fun handleErrorState(error: Throwable) {
+        if (error is FullscreenException) {
+            binding.recyclerView.setVisibleOrGone(false)
+            binding.loadingLayout.root.setVisibleOrGone(false)
+            binding.errorLayout.root.setVisibleOrGone(true)
+
+            binding.errorLayout.errorImage.setImageResource(error.errorImage)
+            binding.errorLayout.errorMessage.setText(error.errorMessage)
+        }
+        // other errors may show only toast/snackbar with message
     }
 }
