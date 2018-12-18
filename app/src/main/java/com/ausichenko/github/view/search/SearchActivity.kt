@@ -23,7 +23,6 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import android.widget.ArrayAdapter
 
 
-
 class SearchActivity : AppCompatActivity() {
 
     companion object {
@@ -60,15 +59,21 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun initSearchAutocomplete() {
-        val adapter = ArrayAdapter(this, R.layout.item_search, R.id.title, arrayOf("java", "java 2"))
+        val adapter =
+            ArrayAdapter(this, R.layout.item_search, R.id.title, ArrayList<String>())
         binding.searchBar.setAdapter(adapter)
-        //binding.searchBar.threshold = 1
-        val density = resources.displayMetrics.density
-        binding.searchBar.dropDownVerticalOffset = (8 * density).toInt()
+        binding.searchBar.dropDownVerticalOffset =
+                resources.getDimension(R.dimen.search_card_margin).toInt()
 
         binding.searchBar.setOnItemClickListener { _, _, _, _ ->
             searchViewModel.onSearch()
         }
+        searchViewModel.searchHistory.observe(this, Observer { items ->
+            adapter.clear()
+            adapter.addAll(items)
+            adapter.notifyDataSetChanged()
+        })
+        searchViewModel.loadSearchHistory()
     }
 
     private fun initSpinner() {

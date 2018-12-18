@@ -1,15 +1,20 @@
 package com.ausichenko.github.domain.interactors
 
 import com.ausichenko.github.data.exceptions.StartSearchException
-import com.ausichenko.github.data.models.Repository
-import com.ausichenko.github.data.models.User
-import com.ausichenko.github.data.models.Commit
-import com.ausichenko.github.data.models.Issue
-import com.ausichenko.github.data.models.Topic
+import com.ausichenko.github.data.models.*
 import com.ausichenko.github.domain.repository.SearchRepository
+import io.reactivex.Completable
 import io.reactivex.Observable
 
 class SearchInteractor(private val repository: SearchRepository) {
+
+    fun getSearchHistory(): Observable<List<String>> {
+        return repository.getSearchHistory()
+    }
+
+    fun saveSearchHistory(searchHistory: String): Completable {
+        return repository.saveSearchHistory(searchHistory)
+    }
 
     fun getRepositories(searchQuery: String): Observable<List<Repository>> {
         return Observable.just(searchQuery)

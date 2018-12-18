@@ -10,21 +10,42 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 
-@Suppress("unused")
 class SearchViewModel(private val interactor: SearchInteractor) : ViewModel() {
 
     private val disposable = CompositeDisposable()
 
-    val isOnline = MutableLiveData<Boolean>()
     var searchQuery = MutableLiveData<String>()
     var searchEvent = SingleLiveEvent<Any>()
+    val searchHistory = MutableLiveData<List<String>>()
+    val isOnline = MutableLiveData<Boolean>()
 
     init {
         searchQuery.value = ""
+        searchHistory.value = ArrayList()
     }
 
     fun onSearch() {
         searchEvent.call()
+        saveSearchQuery()
+        loadSearchHistory()
+    }
+
+    private fun saveSearchQuery() {
+        disposable.add(
+            interactor.saveSearchHistory(searchQuery.value.toString())
+                .subscribe()
+        )
+    }
+
+    fun loadSearchHistory() {
+        disposable.add(
+            interactor.getSearchHistory()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                    { list -> searchHistory.postValue(list) },
+                    { searchHistory.postValue(ArrayList()) }
+                )
+        )
     }
 
     fun initNetworkObserver(context: Context) {

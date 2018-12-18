@@ -1,14 +1,12 @@
 package com.ausichenko.github.data.repository
 
+import com.ausichenko.github.data.database.models.SearchHistoryDB
 import com.ausichenko.github.data.datasource.LocalDataSource
 import com.ausichenko.github.data.datasource.RemoteDataSource
-import com.ausichenko.github.data.models.Repository
-import com.ausichenko.github.data.models.Topic
-import com.ausichenko.github.data.models.User
-import com.ausichenko.github.data.models.Commit
-import com.ausichenko.github.data.models.Issue
+import com.ausichenko.github.data.models.*
 import com.ausichenko.github.domain.repository.SearchRepository
 import com.ausichenko.github.utils.mapper.*
+import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.schedulers.Schedulers
 
@@ -16,6 +14,22 @@ class SearchDataRepository(
     private val localDataSource: LocalDataSource,
     private val remoteDataSource: RemoteDataSource
 ) : SearchRepository {
+
+    override fun getSearchHistory(): Observable<List<String>> {
+        return localDataSource.getSearchHistory()
+            .flattenAsObservable { it }
+            .map { it.searchQuery }
+            .toList()
+            .toObservable()
+            .subscribeOn(Schedulers.computation())
+    }
+
+    override fun saveSearchHistory(searchHistory: String): Completable {
+        return Completable.fromAction {
+            localDataSource.saveSearchHistory(SearchHistoryDB(searchHistory))
+        }
+            .subscribeOn(Schedulers.computation())
+    }
 
     override fun getRepositories(searchQuery: String): Observable<List<Repository>> {
         return remoteDataSource.getRepositories(searchQuery)

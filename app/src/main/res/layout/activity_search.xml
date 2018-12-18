@@ -26,7 +26,7 @@
                     android:id="@+id/searchCard"
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
-                    android:layout_margin="8dp"
+                    android:layout_margin="@dimen/search_card_margin"
                     app:cardElevation="1dp">
 
                     <LinearLayout
@@ -54,7 +54,7 @@
                             android:inputType="text"
                             android:lines="1"
                             android:popupBackground="@drawable/autocomplete_popup_background"
-                            android:popupElevation="2dp"
+                            android:popupElevation="1dp"
                             android:textColor="@color/primary_text" />
 
                         <View
