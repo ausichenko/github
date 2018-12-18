@@ -23,6 +23,7 @@
                 app:contentInsetStart="0dp">
 
                 <androidx.cardview.widget.CardView
+                    android:id="@+id/searchCard"
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
                     android:layout_margin="8dp"
@@ -39,7 +40,7 @@
                             android:layout_margin="8dp"
                             android:src="@drawable/ic_github_circle" />
 
-                        <androidx.appcompat.widget.AppCompatEditText
+                        <androidx.appcompat.widget.AppCompatAutoCompleteTextView
                             android:id="@+id/searchBar"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
@@ -47,10 +48,13 @@
                             android:layout_marginRight="10dp"
                             android:layout_weight="1"
                             android:background="@null"
+                            android:dropDownAnchor="@+id/searchCard"
                             android:hint="@string/search_github"
                             android:imeOptions="actionSearch"
                             android:inputType="text"
                             android:lines="1"
+                            android:popupBackground="@drawable/autocomplete_popup_background"
+                            android:popupElevation="2dp"
                             android:textColor="@color/primary_text" />
 
                         <View

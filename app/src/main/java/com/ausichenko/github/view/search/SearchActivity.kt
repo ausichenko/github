@@ -20,6 +20,9 @@ import com.ausichenko.github.view.search.repositories.RepositoriesFragment
 import com.ausichenko.github.view.search.topics.TopicsFragment
 import com.ausichenko.github.view.search.users.UsersFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import android.widget.ArrayAdapter
+
+
 
 class SearchActivity : AppCompatActivity() {
 
@@ -40,6 +43,7 @@ class SearchActivity : AppCompatActivity() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_search)
 
         initSearch()
+        initSearchAutocomplete()
         initSpinner()
         initNetworkBanner()
         changeFragment(RepositoriesFragment())
@@ -47,10 +51,22 @@ class SearchActivity : AppCompatActivity() {
 
     private fun initSearch() {
         binding.searchBar.onTextChangedListener { text ->
-            searchViewModel.searchQuery.postValue(text)
+            searchViewModel.searchQuery.postValue(text.trim())
         }
 
         binding.searchBar.setOnSearchListener {
+            searchViewModel.onSearch()
+        }
+    }
+
+    private fun initSearchAutocomplete() {
+        val adapter = ArrayAdapter(this, R.layout.item_search, R.id.title, arrayOf("java", "java 2"))
+        binding.searchBar.setAdapter(adapter)
+        //binding.searchBar.threshold = 1
+        val density = resources.displayMetrics.density
+        binding.searchBar.dropDownVerticalOffset = (8 * density).toInt()
+
+        binding.searchBar.setOnItemClickListener { _, _, _, _ ->
             searchViewModel.onSearch()
         }
     }
