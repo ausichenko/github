@@ -12,52 +12,37 @@ import io.reactivex.Observable
 class SearchInteractor(private val repository: SearchRepository) {
 
     fun getRepositories(searchQuery: String): Observable<List<Repository>> {
-        return if (searchQuery.isEmpty()) {
-            Observable.create<List<Repository>> {
-                throw StartSearchException()
-            }
-        } else {
-            repository.getRepositories(searchQuery)
-        }
+        return Observable.just(searchQuery)
+            .filter { it.isNotEmpty() }
+            .switchIfEmpty { it.onError(StartSearchException()) }
+            .switchMap { repository.getRepositories(it) }
     }
 
     fun getCommits(searchQuery: String): Observable<List<Commit>> {
-        return if (searchQuery.isEmpty()) {
-            Observable.create<List<Commit>> {
-                throw StartSearchException()
-            }
-        } else {
-            repository.getCommits(searchQuery)
-        }
+        return Observable.just(searchQuery)
+            .filter { it.isNotEmpty() }
+            .switchIfEmpty { it.onError(StartSearchException()) }
+            .switchMap { repository.getCommits(it) }
     }
 
     fun getIssues(searchQuery: String): Observable<List<Issue>> {
-        return if (searchQuery.isEmpty()) {
-            Observable.create<List<Issue>> {
-                throw StartSearchException()
-            }
-        } else {
-            repository.getIssues(searchQuery)
-        }
+        return Observable.just(searchQuery)
+            .filter { it.isNotEmpty() }
+            .switchIfEmpty { it.onError(StartSearchException()) }
+            .switchMap { repository.getIssues(it) }
     }
 
     fun getTopics(searchQuery: String): Observable<List<Topic>> {
-        return if (searchQuery.isEmpty()) {
-            Observable.create<List<Topic>> {
-                throw StartSearchException()
-            }
-        } else {
-            repository.getTopics(searchQuery)
-        }
+        return Observable.just(searchQuery)
+            .filter { it.isNotEmpty() }
+            .switchIfEmpty { it.onError(StartSearchException()) }
+            .switchMap { repository.getTopics(it) }
     }
 
     fun getUsers(searchQuery: String): Observable<List<User>> {
-        return if (searchQuery.isEmpty()) {
-            Observable.create<List<User>> {
-                throw StartSearchException()
-            }
-        } else {
-            repository.getUsers(searchQuery)
-        }
+        return Observable.just(searchQuery)
+            .filter { it.isNotEmpty() }
+            .switchIfEmpty { it.onError(StartSearchException()) }
+            .switchMap { repository.getUsers(it) }
     }
 }
