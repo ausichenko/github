@@ -14,7 +14,7 @@ import com.ausichenko.github.data.exceptions.MessageException
 import com.ausichenko.github.data.models.Issue
 import com.ausichenko.github.databinding.FragmentSearchListBinding
 import com.ausichenko.github.utils.DividerItemDecoration
-import com.ausichenko.github.utils.bindingadapters.setVisibleOrGone
+import com.ausichenko.github.utils.ext.setVisibleOrGone
 import com.ausichenko.github.utils.livedata.ObserverLiveData
 import com.ausichenko.github.view.search.SearchViewModel
 import com.google.android.material.snackbar.Snackbar

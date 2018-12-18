@@ -1,9 +1,6 @@
 package com.ausichenko.github.utils.ext
 
-import android.content.Context
 import android.util.Log
-import android.view.inputmethod.InputMethodManager
-import android.widget.TextView
 
 fun Any?.logv(message: String) {
     if (this != null) {
@@ -39,10 +36,4 @@ fun Any?.logwtf(message: String) {
     if (this != null) {
         Log.wtf(this::class.java.name.toString(), message)
     }
-}
-
-fun TextView.dismissKeyboard() {
-    clearFocus()
-    val imm = (context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager)
-    imm.hideSoftInputFromWindow(this.windowToken, 0)
 }
