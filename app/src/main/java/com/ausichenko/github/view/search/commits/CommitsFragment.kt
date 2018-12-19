@@ -65,8 +65,8 @@ class CommitsFragment : Fragment() {
         binding.recyclerView.adapter = adapter
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
 
         prepareSingleEvents()
         prepareCommitsList()
@@ -79,14 +79,13 @@ class CommitsFragment : Fragment() {
     }
 
     private fun prepareCommitsList() {
-        commitsViewModel.commits.observe(this, Observer {
+        commitsViewModel.getCommits(searchViewModel.searchQuery).observe(this, Observer {
             when (it.state) {
                 ObserverLiveData.DataState.SUCCESS -> handleSuccessState(it.data!!)
                 ObserverLiveData.DataState.LOADING -> handleLoadingState()
                 ObserverLiveData.DataState.ERROR -> handleErrorState(it.error!!)
             }
         })
-        commitsViewModel.loadCommits(searchViewModel.searchQuery)
     }
 
     private fun handleSuccessState(items: List<Commit>) {

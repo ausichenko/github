@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.provider.Settings
 import android.view.View
 import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -20,8 +21,6 @@ import com.ausichenko.github.view.search.repositories.RepositoriesFragment
 import com.ausichenko.github.view.search.topics.TopicsFragment
 import com.ausichenko.github.view.search.users.UsersFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import android.widget.ArrayAdapter
-
 
 class SearchActivity : AppCompatActivity() {
 
@@ -37,6 +36,12 @@ class SearchActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivitySearchBinding
 
+    private val repositoriesFragment = RepositoriesFragment()
+    private val commitsFragment = CommitsFragment()
+    private val issuesFragment = IssuesFragment()
+    private val topicsFragment = TopicsFragment()
+    private val usersFragment = UsersFragment()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_search)
@@ -45,7 +50,8 @@ class SearchActivity : AppCompatActivity() {
         initSearchAutocomplete()
         initSpinner()
         initNetworkBanner()
-        changeFragment(RepositoriesFragment())
+
+        changeFragment(repositoriesFragment)
     }
 
     private fun initSearch() {
@@ -65,9 +71,6 @@ class SearchActivity : AppCompatActivity() {
         binding.searchBar.dropDownVerticalOffset =
                 resources.getDimension(R.dimen.search_card_margin).toInt()
 
-        binding.searchBar.setOnItemClickListener { _, _, _, _ ->
-            searchViewModel.onSearch()
-        }
         searchViewModel.searchHistory.observe(this, Observer { items ->
             adapter.clear()
             adapter.addAll(items)
@@ -95,11 +98,11 @@ class SearchActivity : AppCompatActivity() {
                 id: Long
             ) {
                 when (id) {
-                    REPOSITORIES_ID -> changeFragment(RepositoriesFragment())
-                    COMMITS_ID -> changeFragment(CommitsFragment())
-                    ISSUES_ID -> changeFragment(IssuesFragment())
-                    TOPICS_ID -> changeFragment(TopicsFragment())
-                    USERS_ID -> changeFragment(UsersFragment())
+                    REPOSITORIES_ID -> changeFragment(repositoriesFragment)
+                    COMMITS_ID -> changeFragment(commitsFragment)
+                    ISSUES_ID -> changeFragment(issuesFragment)
+                    TOPICS_ID -> changeFragment(topicsFragment)
+                    USERS_ID -> changeFragment(usersFragment)
                 }
             }
 

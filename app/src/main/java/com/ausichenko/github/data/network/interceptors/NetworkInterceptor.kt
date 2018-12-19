@@ -9,11 +9,9 @@ import okhttp3.Response
 class NetworkInterceptor(private val context: Context) : Interceptor {
 
     override fun intercept(chain: Interceptor.Chain): Response {
-        val request = chain.request()
         if (!RxNetwork.getConnectivityStatus(context)) {
             throw NoNetworkException()
         }
-        return chain.proceed(request)
+        return chain.proceed(chain.request())
     }
-
 }

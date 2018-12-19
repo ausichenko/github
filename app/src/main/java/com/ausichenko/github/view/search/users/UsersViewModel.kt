@@ -9,7 +9,15 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 
 class UsersViewModel(private val interactor: SearchInteractor) : ViewModel() {
 
-    var users: ObserverLiveData<List<User>> = ObserverLiveData()
+    private lateinit var users: ObserverLiveData<List<User>>
+
+    fun getUsers(searchQueryLiveData: LiveData<String>): ObserverLiveData<List<User>> {
+        if (!::users.isInitialized) {
+            users = ObserverLiveData()
+            loadUsers(searchQueryLiveData)
+        }
+        return users
+    }
 
     fun loadUsers(searchQueryLiveData: LiveData<String>) {
         val query = searchQueryLiveData.value.toString()

@@ -3,7 +3,6 @@ package com.ausichenko.github.utils
 import android.graphics.*
 import com.squareup.picasso.Transformation
 
-
 class RoundedCornersTransformation @JvmOverloads constructor(
     private val mRadius: Int,
     private val mMargin: Int,
@@ -28,8 +27,8 @@ class RoundedCornersTransformation @JvmOverloads constructor(
 
         val canvas = Canvas(bitmap)
         val paint = Paint()
-        paint.setAntiAlias(true)
-        paint.setShader(BitmapShader(source, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP))
+        paint.isAntiAlias = true
+        paint.shader = BitmapShader(source, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP)
         drawRoundRect(canvas, paint, width.toFloat(), height.toFloat())
         source.recycle()
 

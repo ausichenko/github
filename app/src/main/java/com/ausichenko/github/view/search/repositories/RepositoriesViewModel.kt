@@ -9,7 +9,15 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 
 class RepositoriesViewModel(private val interactor: SearchInteractor) : ViewModel() {
 
-    var repositories: ObserverLiveData<List<Repository>> = ObserverLiveData()
+    private lateinit var repositories: ObserverLiveData<List<Repository>>
+
+    fun getRepositories(searchQueryLiveData: LiveData<String>): ObserverLiveData<List<Repository>> {
+        if (!::repositories.isInitialized) {
+            repositories = ObserverLiveData()
+            loadRepositories(searchQueryLiveData)
+        }
+        return repositories
+    }
 
     fun loadRepositories(searchQueryLiveData: LiveData<String>) {
         val query = searchQueryLiveData.value.toString()

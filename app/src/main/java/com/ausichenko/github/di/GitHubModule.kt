@@ -22,6 +22,7 @@ val githubModule = module {
 
     single { makeSearchRepository(get(), get()) }
     single { makeSearchInteractor(get()) }
+
     viewModel { SearchViewModel(get()) }
     viewModel { RepositoriesViewModel(get()) }
     viewModel { CommitsViewModel(get()) }

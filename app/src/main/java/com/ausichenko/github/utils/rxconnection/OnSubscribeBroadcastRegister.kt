@@ -10,7 +10,6 @@ import io.reactivex.ObservableOnSubscribe
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 
-
 internal class OnSubscribeBroadcastRegister(
     private val context: Context,
     private val intentFilter: IntentFilter,

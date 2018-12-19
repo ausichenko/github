@@ -65,8 +65,8 @@ class TopicsFragment : Fragment() {
         binding.recyclerView.adapter = adapter
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
 
         prepareSingleEvents()
         prepareTopicsList()
@@ -79,14 +79,13 @@ class TopicsFragment : Fragment() {
     }
 
     private fun prepareTopicsList() {
-        topicsViewModel.topics.observe(this, Observer {
+        topicsViewModel.getTopics(searchViewModel.searchQuery).observe(this, Observer {
             when (it.state) {
                 ObserverLiveData.DataState.SUCCESS -> handleSuccessState(it.data!!)
                 ObserverLiveData.DataState.LOADING -> handleLoadingState()
                 ObserverLiveData.DataState.ERROR -> handleErrorState(it.error!!)
             }
         })
-        topicsViewModel.loadTopics(searchViewModel.searchQuery)
     }
 
     private fun handleSuccessState(items: List<Topic>) {

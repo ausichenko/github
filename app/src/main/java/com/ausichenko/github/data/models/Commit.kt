@@ -5,5 +5,4 @@ data class Commit(
     var repositoryName: String,
     var authorLogin: String?,
     var committerLogin: String?
-
 )

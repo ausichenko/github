@@ -18,8 +18,10 @@ import java.util.concurrent.TimeUnit
 
 val networkModule = module {
     single { makeGson() }
+
     single { makeLoggingInterceptor() }
     single { makeNetworkInterceptor(androidContext()) }
+
     single { makeOkHttpClient(get(), get()) }
     single { makeGitHubService(get(), get()) }
 }

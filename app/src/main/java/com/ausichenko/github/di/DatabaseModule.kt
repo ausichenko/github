@@ -14,7 +14,7 @@ val databaseModule = module {
 
 fun makeDatabase(context: Context): GitDatabase {
     return Room
-        .databaseBuilder(context, GitDatabase::class.java, "git-database")
+        .databaseBuilder(context, GitDatabase::class.java, "github_database")
         .build()
 }
 

@@ -9,7 +9,15 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 
 class CommitsViewModel(private val interactor: SearchInteractor) : ViewModel() {
 
-    var commits: ObserverLiveData<List<Commit>> = ObserverLiveData()
+    private lateinit var commits: ObserverLiveData<List<Commit>>
+
+    fun getCommits(searchQueryLiveData: LiveData<String>): ObserverLiveData<List<Commit>> {
+        if (!::commits.isInitialized) {
+            commits = ObserverLiveData()
+            loadCommits(searchQueryLiveData)
+        }
+        return commits
+    }
 
     fun loadCommits(searchQueryLiveData: LiveData<String>) {
         val query = searchQueryLiveData.value.toString()
