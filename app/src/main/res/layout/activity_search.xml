@@ -25,9 +25,9 @@
                 <androidx.cardview.widget.CardView
                     android:id="@+id/searchCard"
                     android:layout_width="match_parent"
-                    android:layout_height="48dp"
+                    android:layout_height="@dimen/search_card_height"
                     android:layout_margin="@dimen/search_card_margin"
-                    app:cardElevation="1dp">
+                    app:cardElevation="@dimen/search_card_elevation">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -35,18 +35,18 @@
                         android:orientation="horizontal">
 
                         <androidx.appcompat.widget.AppCompatImageView
-                            android:layout_width="32dp"
-                            android:layout_height="32dp"
-                            android:layout_margin="8dp"
-                            android:src="@drawable/ic_github_circle" />
+                            android:layout_width="@dimen/search_card_icon_size"
+                            android:layout_height="@dimen/search_card_icon_size"
+                            android:layout_margin="@dimen/search_card_icon_margin"
+                            android:src="@drawable/ic_github" />
 
                         <androidx.appcompat.widget.AppCompatAutoCompleteTextView
                             android:id="@+id/searchBar"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
-                            android:layout_marginLeft="10dp"
-                            android:layout_marginRight="10dp"
-                            android:layout_weight="1"
+                            android:layout_marginLeft="@dimen/search_card_search_margin"
+                            android:layout_marginRight="@dimen/search_card_search_margin"
+                            android:layout_weight="@dimen/search_card_search_weight"
                             android:background="@null"
                             android:dropDownAnchor="@+id/searchCard"
                             android:hint="@string/search_github"
@@ -54,21 +54,21 @@
                             android:inputType="text"
                             android:lines="1"
                             android:popupBackground="@drawable/autocomplete_popup_background"
-                            android:popupElevation="1dp"
+                            android:popupElevation="@dimen/search_card_elevation"
                             android:textColor="@color/primary_text" />
 
                         <View
-                            android:layout_width="1dp"
+                            android:layout_width="@dimen/divider_size"
                             android:layout_height="match_parent"
-                            android:layout_marginTop="8dp"
-                            android:layout_marginBottom="8dp"
+                            android:layout_marginTop="@dimen/search_card_divider_margin"
+                            android:layout_marginBottom="@dimen/search_card_divider_margin"
                             android:background="@color/divider" />
 
                         <androidx.appcompat.widget.AppCompatSpinner
                             android:id="@+id/spinner"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
-                            android:layout_weight="1"
+                            android:layout_weight="@dimen/search_card_spinner_weight"
                             android:spinnerMode="dropdown"
                             app:overlapAnchor="false" />
 
@@ -88,21 +88,21 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:paddingLeft="16dp"
-                    android:paddingTop="8dp"
-                    android:paddingRight="16dp">
+                    android:paddingLeft="@dimen/search_banner_padding_horizontal"
+                    android:paddingTop="@dimen/search_banner_padding_top"
+                    android:paddingRight="@dimen/search_banner_padding_horizontal">
 
                     <androidx.appcompat.widget.AppCompatImageView
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
+                        android:layout_width="@dimen/search_banner_icon_size"
+                        android:layout_height="@dimen/search_banner_icon_size"
                         android:background="@drawable/circle"
-                        android:padding="8dp"
+                        android:padding="@dimen/search_banner_icon_padding"
                         android:src="@drawable/ic_wifi_off" />
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="16dp"
+                        android:layout_marginLeft="@dimen/search_banner_message_margin"
                         android:text="@string/offline_message"
                         tools:ignore="RtlHardcoded" />
 
@@ -114,9 +114,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="right"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginRight="8dp"
-                    android:layout_marginBottom="8dp"
+                    android:layout_marginLeft="@dimen/search_banner_button_margin"
+                    android:layout_marginRight="@dimen/search_banner_button_margin"
+                    android:layout_marginBottom="@dimen/search_banner_button_margin"
                     android:text="@string/turn_on_wifi"
                     tools:ignore="RtlHardcoded" />
 
@@ -124,7 +124,7 @@
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="1dp"
+                android:layout_height="@dimen/divider_size"
                 android:background="@color/divider" />
 
         </com.google.android.material.appbar.AppBarLayout>

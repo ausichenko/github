@@ -6,7 +6,7 @@
     android:background="?android:attr/selectableItemBackground"
     android:clickable="true"
     android:focusable="true"
-    android:padding="16dp">
+    android:padding="@dimen/list_item_padding">
 
     <TextView
         android:id="@+id/fullName"
@@ -17,7 +17,7 @@
         android:ellipsize="end"
         android:lines="1"
         android:textColor="@color/accent"
-        android:textSize="16sp"
+        android:textSize="@dimen/list_item_title_text_size"
         tools:text="ausichenko/github" />
 
     <TextView
@@ -26,7 +26,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/fullName"
         android:textColor="@color/primary_text"
-        android:textSize="14sp"
+        android:textSize="@dimen/list_item_info_text_size"
         tools:text="kotlin" />
 
     <TextView
@@ -37,7 +37,7 @@
         android:ellipsize="end"
         android:maxLines="3"
         android:textColor="@color/secondary_text"
-        android:textSize="12sp"
+        android:textSize="@dimen/list_item_description_text_size"
         tools:text="some description about this repository" />
 
     <LinearLayout
@@ -50,8 +50,8 @@
         android:orientation="horizontal">
 
         <androidx.appcompat.widget.AppCompatImageView
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_width="@dimen/list_item_repository_star_icon_size"
+            android:layout_height="@dimen/list_item_repository_star_icon_size"
             android:src="@drawable/ic_star_gray" />
 
         <TextView
@@ -59,7 +59,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="@color/secondary_text"
-            android:textSize="14sp"
+            android:textSize="@dimen/list_item_info_text_size"
             tools:text="30K" />
 
     </LinearLayout>

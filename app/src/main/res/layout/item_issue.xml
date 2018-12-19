@@ -6,7 +6,7 @@
     android:background="?android:attr/selectableItemBackground"
     android:clickable="true"
     android:focusable="true"
-    android:padding="16dp">
+    android:padding="@dimen/list_item_padding">
 
     <TextView
         android:id="@+id/title"
@@ -15,7 +15,7 @@
         android:layout_toStartOf="@id/number"
         android:layout_toLeftOf="@id/number"
         android:textColor="@color/accent"
-        android:textSize="16sp"
+        android:textSize="@dimen/list_item_title_text_size"
         tools:text="ausichenko/github issue" />
 
     <TextView
@@ -24,7 +24,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/title"
         android:textColor="@color/primary_text"
-        android:textSize="14sp"
+        android:textSize="@dimen/list_item_info_text_size"
         tools:text="kotlin" />
 
     <TextView
@@ -34,7 +34,7 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:textColor="@color/secondary_text"
-        android:textSize="14sp"
+        android:textSize="@dimen/list_item_info_text_size"
         tools:text="#31" />
 
 </RelativeLayout>

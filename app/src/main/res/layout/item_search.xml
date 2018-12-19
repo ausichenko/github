@@ -2,15 +2,15 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="48dp"
+    android:layout_height="@dimen/search_item_height"
     android:gravity="center_vertical"
     android:orientation="horizontal"
-    android:paddingLeft="20dp"
-    android:paddingRight="20dp">
+    android:paddingLeft="@dimen/search_item_padding"
+    android:paddingRight="@dimen/search_item_padding">
 
     <androidx.appcompat.widget.AppCompatImageView
-        android:layout_width="24dp"
-        android:layout_height="24dp"
+        android:layout_width="@dimen/search_item_icon_size"
+        android:layout_height="@dimen/search_item_icon_size"
         android:gravity="center_vertical"
         android:src="@drawable/ic_history" />
 
@@ -18,10 +18,10 @@
         android:id="@+id/title"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginStart="22dp"
-        android:layout_marginLeft="22dp"
+        android:layout_marginStart="@dimen/search_item_title_margin"
+        android:layout_marginLeft="@dimen/search_item_title_margin"
         android:gravity="center_vertical"
         android:textAppearance="?android:attr/textAppearanceListItemSmall"
-        tools:text="hello world" />
+        tools:text="helloworld" />
 
 </LinearLayout>
