@@ -73,13 +73,13 @@ class UsersFragment : Fragment() {
     }
 
     private fun prepareSingleEvents() {
-        searchViewModel.searchEvent.observe(this, Observer {
-            usersViewModel.loadUsers(searchViewModel.searchQuery)
+        searchViewModel.getSearchEvent().observe(this, Observer {
+            usersViewModel.loadUsers(searchViewModel.getSearchQuery())
         })
     }
 
     private fun prepareUsersList() {
-        usersViewModel.getUsers(searchViewModel.searchQuery).observe(this, Observer {
+        usersViewModel.getUsers(searchViewModel.getSearchQuery()).observe(this, Observer {
             when (it.state) {
                 ObserverLiveData.DataState.SUCCESS -> handleSuccessState(it.data!!)
                 ObserverLiveData.DataState.LOADING -> handleLoadingState()

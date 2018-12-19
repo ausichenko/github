@@ -14,14 +14,13 @@ class SearchViewModel(private val interactor: SearchInteractor) : ViewModel() {
 
     private val disposable = CompositeDisposable()
 
-    var searchQuery = MutableLiveData<String>()
-    var searchEvent = SingleLiveEvent<Any>()
-    val searchHistory = MutableLiveData<List<String>>()
-    val isOnline = MutableLiveData<Boolean>()
+    private lateinit var searchHistory: MutableLiveData<List<String>>
+    private lateinit var networkStatus: MutableLiveData<Boolean>
+    private var searchQuery = MutableLiveData<String>()
+    private var searchEvent = SingleLiveEvent<Any>()
 
     init {
         searchQuery.value = ""
-        searchHistory.value = ArrayList()
     }
 
     fun onSearch() {
@@ -30,14 +29,15 @@ class SearchViewModel(private val interactor: SearchInteractor) : ViewModel() {
         loadSearchHistory()
     }
 
-    private fun saveSearchQuery() {
-        disposable.add(
-            interactor.saveSearchHistory(searchQuery.value.toString())
-                .subscribe()
-        )
+    fun getSearchHistory(): MutableLiveData<List<String>> {
+        if (!::searchHistory.isInitialized) {
+            searchHistory = MutableLiveData()
+            loadSearchHistory()
+        }
+        return searchHistory
     }
 
-    fun loadSearchHistory() {
+    private fun loadSearchHistory() {
         disposable.add(
             interactor.getSearchHistory()
                 .observeOn(AndroidSchedulers.mainThread())
@@ -48,13 +48,40 @@ class SearchViewModel(private val interactor: SearchInteractor) : ViewModel() {
         )
     }
 
-    fun initNetworkObserver(context: Context) {
+    private fun saveSearchQuery() {
+        disposable.add(
+            interactor.saveSearchHistory(searchQuery.value.toString())
+                .subscribe()
+        )
+    }
+
+    fun getNetworkStatus(context: Context): MutableLiveData<Boolean> {
+        if (!::networkStatus.isInitialized) {
+            networkStatus = MutableLiveData()
+            initNetworkStatus(context)
+        }
+        return networkStatus
+    }
+
+    private fun initNetworkStatus(context: Context) {
         disposable.add(RxNetwork.stream(context)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe {
-                isOnline.postValue(it)
+                networkStatus.postValue(it)
             })
+    }
+
+    fun getSearchQuery(): String {
+        return searchQuery.value.toString()
+    }
+
+    fun setSearchQuery(query: String) {
+        searchQuery.postValue(query)
+    }
+
+    fun getSearchEvent(): SingleLiveEvent<Any> {
+        return searchEvent
     }
 
     override fun onCleared() {

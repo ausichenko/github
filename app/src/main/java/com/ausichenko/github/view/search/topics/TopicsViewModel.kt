@@ -1,6 +1,5 @@
 package com.ausichenko.github.view.search.topics
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import com.ausichenko.github.data.models.Topic
 import com.ausichenko.github.domain.interactors.SearchInteractor
@@ -11,20 +10,15 @@ class TopicsViewModel(private val interactor: SearchInteractor) : ViewModel() {
 
     private lateinit var topics: ObserverLiveData<List<Topic>>
 
-    fun getTopics(searchQueryLiveData: LiveData<String>): ObserverLiveData<List<Topic>> {
+    fun getTopics(searchQuery: String): ObserverLiveData<List<Topic>> {
         if (!::topics.isInitialized) {
             topics = ObserverLiveData()
-            loadTopics(searchQueryLiveData)
+            loadTopics(searchQuery)
         }
         return topics
     }
 
-    fun loadTopics(searchQueryLiveData: LiveData<String>) {
-        val query = searchQueryLiveData.value.toString()
-        loadTopics(query)
-    }
-
-    private fun loadTopics(searchQuery: String) {
+    fun loadTopics(searchQuery: String) {
         interactor.getTopics(searchQuery)
             .doOnSubscribe {
                 topics.load()

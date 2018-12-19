@@ -73,13 +73,13 @@ class CommitsFragment : Fragment() {
     }
 
     private fun prepareSingleEvents() {
-        searchViewModel.searchEvent.observe(this, Observer {
-            commitsViewModel.loadCommits(searchViewModel.searchQuery)
+        searchViewModel.getSearchEvent().observe(this, Observer {
+            commitsViewModel.loadCommits(searchViewModel.getSearchQuery())
         })
     }
 
     private fun prepareCommitsList() {
-        commitsViewModel.getCommits(searchViewModel.searchQuery).observe(this, Observer {
+        commitsViewModel.getCommits(searchViewModel.getSearchQuery()).observe(this, Observer {
             when (it.state) {
                 ObserverLiveData.DataState.SUCCESS -> handleSuccessState(it.data!!)
                 ObserverLiveData.DataState.LOADING -> handleLoadingState()

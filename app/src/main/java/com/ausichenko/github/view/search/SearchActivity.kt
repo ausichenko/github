@@ -56,7 +56,7 @@ class SearchActivity : AppCompatActivity() {
 
     private fun initSearch() {
         binding.searchBar.onTextChangedListener { text ->
-            searchViewModel.searchQuery.postValue(text.trim())
+            searchViewModel.setSearchQuery(text.trim())
         }
 
         binding.searchBar.setOnSearchListener {
@@ -71,12 +71,12 @@ class SearchActivity : AppCompatActivity() {
         binding.searchBar.dropDownVerticalOffset =
                 resources.getDimension(R.dimen.search_card_margin).toInt()
 
-        searchViewModel.searchHistory.observe(this, Observer { items ->
-            adapter.clear()
-            adapter.addAll(items)
-            adapter.notifyDataSetChanged()
-        })
-        searchViewModel.loadSearchHistory()
+        searchViewModel.getSearchHistory().observe(this,
+            Observer { items ->
+                adapter.clear()
+                adapter.addAll(items)
+                adapter.notifyDataSetChanged()
+            })
     }
 
     private fun initSpinner() {
@@ -114,13 +114,13 @@ class SearchActivity : AppCompatActivity() {
         binding.turnOnWifi.setOnClickListener {
             startActivity(Intent(Settings.ACTION_WIFI_SETTINGS))
         }
-        searchViewModel.initNetworkObserver(applicationContext)
-        searchViewModel.isOnline.observe(this, Observer { isOnline ->
-            binding.networkBanner.setVisibleOrGone(!isOnline)
-            if (isOnline) {
-                searchViewModel.onSearch()
-            }
-        })
+        searchViewModel.getNetworkStatus(applicationContext).observe(this,
+            Observer { isOnline ->
+                binding.networkBanner.setVisibleOrGone(!isOnline)
+                if (isOnline) {
+                    searchViewModel.onSearch()
+                }
+            })
     }
 
     private fun changeFragment(fragment: Fragment) {

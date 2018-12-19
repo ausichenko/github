@@ -73,13 +73,13 @@ class RepositoriesFragment : Fragment() {
     }
 
     private fun prepareSingleEvents() {
-        searchViewModel.searchEvent.observe(this, Observer {
-            repositoriesViewModel.loadRepositories(searchViewModel.searchQuery)
+        searchViewModel.getSearchEvent().observe(this, Observer {
+            repositoriesViewModel.loadRepositories(searchViewModel.getSearchQuery())
         })
     }
 
     private fun prepareRepositoriesList() {
-        repositoriesViewModel.getRepositories(searchViewModel.searchQuery).observe(this, Observer {
+        repositoriesViewModel.getRepositories(searchViewModel.getSearchQuery()).observe(this, Observer {
             when (it.state) {
                 ObserverLiveData.DataState.SUCCESS -> handleSuccessState(it.data!!)
                 ObserverLiveData.DataState.LOADING -> handleLoadingState()

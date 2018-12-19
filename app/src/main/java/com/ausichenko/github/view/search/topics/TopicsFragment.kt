@@ -73,13 +73,13 @@ class TopicsFragment : Fragment() {
     }
 
     private fun prepareSingleEvents() {
-        searchViewModel.searchEvent.observe(this, Observer {
-            topicsViewModel.loadTopics(searchViewModel.searchQuery)
+        searchViewModel.getSearchEvent().observe(this, Observer {
+            topicsViewModel.loadTopics(searchViewModel.getSearchQuery())
         })
     }
 
     private fun prepareTopicsList() {
-        topicsViewModel.getTopics(searchViewModel.searchQuery).observe(this, Observer {
+        topicsViewModel.getTopics(searchViewModel.getSearchQuery()).observe(this, Observer {
             when (it.state) {
                 ObserverLiveData.DataState.SUCCESS -> handleSuccessState(it.data!!)
                 ObserverLiveData.DataState.LOADING -> handleLoadingState()
