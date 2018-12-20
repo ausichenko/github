@@ -1,26 +1,30 @@
 <resources>
     <string name="app_name">GitHub</string>
 
+    <!-- Search -->
     <string name="search_github">Search GitHub</string>
+
     <string name="repositories">Repositories</string>
     <string name="commits">Commits</string>
     <string name="issues">Issues</string>
     <string name="topics">Topics</string>
     <string name="users">Users</string>
 
+    <!-- Network banner -->
+    <string name="offline_message">You have lost connection to the internet.\nThis app is offline.</string>
+    <string name="turn_on_wifi">Turn on wifi</string>
+
+    <!-- Item -->
     <string name="commit_info_authored_committed">%s authored and %s committed to %s</string>
     <string name="commit_info_committed">%s committed to %s</string>
 
     <string name="number">#%d</string>
 
-    <string name="error_while_loading">Error while loading :(</string>
-    <string name="list_is_empty">List is empty :(</string>
+    <string name="git_anon">mr.anon</string>
 
-    <string name="offline_message">You have lost connection to the internet.\nThis app is offline.</string>
-    <string name="turn_on_wifi">Turn on wifi</string>
-
+    <!-- Error message -->
     <string name="no_internet_connection">No internet connection</string>
     <string name="start_typing_to_search">Start typing to search</string>
     <string name="nothing_found">Nothing found</string>
-    <string name="git_anon">mr.anon</string>
+
 </resources>

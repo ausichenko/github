@@ -54,6 +54,7 @@
                             android:inputType="text"
                             android:lines="1"
                             android:popupBackground="@drawable/autocomplete_popup_background"
+                            android:popupElevation="@dimen/search_card_elevation"
                             android:textColor="@color/primary_text" />
 
                         <View
@@ -69,7 +70,6 @@
                             android:layout_height="match_parent"
                             android:layout_weight="@dimen/search_card_spinner_weight"
                             android:spinnerMode="dropdown"
-                            android:textColor="@color/primary_text"
                             app:overlapAnchor="false" />
 
                     </LinearLayout>
