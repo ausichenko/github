@@ -75,14 +75,14 @@ class RepositoriesAdapter(private val clickListener: (Repository) -> Unit) :
 
     inner class NetworkStateItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         fun bind(networkState: DataState?) {
-            if (networkState != null && networkState === DataState.Loading) {
+            if (networkState != null && networkState === DataState.LOADING) {
                 loge("LOADING")
                 //binding.progressBar.setVisibility(View.VISIBLE)
             } else {
                 //binding.progressBar.setVisibility(View.GONE)
             }
 
-            if (networkState != null && networkState === DataState.Error) {
+            if (networkState != null && networkState === DataState.ERROR) {
                 loge("ERROR")
                 //binding.errorMsg.setVisibility(View.VISIBLE)
                 //binding.errorMsg.setText(networkState.getMsg())

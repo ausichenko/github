@@ -9,13 +9,12 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ausichenko.github.R
+import com.ausichenko.github.data.datasource.paged.DataState
 import com.ausichenko.github.data.exceptions.FullscreenException
 import com.ausichenko.github.data.exceptions.MessageException
-import com.ausichenko.github.data.models.Repository
 import com.ausichenko.github.databinding.FragmentSearchListBinding
 import com.ausichenko.github.utils.DividerItemDecoration
 import com.ausichenko.github.utils.ext.setVisibleOrGone
-import com.ausichenko.github.utils.livedata.ObserverLiveData
 import com.ausichenko.github.view.search.SearchViewModel
 import com.google.android.material.snackbar.Snackbar
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
@@ -68,44 +67,41 @@ class RepositoriesFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
+        prepareSingleEvents()
+        prepareInitialStates()
         repositoriesViewModel.repositories.observe(this, Observer { pagedList ->
             adapter.submitList(pagedList)
         })
-        //prepareSingleEvents()
-        //prepareRepositoriesList()
     }
 
-    /*
     private fun prepareSingleEvents() {
         searchViewModel.getSearchEvent().observe(this, Observer {
-            repositoriesViewModel.loadRepositories(searchViewModel.getSearchQuery())
+            // load new data with search query
+            //repositoriesViewModel.loadRepositories(searchViewModel.getSearchQuery())
         })
     }
 
-    private fun prepareRepositoriesList() {
-        repositoriesViewModel.getRepositories(searchViewModel.getSearchQuery()).observe(this, Observer {
-            when (it.state) {
-                ObserverLiveData.DataState.SUCCESS -> handleSuccessState(it.data!!)
-                ObserverLiveData.DataState.LOADING -> handleLoadingState()
-                ObserverLiveData.DataState.ERROR -> handleErrorState(it.error!!)
+    private fun prepareInitialStates() {
+        repositoriesViewModel.getInitialStateLiveData().observe(this, Observer { state ->
+            when (state!!) {
+                DataState.LOADING -> handleLoadingState()
+                DataState.SUCCESS -> handleSuccessState()
+                DataState.ERROR -> handleErrorState()
             }
         })
     }
-    */
 
-    private fun handleSuccessState(items: List<Repository>) {
+    private fun handleSuccessState() {
         binding.recyclerView.setVisibleOrGone(true)
         binding.loadingLayout.root.setVisibleOrGone(false)
         binding.errorLayout.root.setVisibleOrGone(false)
-
-        //adapter.setItems(items)
     }
 
     private fun handleLoadingState() {
         binding.loadingLayout.root.setVisibleOrGone(true)
     }
 
-    private fun handleErrorState(error: Throwable) {
+    private fun handleErrorState(error: Throwable? = null) {
         when (error) {
             is MessageException -> {
                 binding.loadingLayout.root.setVisibleOrGone(false)

@@ -1,9 +1,11 @@
 package com.ausichenko.github.view.search.repositories
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
+import com.ausichenko.github.data.datasource.paged.DataState
 import com.ausichenko.github.data.datasource.paged.RepositoriesDataSourceFactory
 import com.ausichenko.github.data.models.Repository
 
@@ -20,5 +22,13 @@ class RepositoriesViewModel(private val dataSourceFactory: RepositoriesDataSourc
             .setInitialLoadSizeHint(60)
             .build()
         repositories = LivePagedListBuilder(dataSourceFactory, config).build()
+    }
+
+    fun getInitialStateLiveData(): MutableLiveData<DataState> {
+        return dataSourceFactory.getInitialStateLiveData()
+    }
+
+    fun getPaginateStateLiveData(): MutableLiveData<DataState> {
+        return dataSourceFactory.getPaginateStateLiveData()
     }
 }
