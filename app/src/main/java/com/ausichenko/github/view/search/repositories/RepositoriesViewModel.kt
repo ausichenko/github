@@ -1,29 +1,24 @@
 package com.ausichenko.github.view.search.repositories
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
+import androidx.paging.LivePagedListBuilder
+import androidx.paging.PagedList
+import com.ausichenko.github.data.datasource.paged.RepositoriesDataSourceFactory
 import com.ausichenko.github.data.models.Repository
-import com.ausichenko.github.domain.interactors.SearchInteractor
-import com.ausichenko.github.utils.livedata.ObserverLiveData
-import io.reactivex.android.schedulers.AndroidSchedulers
 
-class RepositoriesViewModel(private val interactor: SearchInteractor) : ViewModel() {
+class RepositoriesViewModel(private val dataSourceFactory: RepositoriesDataSourceFactory) :
+    ViewModel() {
 
-    private lateinit var repositories: ObserverLiveData<List<Repository>>
+    var repositories: LiveData<PagedList<Repository>>
+        private set
 
-    fun getRepositories(searchQuery: String): ObserverLiveData<List<Repository>> {
-        if (!::repositories.isInitialized) {
-            repositories = ObserverLiveData()
-            loadRepositories(searchQuery)
-        }
-        return repositories
-    }
-
-    fun loadRepositories(searchQuery: String) {
-        interactor.getRepositories(searchQuery)
-            .doOnSubscribe {
-                repositories.load()
-            }
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(repositories)
+    init {
+        val config = PagedList.Config.Builder()
+            .setPageSize(30)
+            .setEnablePlaceholders(false)
+            .setInitialLoadSizeHint(60)
+            .build()
+        repositories = LivePagedListBuilder(dataSourceFactory, config).build()
     }
 }

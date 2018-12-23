@@ -3,30 +3,40 @@ package com.ausichenko.github.view.search.repositories
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.paging.PagedListAdapter
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.ausichenko.github.R
+import com.ausichenko.github.data.datasource.paged.DataState
 import com.ausichenko.github.data.models.Repository
+import com.ausichenko.github.utils.ext.loge
 import kotlinx.android.synthetic.main.item_repository.view.*
-import java.util.*
+
 
 class RepositoriesAdapter(private val clickListener: (Repository) -> Unit) :
-    RecyclerView.Adapter<RepositoriesAdapter.ViewHolder>() {
+    PagedListAdapter<Repository, RecyclerView.ViewHolder>(diffCallback) {
 
-    private val repositories: MutableList<Repository> = ArrayList()
+    companion object {
+        val diffCallback: DiffUtil.ItemCallback<Repository> =
+            object : DiffUtil.ItemCallback<Repository>() {
+                override fun areItemsTheSame(oldItem: Repository, newItem: Repository): Boolean {
+                    return oldItem.id == newItem.id
+                }
 
-    fun setItems(items: List<Repository>) {
-        repositories.clear()
-        repositories.addAll(items)
-        notifyDataSetChanged()
+                override fun areContentsTheSame(oldItem: Repository, newItem: Repository): Boolean {
+                    return oldItem == newItem
+                }
+            }
     }
 
-    fun addItems(items: List<Repository>) {
-        repositories.addAll(items)
-        notifyDataSetChanged() // todo: replace to range changed or inserted
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        if (holder is RepositoryViewHolder) {
+            getItem(position)?.let { repository -> holder.bind(repository) }
+        }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder(
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        return RepositoryViewHolder(
             LayoutInflater.from(parent.context).inflate(
                 R.layout.item_repository,
                 parent,
@@ -35,15 +45,7 @@ class RepositoriesAdapter(private val clickListener: (Repository) -> Unit) :
         )
     }
 
-    override fun getItemCount(): Int {
-        return repositories.size
-    }
-
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(repositories[position])
-    }
-
-    inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    inner class RepositoryViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         fun bind(repository: Repository) {
             itemView.fullName.text = repository.fullName
             if (!repository.language.isNullOrEmpty()) {
@@ -67,6 +69,25 @@ class RepositoriesAdapter(private val clickListener: (Repository) -> Unit) :
 
             itemView.setOnClickListener {
                 clickListener.invoke(repository)
+            }
+        }
+    }
+
+    inner class NetworkStateItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        fun bind(networkState: DataState?) {
+            if (networkState != null && networkState === DataState.Loading) {
+                loge("LOADING")
+                //binding.progressBar.setVisibility(View.VISIBLE)
+            } else {
+                //binding.progressBar.setVisibility(View.GONE)
+            }
+
+            if (networkState != null && networkState === DataState.Error) {
+                loge("ERROR")
+                //binding.errorMsg.setVisibility(View.VISIBLE)
+                //binding.errorMsg.setText(networkState.getMsg())
+            } else {
+                //binding.errorMsg.setVisibility(View.GONE)
             }
         }
     }

@@ -1,0 +1,16 @@
+package com.ausichenko.github.data.datasource.paged
+
+import androidx.lifecycle.MutableLiveData
+import androidx.paging.DataSource
+import com.ausichenko.github.data.models.Repository
+
+class RepositoriesDataSourceFactory(private val dataSource: RepositoriesDataSource) :
+    DataSource.Factory<Long, Repository>() {
+
+    val dataSourceLiveData = MutableLiveData<RepositoriesDataSource>()
+
+    override fun create(): DataSource<Long, Repository> {
+        dataSourceLiveData.postValue(dataSource)
+        return dataSource
+    }
+}

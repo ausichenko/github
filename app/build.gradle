@@ -43,6 +43,7 @@ ext {
     rxandroidVersion = '2.1.0'
 
     roomVersion = '1.1.1'
+    pagingVersion = '1.0.1'
 
     gsonVersion = '2.8.5'
     okhttpVersion = '3.11.0'
@@ -74,6 +75,7 @@ dependencies {
     implementation "android.arch.persistence.room:runtime:$roomVersion"
     kapt "android.arch.persistence.room:compiler:$roomVersion"
     implementation "android.arch.persistence.room:rxjava2:$roomVersion"
+    implementation "android.arch.paging:runtime:$pagingVersion"
 
     implementation "com.google.code.gson:gson:$gsonVersion"
     implementation "com.squareup.okhttp3:okhttp:$okhttpVersion"

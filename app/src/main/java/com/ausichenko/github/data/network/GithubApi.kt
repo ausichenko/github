@@ -10,7 +10,7 @@ import retrofit2.http.Query
 interface GithubApi {
 
     @GET("search/repositories")
-    fun getRepositories(@Query("q") searchQuery: String): Single<Response<GitResponse<RepositoryNetwork>>>
+    fun getRepositories(@Query("q") searchQuery: String, @Query("page") page: Long = 1): Single<Response<GitResponse<RepositoryNetwork>>>
 
     @Headers("Accept: application/vnd.github.cloak-preview")
     @GET("search/commits")

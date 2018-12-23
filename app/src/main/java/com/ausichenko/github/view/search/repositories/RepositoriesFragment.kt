@@ -68,10 +68,14 @@ class RepositoriesFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        prepareSingleEvents()
-        prepareRepositoriesList()
+        repositoriesViewModel.repositories.observe(this, Observer { pagedList ->
+            adapter.submitList(pagedList)
+        })
+        //prepareSingleEvents()
+        //prepareRepositoriesList()
     }
 
+    /*
     private fun prepareSingleEvents() {
         searchViewModel.getSearchEvent().observe(this, Observer {
             repositoriesViewModel.loadRepositories(searchViewModel.getSearchQuery())
@@ -87,13 +91,14 @@ class RepositoriesFragment : Fragment() {
             }
         })
     }
+    */
 
     private fun handleSuccessState(items: List<Repository>) {
         binding.recyclerView.setVisibleOrGone(true)
         binding.loadingLayout.root.setVisibleOrGone(false)
         binding.errorLayout.root.setVisibleOrGone(false)
 
-        adapter.setItems(items)
+        //adapter.setItems(items)
     }
 
     private fun handleLoadingState() {

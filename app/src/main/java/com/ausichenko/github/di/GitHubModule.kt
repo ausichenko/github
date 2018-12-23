@@ -3,6 +3,8 @@ package com.ausichenko.github.di
 import com.ausichenko.github.data.database.dao.SearchHistoryDao
 import com.ausichenko.github.data.datasource.LocalDataSource
 import com.ausichenko.github.data.datasource.RemoteDataSource
+import com.ausichenko.github.data.datasource.paged.RepositoriesDataSource
+import com.ausichenko.github.data.datasource.paged.RepositoriesDataSourceFactory
 import com.ausichenko.github.data.network.GithubApi
 import com.ausichenko.github.data.repository.SearchDataRepository
 import com.ausichenko.github.domain.interactors.SearchInteractor
@@ -17,6 +19,9 @@ import org.koin.androidx.viewmodel.ext.koin.viewModel
 import org.koin.dsl.module.module
 
 val githubModule = module {
+    single { makeRepositoriesDataSource(get()) }
+    single { makeRepositoriesDataSourceFactory(get()) }
+
     single { makeLocalDataSource(get()) }
     single { makeRemoteDataSource(get()) }
 
@@ -29,6 +34,14 @@ val githubModule = module {
     viewModel { IssuesViewModel(get()) }
     viewModel { TopicsViewModel(get()) }
     viewModel { UsersViewModel(get()) }
+}
+
+fun makeRepositoriesDataSource(githubApi: GithubApi): RepositoriesDataSource {
+    return RepositoriesDataSource(githubApi)
+}
+
+fun makeRepositoriesDataSourceFactory(repositoriesDataSource: RepositoriesDataSource): RepositoriesDataSourceFactory {
+    return RepositoriesDataSourceFactory(repositoriesDataSource)
 }
 
 fun makeLocalDataSource(searchHistoryDao: SearchHistoryDao): LocalDataSource {
