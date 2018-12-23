@@ -70,6 +70,10 @@ class RepositoriesDataSource(private val githubApi: GithubApi) :
 
     override fun loadBefore(params: LoadParams<Long>, callback: LoadCallback<Long, Repository>) {}
 
+    fun clear() {
+        compositeDisposable.clear()
+    }
+
     private fun transformRepositories(): SingleTransformer<GitResponse<RepositoryNetwork>, List<Repository>> {
         return SingleTransformer { observable ->
             observable.map { it.items }

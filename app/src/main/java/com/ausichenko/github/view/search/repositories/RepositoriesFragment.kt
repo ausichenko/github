@@ -68,7 +68,7 @@ class RepositoriesFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
 
         prepareSingleEvents()
-        prepareInitialStates()
+        prepareStates()
         repositoriesViewModel.repositories.observe(this, Observer { pagedList ->
             adapter.submitList(pagedList)
         })
@@ -81,13 +81,16 @@ class RepositoriesFragment : Fragment() {
         })
     }
 
-    private fun prepareInitialStates() {
+    private fun prepareStates() {
         repositoriesViewModel.getInitialStateLiveData().observe(this, Observer { state ->
             when (state!!) {
                 DataState.LOADING -> handleLoadingState()
                 DataState.SUCCESS -> handleSuccessState()
                 DataState.ERROR -> handleErrorState()
             }
+        })
+        repositoriesViewModel.getPaginateStateLiveData().observe(this, Observer { state ->
+            adapter.setPaginateState(state)
         })
     }
 
