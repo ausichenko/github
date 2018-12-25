@@ -16,11 +16,11 @@ class SearchInteractor(private val repository: SearchRepository) {
         return repository.saveSearchHistory(searchHistory)
     }
 
-    fun getRepositories(searchQuery: String): Observable<List<Repository>> {
+    fun getRepositories(searchQuery: String, page: Int): Observable<List<Repository>> {
         return Observable.just(searchQuery)
             .filter { it.isNotEmpty() }
             .switchIfEmpty { it.onError(StartSearchException()) }
-            .switchMap { repository.getRepositories(it) }
+            .switchMap { repository.getRepositories(it, page) }
     }
 
     fun getCommits(searchQuery: String): Observable<List<Commit>> {

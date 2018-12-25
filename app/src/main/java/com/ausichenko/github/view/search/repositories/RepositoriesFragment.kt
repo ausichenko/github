@@ -8,14 +8,16 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.ausichenko.github.R
 import com.ausichenko.github.data.exceptions.FullscreenException
 import com.ausichenko.github.data.exceptions.MessageException
 import com.ausichenko.github.data.models.Repository
 import com.ausichenko.github.databinding.FragmentSearchListBinding
 import com.ausichenko.github.utils.DividerItemDecoration
+import com.ausichenko.github.utils.ext.logd
 import com.ausichenko.github.utils.ext.setVisibleOrGone
-import com.ausichenko.github.utils.livedata.ObserverLiveData
+import com.ausichenko.github.utils.livedata.DataState
 import com.ausichenko.github.view.search.SearchViewModel
 import com.google.android.material.snackbar.Snackbar
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
@@ -55,13 +57,25 @@ class RepositoriesFragment : Fragment() {
                 Snackbar.LENGTH_LONG
             ).show()
         }
-        binding.recyclerView.layoutManager = LinearLayoutManager(context)
+        val layoutManager = LinearLayoutManager(context)
+        binding.recyclerView.layoutManager = layoutManager
         binding.recyclerView.addItemDecoration(
             DividerItemDecoration(
                 context!!,
                 R.drawable.divider
             )
         )
+        binding.recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                val visibleItemCount = layoutManager.childCount
+                val totalItemCount = layoutManager.itemCount
+                val firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition()
+
+                if ((totalItemCount - visibleItemCount) <= (firstVisibleItemPosition + 5)) {
+                    repositoriesViewModel.loadMore()
+                }
+            }
+        })
         binding.recyclerView.adapter = adapter
     }
 
@@ -79,13 +93,22 @@ class RepositoriesFragment : Fragment() {
     }
 
     private fun prepareRepositoriesList() {
-        repositoriesViewModel.getRepositories(searchViewModel.getSearchQuery()).observe(this, Observer {
+        repositoriesViewModel.initialState.observe(this, Observer {
             when (it.state) {
-                ObserverLiveData.DataState.SUCCESS -> handleSuccessState(it.data!!)
-                ObserverLiveData.DataState.LOADING -> handleLoadingState()
-                ObserverLiveData.DataState.ERROR -> handleErrorState(it.error!!)
+                DataState.INIT -> logd("init")
+                DataState.SUCCESS -> handleSuccessState(it.data!!)
+                DataState.LOADING -> handleLoadingState()
+                DataState.ERROR -> handleErrorState(it.error!!)
             }
         })
+        repositoriesViewModel.pagedState.observe(this, Observer { it ->
+            adapter.setState(it.state)
+            if (it.state == DataState.SUCCESS) {
+                adapter.addItems(it.data!!)
+            }
+        })
+
+        repositoriesViewModel.loadRepositories(searchViewModel.getSearchQuery())
     }
 
     private fun handleSuccessState(items: List<Repository>) {

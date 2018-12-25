@@ -9,7 +9,7 @@ interface SearchRepository {
     fun getSearchHistory(): Observable<List<String>>
     fun saveSearchHistory(searchHistory: String): Completable
 
-    fun getRepositories(searchQuery: String): Observable<List<Repository>>
+    fun getRepositories(searchQuery: String, page: Int): Observable<List<Repository>>
     fun getCommits(searchQuery: String): Observable<List<Commit>>
     fun getIssues(searchQuery: String): Observable<List<Issue>>
     fun getTopics(searchQuery: String): Observable<List<Topic>>
