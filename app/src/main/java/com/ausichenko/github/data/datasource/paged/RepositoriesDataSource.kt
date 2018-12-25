@@ -18,6 +18,7 @@ class RepositoriesDataSource(private val githubApi: GithubApi) :
     PageKeyedDataSource<Long, Repository>() {
 
     private val compositeDisposable = CompositeDisposable()
+    var searchQuery: String = "init"
     val initialStateLiveData = MutableLiveData<DataState>()
     val paginateStateLiveData = MutableLiveData<DataState>()
 
@@ -27,7 +28,7 @@ class RepositoriesDataSource(private val githubApi: GithubApi) :
     ) {
         initialStateLiveData.postValue(DataState.LOADING)
         val disposable =
-            githubApi.getRepositories("test")
+            githubApi.getRepositories(searchQuery)
                 .checkResult()
                 .compose(transformRepositories())
                 .toObservable()
@@ -49,7 +50,7 @@ class RepositoriesDataSource(private val githubApi: GithubApi) :
     override fun loadAfter(params: LoadParams<Long>, callback: LoadCallback<Long, Repository>) {
         paginateStateLiveData.postValue(DataState.LOADING)
         val disposable =
-            githubApi.getRepositories("test", params.key)
+            githubApi.getRepositories(searchQuery, params.key)
                 .checkResult()
                 .compose(transformRepositories())
                 .toObservable()

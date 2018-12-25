@@ -76,6 +76,7 @@ class RepositoriesFragment : Fragment() {
 
     private fun prepareSingleEvents() {
         searchViewModel.getSearchEvent().observe(this, Observer {
+            repositoriesViewModel.loadData(searchViewModel.getSearchQuery())
             // load new data with search query
             //repositoriesViewModel.loadRepositories(searchViewModel.getSearchQuery())
         })
@@ -105,6 +106,9 @@ class RepositoriesFragment : Fragment() {
     }
 
     private fun handleErrorState(error: Throwable? = null) {
+        binding.recyclerView.setVisibleOrGone(false)
+        binding.loadingLayout.root.setVisibleOrGone(false)
+        binding.errorLayout.root.setVisibleOrGone(true)
         when (error) {
             is MessageException -> {
                 binding.loadingLayout.root.setVisibleOrGone(false)

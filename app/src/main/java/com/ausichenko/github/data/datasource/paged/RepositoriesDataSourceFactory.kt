@@ -21,4 +21,8 @@ class RepositoriesDataSourceFactory(private val dataSource: RepositoriesDataSour
     fun getPaginateStateLiveData(): MutableLiveData<DataState> {
         return dataSource.paginateStateLiveData
     }
+
+    fun loadData(searchQuery: String) {
+        dataSource.searchQuery = searchQuery
+    }
 }

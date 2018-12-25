@@ -31,4 +31,14 @@ class RepositoriesViewModel(private val dataSourceFactory: RepositoriesDataSourc
     fun getPaginateStateLiveData(): MutableLiveData<DataState> {
         return dataSourceFactory.getPaginateStateLiveData()
     }
+
+    fun loadData(searchQuery: String) {
+        dataSourceFactory.loadData(searchQuery)
+        val config = PagedList.Config.Builder()
+            .setPageSize(30)
+            .setEnablePlaceholders(false)
+            .setInitialLoadSizeHint(60)
+            .build()
+        repositories = LivePagedListBuilder(dataSourceFactory, config).build()
+    }
 }
