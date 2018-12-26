@@ -8,6 +8,8 @@ import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.TextView
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 
 fun View.setVisibleOrGone(show: Boolean) {
     visibility = if (show) View.VISIBLE else View.GONE
@@ -41,4 +43,29 @@ fun TextView.dismissKeyboard() {
     clearFocus()
     val imm = (context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager)
     imm.hideSoftInputFromWindow(this.windowToken, 0)
+}
+
+const val loadingTriggerThreshold = 5
+
+fun RecyclerView.setLoadMoreListener(func: () -> Unit) {
+    addOnScrollListener(object : RecyclerView.OnScrollListener() {
+        override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+            val layoutManager = recyclerView.layoutManager
+            if (layoutManager != null) {
+
+                val visibleItemCount = layoutManager.childCount
+                val totalItemCount = layoutManager.itemCount
+                var firstVisibleItemPosition = 0
+                if (layoutManager is LinearLayoutManager) {
+                    firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition()
+                } else {
+                    throw IllegalStateException("layoutManager needs to subclass LinearLayoutManager")
+                }
+
+                if ((totalItemCount - visibleItemCount) <= (firstVisibleItemPosition + loadingTriggerThreshold)) {
+                    func.invoke()
+                }
+            }
+        }
+    })
 }

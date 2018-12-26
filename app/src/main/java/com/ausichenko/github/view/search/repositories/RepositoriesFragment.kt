@@ -8,7 +8,6 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.ausichenko.github.R
 import com.ausichenko.github.data.exceptions.FullscreenException
 import com.ausichenko.github.data.exceptions.MessageException
@@ -16,6 +15,7 @@ import com.ausichenko.github.data.models.Repository
 import com.ausichenko.github.databinding.FragmentSearchListBinding
 import com.ausichenko.github.utils.DividerItemDecoration
 import com.ausichenko.github.utils.ext.logd
+import com.ausichenko.github.utils.ext.setLoadMoreListener
 import com.ausichenko.github.utils.ext.setVisibleOrGone
 import com.ausichenko.github.utils.livedata.DataState
 import com.ausichenko.github.view.search.SearchViewModel
@@ -65,17 +65,9 @@ class RepositoriesFragment : Fragment() {
                 R.drawable.divider
             )
         )
-        binding.recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                val visibleItemCount = layoutManager.childCount
-                val totalItemCount = layoutManager.itemCount
-                val firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition()
-
-                if ((totalItemCount - visibleItemCount) <= (firstVisibleItemPosition + 5)) {
-                    repositoriesViewModel.loadMore()
-                }
-            }
-        })
+        binding.recyclerView.setLoadMoreListener {
+            repositoriesViewModel.loadMore()
+        }
         binding.recyclerView.adapter = adapter
     }
 

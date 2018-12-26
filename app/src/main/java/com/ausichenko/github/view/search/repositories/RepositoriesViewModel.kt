@@ -17,11 +17,13 @@ class RepositoriesViewModel(private val interactor: SearchInteractor) : ViewMode
 
     private var currentSearchQuery = ""
     private var currentPage = 1
+    private var hasLoadedAllItems = false
 
     @SuppressLint("CheckResult")
     fun loadRepositories(searchQuery: String) {
         currentSearchQuery = searchQuery
         currentPage = 1
+        hasLoadedAllItems = false
         interactor.getRepositories(currentSearchQuery, currentPage)
             .doOnSubscribe { disposable ->
                 compositeDisposable.add(disposable)
@@ -37,7 +39,7 @@ class RepositoriesViewModel(private val interactor: SearchInteractor) : ViewMode
 
     @SuppressLint("CheckResult")
     fun loadMore() {
-        if (initialState.isLoading() || pagedState.isLoading())
+        if (initialState.isLoading() || pagedState.isLoading() || hasLoadedAllItems)
             return
 
         currentPage++
@@ -49,6 +51,8 @@ class RepositoriesViewModel(private val interactor: SearchInteractor) : ViewMode
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ repositories ->
                 pagedState.prepareSuccess(repositories)
+                if (repositories.isEmpty())
+                    hasLoadedAllItems = true
             }, { error ->
                 pagedState.prepareError(error)
             })
