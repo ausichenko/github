@@ -1,29 +1,75 @@
 package com.ausichenko.github.view.search.users
 
+import android.annotation.SuppressLint
 import androidx.lifecycle.ViewModel
 import com.ausichenko.github.data.models.User
 import com.ausichenko.github.domain.interactors.SearchInteractor
-import com.ausichenko.github.utils.livedata.ObserverLiveData
+import com.ausichenko.github.utils.livedata.StateLiveData
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
 
 class UsersViewModel(private val interactor: SearchInteractor) : ViewModel() {
 
-    private lateinit var users: ObserverLiveData<List<User>>
-
-    fun getUsers(searchQuery: String): ObserverLiveData<List<User>> {
-        if (!::users.isInitialized) {
-            users = ObserverLiveData()
-            loadUsers(searchQuery)
-        }
-        return users
+    companion object {
+        private const val PER_PAGE = 30
     }
 
+    private val compositeDisposable = CompositeDisposable()
+
+    val initialState = StateLiveData<List<User>>()
+    val pagedState = StateLiveData<List<User>>()
+
+    private var currentSearchQuery = ""
+    private var currentPage = 1
+    private var hasLoadedAllItems = false
+
+    @SuppressLint("CheckResult")
     fun loadUsers(searchQuery: String) {
-        interactor.getUsers(searchQuery)
-            .doOnSubscribe {
-                users.load()
+        currentSearchQuery = searchQuery
+        currentPage = 1
+        hasLoadedAllItems = false
+
+        interactor.getUsers(currentSearchQuery, currentPage, PER_PAGE)
+            .doOnSubscribe { disposable ->
+                compositeDisposable.add(disposable)
+                initialState.prepareLoading()
             }
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(users)
+            .subscribe({ users ->
+                initialState.prepareSuccess(users)
+                if (users.size < PER_PAGE) {
+                    hasLoadedAllItems = true
+                }
+            }, { error ->
+                initialState.prepareError(error)
+                hasLoadedAllItems = true
+            })
+    }
+
+    @SuppressLint("CheckResult")
+    fun loadMore() {
+        if (initialState.isLoading() || pagedState.isLoading() || hasLoadedAllItems)
+            return
+
+        currentPage++
+        interactor.getUsers(currentSearchQuery, currentPage, PER_PAGE)
+            .doOnSubscribe { disposable ->
+                compositeDisposable.add(disposable)
+                pagedState.prepareLoading()
+            }
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({ users ->
+                pagedState.prepareSuccess(users)
+                if (users.size < PER_PAGE)
+                    hasLoadedAllItems = true
+            }, { error ->
+                pagedState.prepareError(error)
+                hasLoadedAllItems = true
+            })
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        compositeDisposable.clear()
     }
 }

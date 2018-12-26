@@ -14,8 +14,10 @@ import com.ausichenko.github.data.exceptions.MessageException
 import com.ausichenko.github.data.models.Issue
 import com.ausichenko.github.databinding.FragmentSearchListBinding
 import com.ausichenko.github.utils.DividerItemDecoration
+import com.ausichenko.github.utils.ext.logd
+import com.ausichenko.github.utils.ext.setLoadMoreListener
 import com.ausichenko.github.utils.ext.setVisibleOrGone
-import com.ausichenko.github.utils.livedata.ObserverLiveData
+import com.ausichenko.github.utils.livedata.DataState
 import com.ausichenko.github.view.search.SearchViewModel
 import com.google.android.material.snackbar.Snackbar
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
@@ -62,6 +64,9 @@ class IssuesFragment : Fragment() {
                 R.drawable.divider
             )
         )
+        binding.recyclerView.setLoadMoreListener {
+            issuesViewModel.loadMore()
+        }
         binding.recyclerView.adapter = adapter
     }
 
@@ -79,13 +84,22 @@ class IssuesFragment : Fragment() {
     }
 
     private fun prepareIssuesList() {
-        issuesViewModel.getIssues(searchViewModel.getSearchQuery()).observe(this, Observer {
+        issuesViewModel.initialState.observe(this, Observer {
             when (it.state) {
-                ObserverLiveData.DataState.SUCCESS -> handleSuccessState(it.data!!)
-                ObserverLiveData.DataState.LOADING -> handleLoadingState()
-                ObserverLiveData.DataState.ERROR -> handleErrorState(it.error!!)
+                DataState.INIT -> logd("init")
+                DataState.SUCCESS -> handleSuccessState(it.data!!)
+                DataState.LOADING -> handleLoadingState()
+                DataState.ERROR -> handleErrorState(it.error!!)
             }
         })
+        issuesViewModel.pagedState.observe(this, Observer { it ->
+            adapter.setState(it.state)
+            if (it.state == DataState.SUCCESS) {
+                adapter.addItems(it.data!!)
+            }
+        })
+
+        issuesViewModel.loadIssues(searchViewModel.getSearchQuery())
     }
 
     private fun handleSuccessState(items: List<Issue>) {

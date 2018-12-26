@@ -45,8 +45,12 @@ class SearchDataRepository(
             .subscribeOn(Schedulers.io())
     }
 
-    override fun getCommits(searchQuery: String): Observable<List<Commit>> {
-        return remoteDataSource.getCommits(searchQuery)
+    override fun getCommits(
+        searchQuery: String,
+        page: Int,
+        perPage: Int
+    ): Observable<List<Commit>> {
+        return remoteDataSource.getCommits(searchQuery, page, perPage)
             .map { it.items }
             .flattenAsObservable { it }
             .map { it.toCommit() }
@@ -55,8 +59,12 @@ class SearchDataRepository(
             .subscribeOn(Schedulers.io())
     }
 
-    override fun getIssues(searchQuery: String): Observable<List<Issue>> {
-        return remoteDataSource.getIssues(searchQuery)
+    override fun getIssues(
+        searchQuery: String,
+        page: Int,
+        perPage: Int
+    ): Observable<List<Issue>> {
+        return remoteDataSource.getIssues(searchQuery, page, perPage)
             .map { it.items }
             .flattenAsObservable { it }
             .map { it.toIssue() }
@@ -65,8 +73,12 @@ class SearchDataRepository(
             .subscribeOn(Schedulers.io())
     }
 
-    override fun getTopics(searchQuery: String): Observable<List<Topic>> {
-        return remoteDataSource.getTopics(searchQuery)
+    override fun getTopics(
+        searchQuery: String,
+        page: Int,
+        perPage: Int
+    ): Observable<List<Topic>> {
+        return remoteDataSource.getTopics(searchQuery, page, perPage)
             .map { it.items }
             .flattenAsObservable { it }
             .map { it.toTopic() }
@@ -75,8 +87,12 @@ class SearchDataRepository(
             .subscribeOn(Schedulers.io())
     }
 
-    override fun getUsers(searchQuery: String): Observable<List<User>> {
-        return remoteDataSource.getUsers(searchQuery)
+    override fun getUsers(
+        searchQuery: String,
+        page: Int,
+        perPage: Int
+    ): Observable<List<User>> {
+        return remoteDataSource.getUsers(searchQuery, page, perPage)
             .map { it.items }
             .flattenAsObservable { it }
             .map { it.toUser() }

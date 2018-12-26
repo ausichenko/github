@@ -16,7 +16,6 @@ class RepositoriesAdapter(private val clickListener: (Repository) -> Unit) :
     companion object {
         private const val TYPE_ITEM = 1
         private const val TYPE_LOADING = 2
-        private const val TYPE_ERROR = 3
     }
 
     private val repositories: MutableList<Repository> = ArrayList()
@@ -68,11 +67,7 @@ class RepositoriesAdapter(private val clickListener: (Repository) -> Unit) :
 
     override fun getItemViewType(position: Int): Int {
         return if (hasExtraRow() && position == itemCount - 1) {
-            if (currentState == DataState.LOADING) {
-                TYPE_LOADING
-            } else {
-                TYPE_ERROR
-            }
+            TYPE_LOADING
         } else {
             TYPE_ITEM
         }
@@ -88,18 +83,10 @@ class RepositoriesAdapter(private val clickListener: (Repository) -> Unit) :
                         false
                     )
                 )
-            TYPE_LOADING ->
+            else ->
                 return LoadingViewHolder(
                     LayoutInflater.from(parent.context).inflate(
                         R.layout.item_loading,
-                        parent,
-                        false
-                    )
-                )
-            else ->
-                return ErrorViewHolder(
-                    LayoutInflater.from(parent.context).inflate(
-                        R.layout.item_error,
                         parent,
                         false
                     )
@@ -142,6 +129,4 @@ class RepositoriesAdapter(private val clickListener: (Repository) -> Unit) :
     }
 
     inner class LoadingViewHolder(view: View) : RecyclerView.ViewHolder(view)
-
-    inner class ErrorViewHolder(view: View) : RecyclerView.ViewHolder(view)
 }
