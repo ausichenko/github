@@ -31,8 +31,12 @@ class SearchDataRepository(
             .subscribeOn(Schedulers.computation())
     }
 
-    override fun getRepositories(searchQuery: String, page: Int): Observable<List<Repository>> {
-        return remoteDataSource.getRepositories(searchQuery, page)
+    override fun getRepositories(
+        searchQuery: String,
+        page: Int,
+        perPage: Int
+    ): Observable<List<Repository>> {
+        return remoteDataSource.getRepositories(searchQuery, page, perPage)
             .map { it.items }
             .flattenAsObservable { it }
             .map { it.toRepository() }

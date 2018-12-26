@@ -10,6 +10,10 @@ import io.reactivex.disposables.CompositeDisposable
 
 class RepositoriesViewModel(private val interactor: SearchInteractor) : ViewModel() {
 
+    companion object {
+        private const val PER_PAGE = 30
+    }
+
     private val compositeDisposable = CompositeDisposable()
 
     val initialState = StateLiveData<List<Repository>>()
@@ -24,7 +28,8 @@ class RepositoriesViewModel(private val interactor: SearchInteractor) : ViewMode
         currentSearchQuery = searchQuery
         currentPage = 1
         hasLoadedAllItems = false
-        interactor.getRepositories(currentSearchQuery, currentPage)
+
+        interactor.getRepositories(currentSearchQuery, currentPage, PER_PAGE)
             .doOnSubscribe { disposable ->
                 compositeDisposable.add(disposable)
                 initialState.prepareLoading()
@@ -32,8 +37,12 @@ class RepositoriesViewModel(private val interactor: SearchInteractor) : ViewMode
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ repositories ->
                 initialState.prepareSuccess(repositories)
+                if (repositories.size < PER_PAGE) {
+                    hasLoadedAllItems = true
+                }
             }, { error ->
                 initialState.prepareError(error)
+                hasLoadedAllItems = true
             })
     }
 
@@ -43,7 +52,7 @@ class RepositoriesViewModel(private val interactor: SearchInteractor) : ViewMode
             return
 
         currentPage++
-        interactor.getRepositories(currentSearchQuery, currentPage)
+        interactor.getRepositories(currentSearchQuery, currentPage, PER_PAGE)
             .doOnSubscribe { disposable ->
                 compositeDisposable.add(disposable)
                 pagedState.prepareLoading()
@@ -51,10 +60,11 @@ class RepositoriesViewModel(private val interactor: SearchInteractor) : ViewMode
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ repositories ->
                 pagedState.prepareSuccess(repositories)
-                if (repositories.isEmpty())
+                if (repositories.size < PER_PAGE)
                     hasLoadedAllItems = true
             }, { error ->
                 pagedState.prepareError(error)
+                hasLoadedAllItems = true
             })
     }
 

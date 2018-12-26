@@ -7,8 +7,12 @@ import io.reactivex.Single
 
 class RemoteDataSource(private val githubApi: GithubApi) : DataSource {
 
-    fun getRepositories(searchQuery: String, page: Int): Single<GitResponse<RepositoryNetwork>> {
-        return githubApi.getRepositories(searchQuery, page)
+    fun getRepositories(
+        searchQuery: String,
+        page: Int,
+        perPage: Int
+    ): Single<GitResponse<RepositoryNetwork>> {
+        return githubApi.getRepositories(searchQuery, page, perPage)
             .checkResult()
     }
 
