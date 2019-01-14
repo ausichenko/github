@@ -62,7 +62,7 @@ class TopicsAdapter(private val clickListener: (Topic) -> Unit) :
     }
 
     private fun hasExtraRow(): Boolean {
-        return currentState != DataState.SUCCESS
+        return currentState == DataState.LOADING
     }
 
     override fun getItemViewType(position: Int): Int {

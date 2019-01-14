@@ -14,7 +14,6 @@ import com.ausichenko.github.data.exceptions.MessageException
 import com.ausichenko.github.data.models.Topic
 import com.ausichenko.github.databinding.FragmentSearchListBinding
 import com.ausichenko.github.utils.DividerItemDecoration
-import com.ausichenko.github.utils.ext.logd
 import com.ausichenko.github.utils.ext.setLoadMoreListener
 import com.ausichenko.github.utils.ext.setVisibleOrGone
 import com.ausichenko.github.utils.livedata.DataState
@@ -86,13 +85,13 @@ class TopicsFragment : Fragment() {
     private fun prepareTopicsList() {
         topicsViewModel.initialState.observe(this, Observer {
             when (it.state) {
-                DataState.INIT -> logd("init")
+                DataState.INIT -> return@Observer
                 DataState.SUCCESS -> handleSuccessState(it.data!!)
                 DataState.LOADING -> handleLoadingState()
                 DataState.ERROR -> handleErrorState(it.error!!)
             }
         })
-        topicsViewModel.pagedState.observe(this, Observer { it ->
+        topicsViewModel.pagedState.observe(this, Observer {
             adapter.setState(it.state)
             if (it.state == DataState.SUCCESS) {
                 adapter.addItems(it.data!!)
