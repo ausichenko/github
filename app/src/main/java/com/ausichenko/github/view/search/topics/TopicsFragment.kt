@@ -14,8 +14,9 @@ import com.ausichenko.github.data.exceptions.MessageException
 import com.ausichenko.github.data.models.Topic
 import com.ausichenko.github.databinding.FragmentSearchListBinding
 import com.ausichenko.github.utils.DividerItemDecoration
+import com.ausichenko.github.utils.ext.setLoadMoreListener
 import com.ausichenko.github.utils.ext.setVisibleOrGone
-import com.ausichenko.github.utils.livedata.ObserverLiveData
+import com.ausichenko.github.utils.livedata.DataState
 import com.ausichenko.github.view.search.SearchViewModel
 import com.google.android.material.snackbar.Snackbar
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
@@ -62,6 +63,9 @@ class TopicsFragment : Fragment() {
                 R.drawable.divider
             )
         )
+        binding.recyclerView.setLoadMoreListener {
+            topicsViewModel.loadMore()
+        }
         binding.recyclerView.adapter = adapter
     }
 
@@ -79,13 +83,22 @@ class TopicsFragment : Fragment() {
     }
 
     private fun prepareTopicsList() {
-        topicsViewModel.getTopics(searchViewModel.getSearchQuery()).observe(this, Observer {
+        topicsViewModel.initialState.observe(this, Observer {
             when (it.state) {
-                ObserverLiveData.DataState.SUCCESS -> handleSuccessState(it.data!!)
-                ObserverLiveData.DataState.LOADING -> handleLoadingState()
-                ObserverLiveData.DataState.ERROR -> handleErrorState(it.error!!)
+                DataState.INIT -> return@Observer
+                DataState.SUCCESS -> handleSuccessState(it.data!!)
+                DataState.LOADING -> handleLoadingState()
+                DataState.ERROR -> handleErrorState(it.error!!)
             }
         })
+        topicsViewModel.pagedState.observe(this, Observer {
+            adapter.setState(it.state)
+            if (it.state == DataState.SUCCESS) {
+                adapter.addItems(it.data!!)
+            }
+        })
+
+        topicsViewModel.loadTopics(searchViewModel.getSearchQuery())
     }
 
     private fun handleSuccessState(items: List<Topic>) {

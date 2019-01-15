@@ -16,38 +16,58 @@ class SearchInteractor(private val repository: SearchRepository) {
         return repository.saveSearchHistory(searchHistory)
     }
 
-    fun getRepositories(searchQuery: String): Observable<List<Repository>> {
+    fun getRepositories(
+        searchQuery: String,
+        page: Int,
+        perPage: Int
+    ): Observable<List<Repository>> {
         return Observable.just(searchQuery)
             .filter { it.isNotEmpty() }
             .switchIfEmpty { it.onError(StartSearchException()) }
-            .switchMap { repository.getRepositories(it) }
+            .switchMap { repository.getRepositories(it, page, perPage) }
     }
 
-    fun getCommits(searchQuery: String): Observable<List<Commit>> {
+    fun getCommits(
+        searchQuery: String,
+        page: Int,
+        perPage: Int
+    ): Observable<List<Commit>> {
         return Observable.just(searchQuery)
             .filter { it.isNotEmpty() }
             .switchIfEmpty { it.onError(StartSearchException()) }
-            .switchMap { repository.getCommits(it) }
+            .switchMap { repository.getCommits(it, page, perPage) }
     }
 
-    fun getIssues(searchQuery: String): Observable<List<Issue>> {
+    fun getIssues(
+        searchQuery: String,
+        page: Int,
+        perPage: Int
+    ): Observable<List<Issue>> {
         return Observable.just(searchQuery)
             .filter { it.isNotEmpty() }
             .switchIfEmpty { it.onError(StartSearchException()) }
-            .switchMap { repository.getIssues(it) }
+            .switchMap { repository.getIssues(it, page, perPage) }
     }
 
-    fun getTopics(searchQuery: String): Observable<List<Topic>> {
+    fun getTopics(
+        searchQuery: String,
+        page: Int,
+        perPage: Int
+    ): Observable<List<Topic>> {
         return Observable.just(searchQuery)
             .filter { it.isNotEmpty() }
             .switchIfEmpty { it.onError(StartSearchException()) }
-            .switchMap { repository.getTopics(it) }
+            .switchMap { repository.getTopics(it, page, perPage) }
     }
 
-    fun getUsers(searchQuery: String): Observable<List<User>> {
+    fun getUsers(
+        searchQuery: String,
+        page: Int,
+        perPage: Int
+    ): Observable<List<User>> {
         return Observable.just(searchQuery)
             .filter { it.isNotEmpty() }
             .switchIfEmpty { it.onError(StartSearchException()) }
-            .switchMap { repository.getUsers(it) }
+            .switchMap { repository.getUsers(it, page, perPage) }
     }
 }

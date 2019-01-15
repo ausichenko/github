@@ -10,19 +10,39 @@ import retrofit2.http.Query
 interface GithubApi {
 
     @GET("search/repositories")
-    fun getRepositories(@Query("q") searchQuery: String): Single<Response<GitResponse<RepositoryNetwork>>>
+    fun getRepositories(
+        @Query("q") searchQuery: String,
+        @Query("page") page: Int,
+        @Query("per_page") perPage: Int
+    ): Single<Response<GitResponse<RepositoryNetwork>>>
 
     @Headers("Accept: application/vnd.github.cloak-preview")
     @GET("search/commits")
-    fun getCommits(@Query("q") searchQuery: String): Single<Response<GitResponse<CommitNetwork>>>
+    fun getCommits(
+        @Query("q") searchQuery: String,
+        @Query("page") page: Int,
+        @Query("per_page") perPage: Int
+    ): Single<Response<GitResponse<CommitNetwork>>>
 
     @GET("search/issues")
-    fun getIssues(@Query("q") searchQuery: String): Single<Response<GitResponse<IssueNetwork>>>
+    fun getIssues(
+        @Query("q") searchQuery: String,
+        @Query("page") page: Int,
+        @Query("per_page") perPage: Int
+    ): Single<Response<GitResponse<IssueNetwork>>>
 
     @Headers("Accept: application/vnd.github.mercy-preview+json")
     @GET("search/topics")
-    fun getTopics(@Query("q") searchQuery: String): Single<Response<GitResponse<TopicNetwork>>>
+    fun getTopics(
+        @Query("q") searchQuery: String,
+        @Query("page") page: Int,
+        @Query("per_page") perPage: Int
+    ): Single<Response<GitResponse<TopicNetwork>>>
 
     @GET("search/users")
-    fun getUsers(@Query("q") searchQuery: String): Single<Response<GitResponse<UserNetwork>>>
+    fun getUsers(
+        @Query("q") searchQuery: String,
+        @Query("page") page: Int,
+        @Query("per_page") perPage: Int
+    ): Single<Response<GitResponse<UserNetwork>>>
 }
