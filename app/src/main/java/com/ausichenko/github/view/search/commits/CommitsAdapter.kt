@@ -1,78 +1,44 @@
 package com.ausichenko.github.view.search.commits
 
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import androidx.recyclerview.widget.RecyclerView
 import com.ausichenko.github.R
 import com.ausichenko.github.data.models.Commit
+import com.ausichenko.github.view.search.base.SearchListAdapter
 import kotlinx.android.synthetic.main.item_commit.view.*
-import java.util.*
 
-class CommitsAdapter(private val clickListener: (Commit) -> Unit) :
-    RecyclerView.Adapter<CommitsAdapter.ViewHolder>() {
+class CommitsAdapter(private val clickListener: (Commit) -> Unit) : SearchListAdapter<Commit>() {
 
-    private val commits: MutableList<Commit> = ArrayList()
+    override val itemLayoutRes: Int
+        get() = R.layout.item_commit
 
-    fun setItems(items: List<Commit>) {
-        commits.clear()
-        commits.addAll(items)
-        notifyDataSetChanged()
-    }
+    override fun bindItemToView(item: Commit, itemView: View) {
+        itemView.name.text = item.commitMessage
 
-    fun addItems(items: List<Commit>) {
-        commits.addAll(items)
-        notifyDataSetChanged() // todo: replace to range changed or inserted
-    }
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder(
-            LayoutInflater.from(parent.context).inflate(
-                R.layout.item_commit,
-                parent,
-                false
-            )
-        )
-    }
-
-    override fun getItemCount(): Int {
-        return commits.size
-    }
-
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(commits[position])
-    }
-
-    inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        fun bind(commit: Commit) {
-            itemView.name.text = commit.commitMessage
-
-            if (commit.authorLogin != null) {
-                if (commit.committerLogin != null && !commit.authorLogin.equals(commit.committerLogin)) {
-                    itemView.info.text = itemView.context.getString(
-                        R.string.commit_info_authored_committed,
-                        commit.authorLogin,
-                        commit.committerLogin,
-                        commit.repositoryName
-                    )
-                } else {
-                    itemView.info.text = itemView.context.getString(
-                        R.string.commit_info_committed,
-                        commit.authorLogin,
-                        commit.repositoryName
-                    )
-                }
+        if (item.authorLogin != null) {
+            if (item.committerLogin != null && !item.authorLogin.equals(item.committerLogin)) {
+                itemView.info.text = itemView.context.getString(
+                    R.string.commit_info_authored_committed,
+                    item.authorLogin,
+                    item.committerLogin,
+                    item.repositoryName
+                )
             } else {
                 itemView.info.text = itemView.context.getString(
                     R.string.commit_info_committed,
-                    itemView.context.getString(R.string.git_anon),
-                    commit.repositoryName
+                    item.authorLogin,
+                    item.repositoryName
                 )
             }
+        } else {
+            itemView.info.text = itemView.context.getString(
+                R.string.commit_info_committed,
+                itemView.context.getString(R.string.git_anon),
+                item.repositoryName
+            )
+        }
 
-            itemView.setOnClickListener {
-                clickListener.invoke(commit)
-            }
+        itemView.setOnClickListener {
+            clickListener.invoke(item)
         }
     }
 }
